@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role and multi-tenancy info",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["client", "apporteur", "avocat", "gestionnaire", "institution"] },
+        "tenantId": { "type": "string" },
+        "companyName": { "type": "string" },
+        "siret": { "type": "string" },
+        "isValidated": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "role"]
+    },
+    "Dossier": {
+      "title": "Dossier",
+      "description": "Real estate portage dossier",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "apporteurId": { "type": "string" },
+        "offerType": { "type": "string", "enum": ["premium", "equilibre", "prudente"] },
+        "status": { "type": "string", "enum": ["draft", "submitted", "in_review", "approved", "signed", "active", "exit_in_progress", "closed", "archived"] },
+        "address": { "type": "string" },
+        "propertyValue": { "type": "number" },
+        "fundingNeeded": { "type": "number" },
+        "surface": { "type": "number" },
+        "spvId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientId", "offerType", "status"]
+    },
+    "Document": {
+      "title": "Document",
+      "description": "Encrypted document metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "dossierId": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileType": { "type": "string" },
+        "encryptedKey": { "type": "string" },
+        "iv": { "type": "string" },
+        "storagePath": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "verified", "expired", "rejected"] },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["dossierId", "fileName", "storagePath"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Financial transaction related to a dossier",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "dossierId": { "type": "string" },
+        "type": { "type": "string", "enum": ["commission", "net_client", "investor_refund", "notary_fees"] },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["planned", "executed", "failed", "cancelled"] },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "paidAt": { "type": "string", "format": "date-time" },
+        "beneficiaryId": { "type": "string" }
+      },
+      "required": ["dossierId", "type", "amount", "status", "dueDate"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Meeting or notary appointment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "dossierId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "location": { "type": "string" },
+        "participants": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "startTime", "endTime"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Collection of user profiles"
+    },
+    "dossiers": {
+      "schema": "Dossier",
+      "description": "Collection of dossiers"
+    },
+    "dossiers/{dossierId}/documents": {
+      "schema": "Document",
+      "description": "Sub-collection of documents for a dossier"
+    },
+    "payments": {
+      "schema": "Payment",
+      "description": "Collection of payments"
+    },
+    "appointments": {
+      "schema": "Appointment",
+      "description": "Collection of appointments"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&family=Fira+Code&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, monospace;
+
+  --color-primary: #0A2B4E;
+  --color-secondary: #C79A2E;
+  --color-success: #2E6F40;
+  --color-warning: #D9731E;
+  --color-danger: #B53B3B;
+  
+  --color-neutral-light: #F5F5F5;
+  --color-neutral-dark: #2E2E2E;
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-light text-neutral-dark font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+.glass {
+  @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-lg;
+}
+
+.dark .glass {
+  @apply bg-[#121826]/70 border-white/10;
+}
+

@@ -1,0 +1,107 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function existing() { return resource.data; }
+    function incoming() { return request.resource.data; }
+    
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) 
+             && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['gestionnaire', 'institution'];
+    }
+
+    // --- Collections ---
+
+    // USERS
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.keys().hasAll(['id', 'email', 'role']) 
+          && data.id == request.auth.uid
+          && data.email is string && data.email.size() <= 100
+          && data.role in ['client', 'apporteur'] // Users can't self-promote to admin roles
+          && (data.get('displayName', '') is string && data.displayName.size() <= 100);
+      }
+
+      allow get: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isVerified() && isValidUser(incoming());
+      allow update: if (isOwner(userId) || isAdmin()) && (
+        // Only allow profile updates, not role/id changes for users
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'companyName', 'siret', 'updatedAt'])
+        && incoming().updatedAt == request.time
+      );
+    }
+
+    // DOSSIERS
+    match /dossiers/{dossierId} {
+      function isValidDossier(data) {
+        return data.clientId is string && data.clientId.size() <= 128
+          && data.offerType in ['premium', 'equilibre', 'prudente']
+          && data.status in ['draft', 'submitted', 'in_review', 'approved', 'signed', 'active', 'exit_in_progress', 'closed', 'archived']
+          && (data.get('propertyValue', 0) is number && data.propertyValue >= 0);
+      }
+
+      allow get: if isSignedIn() && (existing().clientId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.clientId == request.auth.uid || isAdmin());
+      
+      allow create: if isVerified() 
+        && isValidId(dossierId)
+        && incoming().clientId == request.auth.uid
+        && isValidDossier(incoming())
+        && incoming().createdAt == request.time;
+
+      allow update: if isSignedIn() && (existing().clientId == request.auth.uid || isAdmin())
+        && isValidDossier(incoming())
+        && (
+          // Action: Submit
+          (existing().status == 'draft' && incoming().status == 'submitted' && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])) ||
+          // Action: Admin Review
+          (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'spvId', 'updatedAt'])) ||
+          // Action: Basic Update (only in draft)
+          (existing().status == 'draft' && incoming().diff(existing()).affectedKeys().hasOnly(['offerType', 'address', 'propertyValue', 'fundingNeeded', 'surface', 'updatedAt']))
+        )
+        && incoming().updatedAt == request.time;
+    }
+
+    // DOCUMENTS (Subcollection)
+    match /dossiers/{dossierId}/documents/{docId} {
+      function dossierOwner() {
+        return get(/databases/$(database)/documents/dossiers/$(dossierId)).data.clientId;
+      }
+
+      allow get, list: if isSignedIn() && (dossierOwner() == request.auth.uid || isAdmin());
+      
+      allow create: if isVerified() 
+        && isValidId(docId)
+        && (dossierOwner() == request.auth.uid)
+        && incoming().dossierId == dossierId
+        && incoming().uploadedAt == request.time;
+        
+      allow delete: if isAdmin() || (isSignedIn() && dossierOwner() == request.auth.uid && existing().status == 'pending');
+    }
+
+    // PAYMENTS
+    match /payments/{paymentId} {
+      allow get: if isSignedIn() && (get(/databases/$(database)/documents/dossiers/$(existing().dossierId)).data.clientId == request.auth.uid || isAdmin());
+      allow list: if isAdmin(); // Only admins can list all payments
+      allow create, update, delete: if isAdmin();
+    }
+
+    // APPOINTMENTS
+    match /appointments/{appId} {
+      allow read: if isSignedIn() && (existing().dossierId == null || get(/databases/$(database)/documents/dossiers/$(existing().dossierId)).data.clientId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+  }
+}
