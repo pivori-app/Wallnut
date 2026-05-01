@@ -25,9 +25,10 @@ import {
   Bar
 } from 'recharts';
 import { Link, useNavigate } from 'react-router-dom';
+import { SecuritySettings } from '../components/SecuritySettings';
 
 export function Dashboard() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const navigate = useNavigate();
 
   const isPro = profile?.role === 'professionnel';
@@ -53,21 +54,21 @@ export function Dashboard() {
         </div>
         <button 
           onClick={() => navigate('/dossiers/new')}
-          className="bg-primary text-white px-6 py-3 rounded-xl font-display font-bold hover:scale-105 transition-transform flex items-center gap-2 self-start sm:self-center"
+          className="touch-target bg-primary text-white px-6 flex-shrink-0 min-h-[44px] rounded-xl font-display font-bold hover:scale-105 transition-transform flex items-center justify-center gap-2 self-stretch sm:self-center"
         >
           Nouveau Dossier +
         </button>
       </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="@container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="glass p-6 rounded-3xl"
+            className="glass-card-3d p-6 rounded-3xl"
           >
             <div className="flex justify-between items-start mb-4">
               <div className={cn("p-3 rounded-2xl bg-black/5 dark:bg-white/5", stat.color)}>
@@ -83,12 +84,12 @@ export function Dashboard() {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="@container grid lg:grid-cols-3 gap-8">
         {/* Main Chart */}
-        <div className="lg:col-span-2 glass p-8 rounded-3xl space-y-6">
+        <div className="lg:col-span-2 glass-card-3d p-8 rounded-3xl space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-display font-bold">Performance Financière</h2>
-            <select className="bg-transparent border border-black/10 dark:border-white/10 rounded-lg px-3 py-1 text-sm font-medium focus:outline-none">
+            <select className="touch-target min-h-[44px] bg-transparent border border-black/10 dark:border-white/10 rounded-lg px-3 py-1 text-sm font-medium focus:outline-none">
               <option>6 derniers mois</option>
               <option>12 derniers mois</option>
             </select>
@@ -120,7 +121,7 @@ export function Dashboard() {
         </div>
 
         {/* Action Needed */}
-        <div className="glass p-8 rounded-3xl space-y-6">
+        <div className="glass-card-3d p-8 rounded-3xl space-y-6">
           <h2 className="text-xl font-display font-bold">Actions Requises</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -138,14 +139,14 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="w-full py-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <button className="touch-target min-h-[44px] w-full p-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
             Voir tous les dossiers
           </button>
         </div>
       </div>
       
       {/* Active Pipeline */}
-      <div className="glass p-8 rounded-3xl">
+      <div className="glass-card-3d p-8 rounded-3xl overflow-hidden">
         <div className="flex items-center justify-between mb-8">
            <h2 className="text-xl font-display font-bold">Pipeline Dossiers</h2>
            <div className="flex gap-2">
@@ -199,6 +200,11 @@ export function Dashboard() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* 2026 Security Recommendations Implementation */}
+      <div className="mt-8">
+        <SecuritySettings user={user} />
       </div>
     </div>
   );

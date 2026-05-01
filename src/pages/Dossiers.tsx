@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { formatCurrency, cn } from '../lib/utils';
 import { Search, Filter, MoreVertical, Plus, FileText, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
@@ -28,25 +27,16 @@ export function Dossiers() {
     const fetchDossiers = async () => {
       setLoading(true);
       try {
-        let q;
-        if (profile?.role === 'institution' || profile?.role === 'gestionnaire') {
-          // Admins see everything
-          q = query(collection(db, 'dossiers'), orderBy('createdAt', 'desc'));
-        } else {
-          // Clients only see their own dossiers
-          q = query(
-            collection(db, 'dossiers'), 
-            where('clientId', '==', user.uid),
-            orderBy('createdAt', 'desc')
-          );
+        let q = supabase.from('dossiers').select('*').order('created_at', { ascending: false });
+        
+        if (profile?.role !== 'institution' && profile?.role !== 'gestionnaire') {
+           q = q.eq('client_id', user.id);
         }
         
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => ({
-          ...(doc.data() as any),
-          id: doc.id
-        }));
-        setDossiers(data);
+        const { data, error } = await q;
+        if (error) throw error;
+
+        setDossiers(data || []);
       } catch (error) {
         console.error("Error fetching dossiers:", error);
       } finally {
@@ -138,7 +128,7 @@ export function Dossiers() {
                 <div className="pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
                   <div>
                     <p className="text-[10px] uppercase font-bold opacity-40">Valeur estimée</p>
-                    <p className="font-display font-bold">{formatCurrency(dossier.value)}</p>
+                    <p className="font-display font-bold">{formatCurrency(dossier.property_value || dossier.value)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] uppercase font-bold opacity-40">Dernière MAJ</p>
@@ -157,3 +147,4 @@ export function Dossiers() {
     </div>
   );
 }
+

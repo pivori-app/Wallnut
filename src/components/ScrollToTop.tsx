@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronUp } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
 
+  // Automatically scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Show "Scroll to Top" button when scrolled down
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 400) {

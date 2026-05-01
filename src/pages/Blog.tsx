@@ -4,51 +4,9 @@ import { PublicHeader } from '../components/PublicHeader';
 import { Footer } from '../components/Footer';
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { posts } from '../data/posts';
 
 export function Blog() {
-  const posts = [
-    {
-      id: 1,
-      title: "Portage immobilier : Le guide complet 2024",
-      excerpt: "Découvrez comment le portage immobilier peut sauver votre patrimoine et offrir une liquidité immédiate sans passer par les banques.",
-      category: "Guide",
-      date: "24 Mars 2024",
-      author: "Équipe Wallnut",
-      readTime: "8 min",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800"
-    },
-    {
-      id: 2,
-      title: "Vente à réméré VS Portage : Quelles différences ?",
-      excerpt: "Analyse comparative des deux solutions phares de la liquidité immobilière. Sécurité, délais et fiscalité passés au crible.",
-      category: "Finance",
-      date: "12 Mars 2024",
-      author: "Marc Lefebvre",
-      readTime: "6 min",
-      image: "https://images.unsplash.com/photo-1454165833767-1306d644633b?auto=format&fit=crop&q=80&w=800"
-    },
-    {
-      id: 3,
-      title: "Comment sortir du surendettement grâce à l'immobilier ?",
-      excerpt: "Le portage n'est pas seulement une solution financière, c'est un levier de restructuration pour repartir sur des bases saines.",
-      category: "Conseils",
-      date: "05 Mars 2024",
-      author: "Sarah Mendy",
-      readTime: "10 min",
-      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800"
-    },
-    {
-      id: 4,
-      title: "Investir en portage : Opportunités institutionnelles",
-      excerpt: "Pourquoi les fonds immobiliers se tournent massivement vers le portage structuré. Rendement et impact social.",
-      category: "Investissement",
-      date: "01 Mars 2024",
-      author: "Gestion Wallnut",
-      readTime: "7 min",
-      image: "https://images.unsplash.com/photo-1460472178825-e51c0621995a?auto=format&fit=crop&q=80&w=800"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50">
       <PublicHeader />
@@ -72,22 +30,25 @@ export function Blog() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-black/5"
+                className="group flex flex-col bg-white/70 backdrop-blur-xl rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/40 hover:-translate-y-2 relative"
+                style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
               >
-                <div className="aspect-[16/10] overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+                <div className="aspect-[16/10] overflow-hidden relative border-b border-white/20">
+                  <div className="absolute inset-0 bg-primary/10 mix-blend-multiply z-10 group-hover:opacity-0 transition-opacity duration-500" />
                   <img 
                     src={post.image} 
                     alt={post.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold uppercase tracking-widest text-primary">
+                  <div className="absolute top-4 left-4 z-20">
+                    <span className="px-3 py-1 bg-white/80 backdrop-blur-md shadow-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-primary border border-white/50">
                       {post.category}
                     </span>
                   </div>
                 </div>
                 
-                <div className="p-8 flex flex-col flex-1">
+                <div className="p-8 flex flex-col flex-1 relative z-20">
                   <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-neutral-dark/40 mb-4">
                     <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                     <span className="flex items-center gap-1"><User size={12} /> {post.readTime}</span>
@@ -101,9 +62,10 @@ export function Blog() {
                     {post.excerpt}
                   </p>
                   
-                  <button className="mt-auto flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-4 transition-all">
-                    Lire l'article <ArrowRight size={18} className="text-secondary" />
-                  </button>
+                  <Link to={`/blog/${post.slug || post.id}`} className="mt-auto inline-flex items-center w-full justify-between gap-2 px-6 py-4 bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-2xl font-bold text-sm transition-all duration-300">
+                    <span>Lire l'article</span>
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </motion.article>
             ))}

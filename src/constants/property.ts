@@ -1,5 +1,9 @@
 export const PROPERTY_TYPES = [
   'Appartement',
+  'Maison',
+  'Terrain',
+  'Immeuble de rapport',
+  'Local commercial',
   'Bastide',
   'Bergerie',
   'Bois de chasse',
@@ -30,13 +34,10 @@ export const PROPERTY_TYPES = [
   'Haras',
   'Hotel particulier',
   'Immeuble',
-  'Immeuble de rapport',
-  'Local commercial',
   "Local d'activité",
   'Loft',
   'Longère',
   'Lotissement',
-  'Maison',
   'Maison bourgeoise',
   "Maison d'architecte",
   'Maison de gardien',
@@ -58,7 +59,6 @@ export const PROPERTY_TYPES = [
   'Propriété Equestre',
   'Péniche',
   'Riad',
-  'Terrain',
   'Terrain de loisirs',
   'Territoire de chasse',
   'Villa'
@@ -73,15 +73,37 @@ export interface RequiredDocument {
   isMandatory: boolean;
 }
 
-export function getRequiredDocuments(propertyType: PropertyType, isPro: boolean): RequiredDocument[] {
+export function getRequiredDocuments(propertyType: PropertyType, isPro: boolean, subRole?: string): RequiredDocument[] {
   // Base documents common to all properties
   let docs: RequiredDocument[] = [];
 
   if (isPro) {
-    docs.push(
-      { id: 'mandat_vente', name: 'Mandat de vente', description: 'Mandat exclusif ou simple valide.', isMandatory: true },
-      { id: 'fiche_technique', name: 'Fiche technique', description: 'Description détaillée du bien.', isMandatory: true },
-    );
+    if (subRole === 'notaire') {
+      docs.push(
+        { id: 'titre_propriete_complet', name: 'Titre de propriété complet', description: 'Incluant l\'origine de propriété.', isMandatory: true },
+        { id: 'etat_civil', name: 'État civil complet', description: 'Livret de famille, contrat de mariage.', isMandatory: true },
+        { id: 'pre_etat_date', name: 'Pré-état daté', description: 'Si copropriété.', isMandatory: false }
+      );
+    } else if (subRole === 'agent_immobilier' || subRole === 'partenaire') {
+      docs.push(
+        { id: 'mandat_vente', name: 'Mandat de vente', description: 'Mandat exclusif ou simple valide.', isMandatory: true },
+        { id: 'fiche_technique', name: 'Fiche technique', description: 'Description détaillée du bien.', isMandatory: true },
+      );
+    } else if (subRole === 'diagnostiqueur') {
+       docs.push(
+        { id: 'ordres_mission', name: 'Ordre de mission', description: 'Signé par le propriétaire.', isMandatory: true },
+        { id: 'precedents_dpe', name: 'Précédents diagnostics', description: 'Anciens bilans si disponibles.', isMandatory: false },
+      );
+    } else if (subRole === 'courtier') {
+      docs.push(
+        { id: 'simulation_financement', name: 'Simulation de financement', description: 'Plan de financement prévisionnel.', isMandatory: true },
+        { id: 'compromis_projet', name: 'Projet de compromis', description: 'Pour étude du dossier.', isMandatory: true },
+      );
+    } else {
+      docs.push(
+        { id: 'mandat_vente', name: 'Mandat ou Contrat', description: 'Mandat valide ou contrat de mission.', isMandatory: true },
+      );
+    }
   } else {
     docs.push(
       { id: 'piece_identite', name: 'Pièce d\'identité', description: 'CNI ou Passeport en cours de validité.', isMandatory: true },
@@ -93,8 +115,13 @@ export function getRequiredDocuments(propertyType: PropertyType, isPro: boolean)
   // Type specific documents
   switch (propertyType) {
     case 'Appartement':
-      docs.push({ id: 'dpe', name: 'DPE (Diagnostic)', description: 'Diagnostic de performance énergétique.', isMandatory: true });
-      if (isPro) docs.push({ id: 'registre_copro', name: 'Registre Copropriété', description: 'Immatriculation au registre national.', isMandatory: true });
+      if (subRole !== 'diagnostiqueur') {
+        docs.push({ id: 'dpe', name: 'DPE (Diagnostic)', description: 'Diagnostic de performance énergétique.', isMandatory: true });
+      }
+      if (isPro && subRole !== 'courtier' && subRole !== 'diagnostiqueur') {
+        docs.push({ id: 'registre_copro', name: 'Registre Copropriété', description: 'Immatriculation au registre national.', isMandatory: true });
+        docs.push({ id: 'pv_ag', name: 'PV d\'AG', description: '3 derniers Procès-verbaux.', isMandatory: true });
+      }
       break;
     case 'Immeuble':
     case 'Immeuble de rapport':
@@ -133,10 +160,10 @@ export function getRequiredDocuments(propertyType: PropertyType, isPro: boolean)
       );
       break;
     default: // Maison, Villa, Manoir, Château
-      docs.push(
-        { id: 'dpe', name: 'DPE (Diagnostic)', description: 'Diagnostic de performance énergétique.', isMandatory: true },
-        { id: 'plans', name: 'Plans', description: 'Plans du bien si disponibles.', isMandatory: false }
-      );
+      if (subRole !== 'diagnostiqueur') {
+        docs.push({ id: 'dpe', name: 'DPE (Diagnostic)', description: 'Diagnostic de performance énergétique.', isMandatory: true });
+      }
+      docs.push({ id: 'plans', name: 'Plans', description: 'Plans du bien si disponibles.', isMandatory: false });
       break;
   }
 

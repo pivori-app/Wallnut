@@ -25,63 +25,73 @@ export function calculateRealTimeEstimation(
   
   if (!surface || surface <= 0) return null;
 
-  // 1. LOGIQUE DE LOCALISATION & DATA MINING (Simulation de l'API DVF/Yanport)
-  // En production, un appel API récupérerait le prix médian au m² sur un rayon de 500m à 2km.
+  // 1. ACTUALISATION TEMPORELLE (Market Trend)
+  // Règle: Baisse de 2% sur les 6 derniers mois
+  const MarketTrendIndex = -0.02;
+
+  // 1. LOGIQUE DE LOCALISATION & DATA MINING
   const zipPrefix = (zipCode || '').substring(0, 2);
-  let baseAreaPrice = 2500; // Province par défaut
+  let baseAreaPrice = 2500; 
   
   if (['75', '92'].includes(zipPrefix)) baseAreaPrice = 9500;
   else if (['69', '13', '33'].includes(zipPrefix)) baseAreaPrice = 4500;
-  else if (['06', '83'].includes(zipPrefix)) baseAreaPrice = 5500; // Côte d'Azur
+  else if (['06', '83'].includes(zipPrefix)) baseAreaPrice = 5500; 
   
-  // Ajustement tension immobilière (Castorus/Yanport mock)
-  const tensionMultiplier = 1.02; // Légère tension à la hausse globale par défaut
-  const basePrice = surface * baseAreaPrice * tensionMultiplier;
+  const adjustedBaseAreaPrice = baseAreaPrice * (1 + MarketTrendIndex);
+  const basePrice = surface * adjustedBaseAreaPrice;
 
   // 2. ALGORITHME DE PONDÉRATION PAR FILTRES (SCORE DE VALORISATION)
-  let totalMultiplier = 1.0;
   const multipliersApplied: Record<string, number> = {};
+  let totalPlusValues = 0;
+  let totalMoinsValues = 0;
 
-  const applyMultiplier = (name: string, value: number) => {
-    totalMultiplier *= (1 + value);
+  const trackMultiplier = (name: string, value: number) => {
+    if (value > 0) totalPlusValues += value;
+    else totalMoinsValues += value;
     multipliersApplied[name] = value;
   };
 
   // --- ÉTAT DU BIEN ---
-  if (condition.includes('Très bon') || condition.includes('Rénové')) applyMultiplier('État Rénové', 0.10);
-  else if (condition.includes('rafraîchir')) applyMultiplier('À rafraîchir', -0.10);
-  else if (condition.includes('Travaux') || condition.includes('rénover')) applyMultiplier('Travaux importants', -0.25);
+  if (condition.includes('Très bon') || condition.includes('Rénové')) trackMultiplier('État Rénové', 0.10);
+  else if (condition.includes('rafraîchir')) trackMultiplier('À rafraîchir', -0.10);
+  else if (condition.includes('Travaux') || condition.includes('rénover')) trackMultiplier('Travaux importants', -0.25);
 
-  // --- DPE (Performances Énergétiques) ---
-  if (dpe === 'A' || dpe === 'B') applyMultiplier('DPE Vert (A/B)', 0.05);
-  else if (dpe === 'F') applyMultiplier('DPE F', -0.05);
-  else if (dpe === 'G') applyMultiplier('Passoire thermique (G)', -0.12);
+  // --- DPE ---
+  if (dpe === 'A' || dpe === 'B') trackMultiplier('DPE Vert (A/B)', 0.05);
+  else if (dpe === 'F') trackMultiplier('DPE F', -0.05);
+  else if (dpe === 'G') trackMultiplier('Passoire thermique (G)', -0.15);
 
-  // --- CARACTÉRISTIQUES INTRINSÈQUES ET PLUS-VALUES ---
-  if (features.includes('Vue mer')) applyMultiplier('Vue mer', 0.20);
-  if (features.includes('Rooftop') || features.includes('Terrasse')) applyMultiplier('Rooftop / Terrasse', 0.12);
-  if (features.includes('Piscine')) applyMultiplier('Piscine', 0.08); // +8%
+  // --- PLUS-VALUES (Majorations) ---
+  if (features.includes('Vue mer')) trackMultiplier('Vue mer', 0.20);
+  if (features.includes('Rooftop') || features.includes('Terrasse')) trackMultiplier('Rooftop / Terrasse', 0.12);
   
-  // Commodités
-  let commoditesBonus = 0;
-  if (features.includes('Proche transports')) commoditesBonus += 0.03;
-  if (features.includes('Écoles à proximité')) commoditesBonus += 0.02;
-  if (features.includes('Proche commerces')) commoditesBonus += 0.02;
-  if (commoditesBonus > 0) applyMultiplier('Commodités', Math.min(commoditesBonus, 0.08));
+  if (features.includes('Piscine')) {
+    const isLuxuryAppart = propertyType.toLowerCase().includes('appartement') && (features.includes('Rooftop') || features.includes('Dernier étage'));
+    const poolBonus = isLuxuryAppart ? 0.04 : 0.08;
+    trackMultiplier(isLuxuryAppart ? 'Piscine (Ajustée Copro)' : 'Piscine', poolBonus);
+  }
+  
+  if (features.includes('Proche transports')) trackMultiplier('Proximité Transports', 0.05);
+  if (features.includes('Écoles à proximité')) trackMultiplier('Scolarité', 0.03);
 
-  // --- MOINS-VALUES (Décotes supplémentaires) ---
+  // --- MOINS-VALUES (Décotes) ---
   if (features.includes('Rez-de-jardin') && propertyType.toLowerCase().includes('appartement')) {
-    applyMultiplier('Rez-de-chaussée', -0.10);
+    trackMultiplier('Rez-de-chaussée', -0.10);
   }
 
-  // Calcul Final
-  const finalPrice = Math.round(basePrice * totalMultiplier);
-  const lowBound = Math.round(finalPrice * 0.93); // -7% pour la fourchette basse
-  const highBound = Math.round(finalPrice * 1.07); // +7% pour la fourchette haute
+  // LISSAGE DES PLUS-VALUES (Plafond de verre à +35%)
+  if (totalPlusValues > 0.35) {
+    const diff = totalPlusValues - 0.35;
+    totalPlusValues = 0.35;
+    multipliersApplied['PLAFOND DE VERRE (Anti-stacking)'] = -diff;
+  }
 
-  // Indice de fiabilité (Mock: basé sur la présence du code postal et des données DVF simulées)
-  // En production, il serait basé sur le volume de data (ex: count(ventes_500m) > 10)
-  const confidenceIndex = zipPrefix ? 88 : 65; 
+  const finalMultiplier = (1 + totalPlusValues + totalMoinsValues);
+  const finalPrice = Math.round(basePrice * finalMultiplier);
+  const lowBound = Math.round(finalPrice * 0.95);
+  const highBound = Math.round(finalPrice * 1.05);
+
+  const confidenceIndex = zipPrefix ? 92 : 65; 
 
   return {
     basePrice: Math.round(basePrice),
@@ -96,33 +106,20 @@ export function calculateRealTimeEstimation(
 
 // 3. COMPOSANT DE TEST & VALIDATION (DEBUG MODE)
 export function TestEstimationEngine() {
-  console.log("=== DÉMARRAGE DU TEST: MOTEUR D'ESTIMATION IMMOBILIÈRE ===");
+  console.log("=== DÉMARRAGE DU TEST: MOTEUR D'ESTIMATION IMMOBILIÈRE (INSTITUTIONNEL) ===");
   
-  // Test A: Appartement standard Bon État
   const testA = calculateRealTimeEstimation({
-    surface: 80,
-    zipCode: '06000', // Nice
-    condition: 'Bon état',
-    features: ['Proche transports'],
-    dpe: 'C',
-    propertyType: 'Appartement'
+    surface: 80, zipCode: '06000', condition: 'Bon état', features: [], dpe: 'C', propertyType: 'Appartement'
   });
-  console.log("TEST A: Appartement 80m², Nice, Bon État, Proche transports (DPE C)");
-  console.log("Résultat:", testA);
+  console.log("TEST A (Base):", testA);
 
-  // Test B: Même appartement mais "Vue mer", "Dernier étage/Rooftop", "Très bon état"
-  const testB = calculateRealTimeEstimation({
-    surface: 80,
-    zipCode: '06000',
-    condition: 'Très bon état',
-    features: ['Vue mer', 'Rooftop', 'Proche transports', 'Proche commerces'],
-    dpe: 'B',
-    propertyType: 'Appartement'
+  const testC = calculateRealTimeEstimation({
+    surface: 80, zipCode: '75000', condition: 'Très bon état', 
+    features: ['Vue mer', 'Rooftop', 'Piscine', 'Proche transports', 'Écoles à proximité'], 
+    dpe: 'A', propertyType: 'Appartement'
   });
-  console.log("\nTEST B: Appartement 80m², Nice, Rénové, Vue mer, Rooftop, Commodités (DPE B)");
-  console.log("Résultat:", testB);
-
-  console.log(`\nDifférence de valorisation entre Test B et Test A : +${Math.round(((testB?.finalPrice || 0) / (testA?.finalPrice || 1) - 1) * 100)}%`);
+  console.log("TEST C (Plafond 35%):", testC);
+  
   console.log("=== FIN DU TEST ===");
 }
 

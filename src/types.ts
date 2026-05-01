@@ -1,5 +1,5 @@
 
-export type UserRole = 'particulier' | 'professionnel';
+export type UserRole = 'particulier' | 'professionnel' | 'institution' | 'gestionnaire';
 
 export type ProfessionalSubRole = 
   | 'agent_immobilier' 
@@ -22,6 +22,7 @@ export interface PropertyDataSchema {
   status: 'draft' | 'documents_pending' | 'analysis' | 'validated' | 'rejected';
   isComplete: boolean;
   createdAt: any;
+  referenceNumber?: string;
 }
 
 // Document Data Schema
@@ -47,6 +48,7 @@ export interface UserProfile {
   
   // Professional specific fields
   professionalData?: {
+    proId?: string; // Wallnut Professional ID
     subRole: ProfessionalSubRole;
     customSubRole?: string;
     companyName: string;

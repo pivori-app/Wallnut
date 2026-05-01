@@ -1,17 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signOut,
-  User as FirebaseUser
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import { User as SupabaseUser } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase';
 import { UserProfile, UserRole } from '../types';
 
 interface AuthContextType {
-  user: FirebaseUser | null;
+  user: SupabaseUser | null;
   profile: UserProfile | null;
   loading: boolean;
   signIn: () => Promise<void>;
@@ -22,42 +15,88 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        try {
-          const profileDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-          if (profileDoc.exists()) {
-            setProfile(profileDoc.data() as UserProfile);
-          } else {
-            // No profile yet - we don't auto-create here to allow RegisterForm to handle it
-            // or we create a minimalist one that will be updated.
-            setProfile(null);
-          }
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-        }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
       } else {
-        setProfile(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => unsubscribe();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setProfile(null);
+          setLoading(false);
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error("Error fetching profile:", error);
+      }
+      
+      if (data) {
+        setProfile(data as UserProfile);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const signIn = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    if (import.meta.env.VITE_SUPABASE_URL === undefined || import.meta.env.VITE_SUPABASE_URL.includes('xxxx')) {
+      alert("⚠️ Supabase n'est pas encore configuré. Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans les variables d'environnement.");
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard'
+        }
+      });
+      if (error) {
+        console.error("Sign in error:", error);
+        alert("Erreur de connexion. Veuillez vérifier la configuration de votre base de données Supabase.");
+      }
+    } catch (err: any) {
+      console.error("Auth error catch:", err);
+      if (err.message?.includes('URL') || err.message?.includes('key')) {
+        alert("Les clés Supabase ne sont pas configurées. Veuillez les rajouter via le menu Settings > Environment Variables.");
+      } else {
+        alert("Impossible de se connecter: " + err.message);
+      }
+    }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    await supabase.auth.signOut();
   };
 
   const isAdmin = profile?.role === 'institution' || profile?.role === 'gestionnaire';

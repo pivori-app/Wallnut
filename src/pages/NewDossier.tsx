@@ -14,8 +14,7 @@ import {
   ShieldCheck,
   AlertCircle
 } from 'lucide-react';
-import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { formatCurrency, cn } from '../lib/utils';
 import { analyzeRealEstateDocument } from '../services/geminiService';
@@ -43,22 +42,23 @@ export function NewDossier() {
     setLoading(true);
     try {
       const dossierId = `WN-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-      const dossierRef = doc(db, 'dossiers', dossierId);
       
-      await setDoc(dossierRef, {
+      const { error } = await supabase.from('dossiers').insert([{
         id: dossierId,
-        clientId: user.uid,
-        proId: profile?.isPro ? user.uid : null,
-        isProCreated: profile?.isPro || false,
+        client_id: user.id,
+        pro_id: profile?.isPro ? user.id : null,
+        is_pro_created: profile?.isPro || false,
         status: 'submitted',
-        offerType: form.offerType,
-        propertyValue: form.propertyValue,
-        fundingNeeded: form.fundingNeed,
+        offer_type: form.offerType,
+        property_value: form.propertyValue,
+        funding_needed: form.fundingNeed,
         address: form.address,
         surface: Number(form.surface),
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }]);
+      
+      if (error) throw error;
 
       // Redirect to dashboard on success
       navigate('/dashboard');
@@ -69,6 +69,7 @@ export function NewDossier() {
       setLoading(false);
     }
   };
+
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

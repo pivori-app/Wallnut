@@ -15,10 +15,6 @@ export function FAQ() {
       a: "Absolument. Toutes les transactions sans exception passent par un acte authentique signé devant notaire. Cela garantit la légalité de la procédure, la protection de vos droits et la sécurité des fonds."
     },
     {
-      q: "Qui sont les investisseurs ?",
-      a: "Wallnut travaille exclusivement avec des investisseurs institutionnels, des fonds spécialisés (OPCI, SCPI) et des entités professionnelles. Nous ne faisons pas de 'peer-to-peer' entre particuliers pour garantir une solidité financière et une déontologie irréprochable."
-    },
-    {
       q: "Que se passe-t-il si je ne peux pas racheter mon bien ?",
       a: "À la fin de la période de portage, si vous ne souhaitez pas ou ne pouvez pas racheter le bien, celui-ci est vendu sur le marché classique. Wallnut vous accompagne pour optimiser cette vente et vous permettre d'encaisser le complément de prix (la différence entre le prix de vente final et le prix de portage initial)."
     },

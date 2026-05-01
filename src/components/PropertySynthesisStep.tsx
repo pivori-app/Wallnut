@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Share2, HardDrive, FileCheck, MapPin, Calculator, Send, CheckCircle2, ChevronLeft, Loader2, FileText, Download, Activity } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { calculateRealTimeEstimation } from '../lib/estimationEngine';
+import { exportToInstitutionalPDF } from '../lib/pdfExporter';
 
 export function PropertySynthesisStep({ propertyData, documents, onComplete, onBack }: any) {
   const [isEstimating, setIsEstimating] = useState(true);
@@ -16,6 +17,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
   const [shareTarget, setShareTarget] = useState<'notaire' | 'agent' | null>(null);
   const [isSendingShare, setIsSendingShare] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   // 1. ENGINE D'ESTIMATION PONDÉRÉE (DATA SCIENCE)
   useEffect(() => {
@@ -45,6 +47,19 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
 
     runEstimation();
   }, [propertyData]);
+
+  const handleExportPDF = async () => {
+    if (!estimation) return;
+    setIsGeneratingPDF(true);
+    await exportToInstitutionalPDF('synthesis-content', {
+      bundleId,
+      propertyType: propertyData?.type || 'Bien',
+      city: propertyData?.city || 'Inconnue',
+      finalPrice: formatEuro(estimation.finalPrice),
+      confidence: estimation.confidenceIndex
+    });
+    setIsGeneratingPDF(false);
+  };
 
   // Calculate Completeness Score
   const uploadedDocsCount = Object.keys(documents).filter(k => documents[k]?.length > 0).length;
@@ -79,7 +94,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
   return (
     <div className="space-y-8">
       {/* Dashboard Synthèse */}
-      <div className="glass p-8 md:p-10 rounded-[2.5rem] border border-black/5 relative overflow-hidden">
+      <div id="synthesis-content" className="glass p-8 md:p-10 rounded-[2.5rem] border border-black/5 relative overflow-hidden">
         {/* Decorative Blur */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
 
@@ -289,8 +304,13 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
             </button>
             
             <div className="mt-4 text-center">
-               <button className="text-sm font-medium text-primary flex items-center justify-center gap-2 mx-auto hover:underline opacity-80">
-                  <Download size={14} /> Exporter PDF Institutionnel (Synthèse)
+               <button 
+                 onClick={handleExportPDF}
+                 disabled={isGeneratingPDF}
+                 className="text-sm font-bold text-primary flex items-center justify-center gap-2 mx-auto hover:underline opacity-80"
+               >
+                  {isGeneratingPDF ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                  Exporter PDF Institutionnel (Synthèse)
                </button>
             </div>
           </div>

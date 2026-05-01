@@ -110,7 +110,10 @@ export function Simulator({ onInitialize }: SimulatorProps) {
                     </span>
                     <span className="text-xs font-medium opacity-60">Jusqu'à {offer.ratio * 100}%</span>
                   </div>
-                  <span className="text-lg font-bold">{formatCurrency(maxFunding)}</span>
+                  <div className="text-right">
+                    <span className="text-lg font-bold">{formatCurrency(maxFunding)}</span>
+                    <p className="text-[10px] uppercase font-bold opacity-40 mt-1">*Hors frais (Net estimé)</p>
+                  </div>
                 </div>
                 <p className="text-xs opacity-70 mb-4">{offer.description}</p>
                 

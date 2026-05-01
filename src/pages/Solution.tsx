@@ -35,7 +35,7 @@ export function Solution() {
                 <h2 className="text-4xl font-display font-bold text-primary">Comment ça marche ?</h2>
                 <div className="space-y-6">
                   {[
-                    { title: "Transformation d'actifs", desc: "Vous vendez temporairement tout ou partie de votre patrimoine à des investisseurs institutionnels pour dégager des fonds immédiats." },
+                    { title: "Transformation d'actifs", desc: "Vous vendez temporairement tout ou partie de votre patrimoine à wallnut pour dégager des fonds immédiats." },
                     { title: "Convention d'occupation", desc: "Vous restez chez vous en versant une indemnité d'occupation, tout en conservant une faculté de rachat exclusive." },
                     { title: "Rachat ou cession", desc: "À tout moment (jusqu'à 24 mois), vous rachetez votre bien ou le vendez sur le marché pour encaisser la plus-value." }
                   ].map((item, idx) => (
@@ -76,10 +76,19 @@ export function Solution() {
           <div className="prose prose-slate lg:prose-xl">
             <h2 className="text-3xl font-display font-bold text-primary mb-8 text-center">Pourquoi choisir Wallnut pour votre portage immobilier ?</h2>
             <p className="text-lg text-neutral-dark/70 mb-6">
-              Le <strong>portage immobilier</strong>, autrefois connu sous le nom de vente à réméré, est aujourd'hui une solution financière de premier plan pour les propriétaires en quête de <strong>liquidité immobilière</strong>. Que ce soit pour solder des dettes, financer un nouveau projet professionnel ou sortir d'une situation de surendettement, Wallnut offre une alternative crédible au rachat de crédit classique.
+              Le <strong>portage immobilier</strong> est une solution de <strong>liquidité immobilière</strong> permettant à un propriétaire d’obtenir rapidement une avance de trésorerie adossée à la valeur de son bien avant sa vente définitive.
+            </p>
+            <p className="text-lg text-neutral-dark/70 mb-6">
+              Contrairement aux mécanismes classiques de vente à réméré principalement centrés sur la faculté de rachat du bien, l’approche développée par Wallnut vise prioritairement la revente du bien sur le marché dans les meilleures conditions possibles.
+            </p>
+            <p className="text-lg text-neutral-dark/70 mb-6">
+              Avec Wallnut, vous pouvez percevoir une avance immédiate en numéraire pouvant atteindre jusqu’à 80 % de la valeur estimée du bien (selon éligibilité). Une fois le bien vendu à un acquéreur tiers, vous percevez le solde restant après déduction des frais et engagements convenus.
+            </p>
+            <p className="text-lg text-neutral-dark/70 mb-6">
+              Cette solution structurée peut permettre de débloquer rapidement des liquidités pour solder des dettes, éviter une vente contrainte ou financer un nouveau projet, sans recourir à un crédit bancaire classique.
             </p>
             <p className="text-lg text-neutral-dark/70 mb-12">
-              Notre expertise se concentre sur la mise en relation avec des investisseurs qualifiés, garantissant une transaction fluide et transparente. Contrairement aux plateformes classiques, nous n'exposons pas vos données aux particuliers ; vous traitez directement avec le cœur de la chaîne de valeur immobilière.
+              Wallnut assure directement la gestion et le suivi des opérations, avec un traitement confidentiel des dossiers et un accompagnement dédié tout au long du processus.
             </p>
             
             <div className="grid md:grid-cols-2 gap-8 mb-12 font-bold text-primary">

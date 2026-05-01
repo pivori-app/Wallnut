@@ -5,6 +5,7 @@ import { PropertyCard, PropertyData } from '../../components/PropertyCard';
 import { PropertyType } from '../../constants/property';
 import { PropertyCreationWizard } from '../../components/PropertyCreationWizard';
 import { SmartScannerPro } from '../../components/SmartScannerPro';
+import { PropertyDetailsView } from '../../components/PropertyDetailsView';
 import { motion, AnimatePresence } from 'motion/react';
 
 export function ParticulierDashboard() {
@@ -13,49 +14,60 @@ export function ParticulierDashboard() {
   // Simulated properties state
   const [properties, setProperties] = useState<PropertyData[]>([
     {
-      id: 'demo-1',
+      id: 'demo-lyon',
       type: 'Maison',
-      address: 'En attente détaillée',
+      address: 'Quai Saint-Vincent',
       city: 'Lyon',
       estimatedValue: 450000,
       status: 'documents_pending',
       isComplete: false,
+      createdAt: new Date()
+    },
+    {
+      id: 'demo-nice',
+      type: 'Appartement',
+      address: 'Promenade des Anglais',
+      city: 'Nice',
+      estimatedValue: 890000,
+      status: 'validated',
+      isComplete: true,
       createdAt: new Date()
     }
   ]);
 
   const [showNewForm, setShowNewForm] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyData | null>(null);
 
   const handleCreateProperty = (data: any) => {
     const newProp: PropertyData = {
       id: Math.random().toString(),
-      type: data.type,
-      address: 'Nouvelle adresse',
-      city: 'Ville',
-      estimatedValue: 0,
-      status: 'documents_pending', // Changed to documents_pending as they need to upload now
+      type: data.type as PropertyType,
+      address: data.address?.address || 'Adresse à préciser',
+      city: data.address?.city || 'Ville inconnue',
+      estimatedValue: data.estimatedValue || 300000,
+      status: 'documents_pending', 
       isComplete: false, 
-      createdAt: new Date()
+      createdAt: new Date(),
+      surface: data.surface,
+      rooms: data.rooms,
+      condition: data.condition,
+      dpe: data.dpe,
+      addressData: data.address,
+      features: data.features
     };
     setProperties([newProp, ...properties]);
     setShowNewForm(false);
   };
 
-  const handleSaveAndAddAnother = (data: any) => {
-    const newProp: PropertyData = {
-      id: Math.random().toString(),
-      type: data.type,
-      address: 'Nouvelle adresse',
-      city: 'Ville',
-      estimatedValue: 0,
-      status: 'documents_pending',
-      isComplete: false, 
-      createdAt: new Date()
-    };
-    setProperties([newProp, ...properties]);
-    // Keeps form open
-  };
+  if (selectedProperty) {
+    return (
+      <PropertyDetailsView 
+        property={selectedProperty} 
+        onBack={() => setSelectedProperty(null)} 
+      />
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -105,7 +117,11 @@ export function ParticulierDashboard() {
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
           >
             {properties.map(prop => (
-              <PropertyCard key={prop.id} property={prop} />
+              <PropertyCard 
+                key={prop.id} 
+                property={prop} 
+                onClick={() => setSelectedProperty(prop)}
+              />
             ))}
           </motion.div>
         )}

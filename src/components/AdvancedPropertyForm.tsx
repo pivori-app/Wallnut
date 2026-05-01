@@ -5,10 +5,11 @@ import { AddressSearchInput } from './AddressSearchInput';
 import { PropertyType } from '../constants/property';
 import { cn } from '../lib/utils';
 import { calculateRealTimeEstimation, TestEstimationEngine } from '../lib/estimationEngine';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Save, Plus, ChevronDown, MapPin, Home, Trees, Building, 
   Train, GraduationCap, ShoppingCart, Waves, Sun, 
-  Accessibility, Flame, Phone, CheckSquare, Droplets, Zap, Users, Dumbbell, Calculator, Activity
+  Accessibility, Flame, Phone, CheckSquare, Droplets, Zap, Users, Dumbbell, Calculator, Activity, Hash
 } from 'lucide-react';
 
 interface AdvancedPropertyFormProps {
@@ -24,15 +25,15 @@ const AccordionSection = ({ title, icon: Icon, children, defaultOpen = false }: 
     <div className="border border-black/5 rounded-[1.5rem] bg-white/40 overflow-hidden transition-all shadow-sm hover:shadow-md">
       <button 
         onClick={(e) => { e.preventDefault(); setIsOpen(!isOpen); }}
-        className="w-full flex items-center justify-between p-6 bg-white/60 hover:bg-white/80 transition-colors"
+        className="w-full flex items-center justify-between p-4 sm:p-6 bg-white/60 hover:bg-white/80 transition-colors"
       >
-        <div className="flex items-center gap-4">
-           <div className="p-2 bg-primary/5 rounded-xl text-primary">
-             <Icon className="w-6 h-6" />
+        <div className="flex items-center gap-3 sm:gap-4">
+           <div className="p-1.5 sm:p-2 bg-primary/5 rounded-xl text-primary">
+             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
            </div>
-           <span className="font-bold text-lg text-primary">{title}</span>
+           <span className="font-bold text-base sm:text-lg text-primary">{title}</span>
         </div>
-        <ChevronDown className={cn("w-6 h-6 text-primary/60 transition-transform", isOpen && "rotate-180")} />
+        <ChevronDown className={cn("w-5 h-5 sm:w-6 sm:h-6 text-primary/60 transition-transform", isOpen && "rotate-180")} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -53,6 +54,8 @@ const AccordionSection = ({ title, icon: Icon, children, defaultOpen = false }: 
 };
 
 export const AdvancedPropertyForm: React.FC<AdvancedPropertyFormProps> = ({ onSave, onSaveAndAddAnother, onCancel, isWizardStep }) => {
+  const { profile } = useAuth();
+  const [referenceNumber, setReferenceNumber] = useState<string>('');
   const [type, setType] = useState<PropertyType>('Appartement');
   const [addressData, setAddressData] = useState<any>(null);
   const [surface, setSurface] = useState<string>('');
@@ -127,7 +130,8 @@ export const AdvancedPropertyForm: React.FC<AdvancedPropertyFormProps> = ({ onSa
 
   const getFormData = () => ({
     type, address: addressData, surface, landSurface, rooms, bedrooms, 
-    transactionType, features, condition, dpe
+    transactionType, features, condition, dpe, referenceNumber,
+    estimatedValue: liveEstimation?.finalPrice || 0
   });
 
   const handleSaveAndAdd = (e: React.MouseEvent) => {
@@ -158,13 +162,13 @@ export const AdvancedPropertyForm: React.FC<AdvancedPropertyFormProps> = ({ onSa
               key={val}
               onClick={(e) => { e.preventDefault(); handleToggleFeature(val); }}
               className={cn(
-                "px-4 py-2.5 rounded-xl text-sm font-bold transition-all border flex items-center gap-2",
+                "px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all border flex items-center gap-2",
                 isSelected 
                   ? "bg-primary text-white border-primary shadow-md scale-105" 
                   : "bg-white/60 border-black/10 text-primary hover:border-primary/30 hover:bg-white"
               )}
             >
-              {Icon && <Icon size={16} className={isSelected ? "text-white" : "text-primary/60"} />}
+              {Icon && <Icon size={14} className={cn("sm:w-4 sm:h-4", isSelected ? "text-white" : "text-primary/60")} />}
               {val}
             </button>
           )
@@ -189,99 +193,120 @@ export const AdvancedPropertyForm: React.FC<AdvancedPropertyFormProps> = ({ onSa
   }, [surface, addressData, condition, features, dpe, type]);
 
   return (
-    <div className="glass p-6 md:p-10 rounded-[2.5rem] border border-black/5 space-y-8">
-      <div className="flex justify-between items-center px-2">
+    <div className="glass p-5 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-black/5 space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-1 sm:px-2 gap-4">
         <div>
-          <h2 className="text-3xl font-display font-bold text-primary">Créer une Fiche Bien</h2>
-          <p className="text-neutral-dark/60 mt-2">Détaillez les caractéristiques expertes pour une valorisation précise.</p>
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-primary">Créer une Fiche Bien</h2>
+          <p className="text-sm sm:text-base text-neutral-dark/60 mt-1 sm:mt-2">Détaillez les caractéristiques expertes pour une valorisation précise.</p>
         </div>
-        <button onClick={onCancel} className="text-sm font-bold text-primary/60 hover:text-primary transition-colors bg-white/50 px-4 py-2 rounded-xl">Ignorer</button>
+        <button onClick={onCancel} className="w-full sm:w-auto text-sm font-bold text-primary/60 hover:text-primary transition-colors bg-white/50 px-4 py-2 rounded-xl">Ignorer</button>
       </div>
 
       <div className="space-y-4">
         <AccordionSection title="Informations Générales" icon={Home} defaultOpen={true}>
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="block text-sm font-bold text-primary">Type de bien</label>
-              <PropertySearchSelect value={type} onChange={setType} />
-            </div>
-
-            <div className="space-y-3">
-              <label className="block text-sm font-bold text-primary">Adresse du bien</label>
-              <AddressSearchInput onAddressSelect={setAddressData} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <label className="block text-sm font-bold text-primary">Surface Habitable (m²)</label>
+          <div className="space-y-8">
+            {profile?.isPro && (
+              <div className="p-6 bg-secondary/5 rounded-2xl border border-secondary/20 space-y-4">
+                <div className="flex items-center gap-2 text-secondary">
+                  <Hash size={20} />
+                  <span className="font-bold uppercase text-xs tracking-wider">Référence Dossier Professionnel</span>
+                </div>
                 <div className="relative">
                   <input 
-                    type="number" 
-                    value={surface} 
-                    onChange={(e) => setSurface(e.target.value)}
-                    placeholder="Ex: 85"
-                    className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+                    type="text" 
+                    value={referenceNumber}
+                    onChange={(e) => setReferenceNumber(e.target.value)}
+                    placeholder="Ex: MANDAT-2024-XP"
+                    className="w-full bg-white border border-secondary/20 rounded-xl px-4 py-3 outline-none focus:border-secondary transition-all font-bold text-primary"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold opacity-40">m²</span>
+                  <p className="text-[10px] text-neutral-dark/60 mt-2 italic">Cette référence sera utilisée pour identifier la provenance (Fiche de dénonciation).</p>
                 </div>
+              </div>
+            )}
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="block text-sm font-bold text-primary">Type de bien</label>
+                <PropertySearchSelect value={type} onChange={setType} />
               </div>
 
               <div className="space-y-3">
-                <label className="block text-sm font-bold text-primary">Surface Terrain (m²)</label>
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
+                <label className="block text-sm font-bold text-primary">Adresse du bien</label>
+                <AddressSearchInput onAddressSelect={setAddressData} />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <label className="block text-sm font-bold text-primary">Surface Habitable (m²)</label>
+                  <div className="relative">
                     <input 
                       type="number" 
-                      value={landSurface} 
-                      onChange={(e) => setLandSurface(e.target.value)}
-                      placeholder="Ex: 500"
+                      value={surface} 
+                      onChange={(e) => setSurface(e.target.value)}
+                      placeholder="Ex: 85"
                       className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold opacity-40">m²</span>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex gap-4">
-                 <div className="flex-1 space-y-3">
-                   <label className="block text-sm font-bold text-primary">Pièces</label>
-                   <select 
-                     value={rooms} 
-                     onChange={(e) => setRooms(e.target.value)}
-                     className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-primary appearance-none cursor-pointer"
-                   >
-                     {[1, 2, 3, 4, 5, 6, 7, '8+'].map(num => <option key={num} value={num}>{num} {num === '8+' ? '' : 'pièces'}</option>)}
-                   </select>
-                 </div>
-                 <div className="flex-1 space-y-3">
-                   <label className="block text-sm font-bold text-primary">Chambres</label>
-                   <select 
-                     value={bedrooms} 
-                     onChange={(e) => setBedrooms(e.target.value)}
-                     className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-primary appearance-none cursor-pointer"
-                   >
-                     {[0, 1, 2, 3, 4, 5, 6, 7, '8+'].map(num => <option key={num} value={num}>{num} {num === '8+' ? '' : 'chambres'}</option>)}
-                   </select>
-                 </div>
+                <div className="space-y-3">
+                  <label className="block text-sm font-bold text-primary">Surface Terrain (m²)</label>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <input 
+                        type="number" 
+                        value={landSurface} 
+                        onChange={(e) => setLandSurface(e.target.value)}
+                        placeholder="Ex: 500"
+                        className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold opacity-40">m²</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <label className="block text-sm font-bold text-primary">Type de transaction</label>
-                <div className="flex gap-2">
-                  {['Sans viager', 'Avec viager'].map(t => (
-                    <button
-                      key={t}
-                      onClick={(e) => { e.preventDefault(); setTransactionType(t); }}
-                      className={cn(
-                        "flex-1 py-3 rounded-xl font-bold transition-all border",
-                        transactionType === t ? "bg-primary text-white border-primary shadow-md" : "bg-white/60 text-primary border-black/10 hover:border-primary/30"
-                      )}
-                    >
-                      {t}
-                    </button>
-                  ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex gap-4">
+                   <div className="flex-1 space-y-3">
+                     <label className="block text-sm font-bold text-primary">Pièces</label>
+                     <select 
+                       value={rooms} 
+                       onChange={(e) => setRooms(e.target.value)}
+                       className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-primary appearance-none cursor-pointer"
+                     >
+                       {[1, 2, 3, 4, 5, 6, 7, '8+'].map(num => <option key={num} value={num}>{num} {num === '8+' ? '' : 'pièces'}</option>)}
+                     </select>
+                   </div>
+                   <div className="flex-1 space-y-3">
+                     <label className="block text-sm font-bold text-primary">Chambres</label>
+                     <select 
+                       value={bedrooms} 
+                       onChange={(e) => setBedrooms(e.target.value)}
+                       className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-primary appearance-none cursor-pointer"
+                     >
+                       {[0, 1, 2, 3, 4, 5, 6, 7, '8+'].map(num => <option key={num} value={num}>{num} {num === '8+' ? '' : 'chambres'}</option>)}
+                     </select>
+                   </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="block text-sm font-bold text-primary">Type de transaction</label>
+                  <div className="flex gap-2">
+                    {['Sans viager', 'Avec viager'].map(t => (
+                      <button
+                        key={t}
+                        onClick={(e) => { e.preventDefault(); setTransactionType(t); }}
+                        className={cn(
+                          "flex-1 py-3 rounded-xl font-bold transition-all border",
+                          transactionType === t ? "bg-primary text-white border-primary shadow-md" : "bg-white/60 text-primary border-black/10 hover:border-primary/30"
+                        )}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -363,13 +388,13 @@ export const AdvancedPropertyForm: React.FC<AdvancedPropertyFormProps> = ({ onSa
 
             <div className="space-y-4">
               <label className="block text-sm font-bold text-primary">Diagnostic de Performance Énergétique (DPE)</label>
-              <div className="flex gap-1 bg-white/40 p-2 rounded-2xl border border-black/5">
+              <div className="flex flex-wrap sm:flex-nowrap gap-1 bg-white/40 p-1.5 sm:p-2 rounded-2xl border border-black/5">
                 {DPE_GRADES.map(grade => (
                   <button
                     key={grade.label}
                     onClick={(e) => { e.preventDefault(); setDpe(grade.label); }}
                     className={cn(
-                      "flex-1 py-3 text-sm font-extrabold transition-all rounded-lg relative overflow-hidden",
+                      "flex-1 min-w-[35px] sm:min-w-0 py-2 sm:py-3 text-[10px] sm:text-xs font-extrabold transition-all rounded-lg relative overflow-hidden",
                       dpe === grade.label ? "scale-105 z-10 shadow-md border-transparent" : "border-transparent opacity-50 hover:opacity-100",
                       grade.color,
                       dpe === grade.label && "opacity-100"

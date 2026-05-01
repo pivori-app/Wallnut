@@ -162,7 +162,7 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
           onClick={handleFinish}
           className="px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all bg-primary text-white shadow-lg hover:shadow-xl hover:-translate-y-1"
         >
-          Générer la Synthèse & Déploiement
+          {Object.keys(documents).length === 0 ? "Voir la Synthèse sans document" : "Générer la Synthèse & Déploiement"}
         </button>
       </div>
 

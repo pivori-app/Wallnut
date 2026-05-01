@@ -7,6 +7,7 @@
   --font-mono: "Fira Code", ui-monospace, SFMono-Regular, monospace;
 
   --color-primary: #0A2B4E;
+  --color-primary-light: #1A3E62;
   --color-secondary: #C79A2E;
   --color-success: #2E6F40;
   --color-warning: #D9731E;
@@ -14,22 +15,117 @@
   
   --color-neutral-light: #F5F5F5;
   --color-neutral-dark: #2E2E2E;
+
+  --container-3xs: 16rem;
+  --container-2xs: 18rem;
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-4xl: 56rem;
+  --container-5xl: 64rem;
+  --container-6xl: 72rem;
+  --container-7xl: 80rem;
 }
 
 @layer base {
+  :root {
+    /* Fluid Typography using clamp() for 2026 standards */
+    --step--2: clamp(0.7014rem, 0.6728rem + 0.1432vw, 0.8rem);
+    --step--1: clamp(0.875rem, 0.817rem + 0.29vw, 1.075rem);
+    --step-0: clamp(1rem, 0.9034rem + 0.4831vw, 1.3331rem);
+    --step-1: clamp(1.2rem, 1.0506rem + 0.7469vw, 1.7156rem);
+    --step-2: clamp(1.44rem, 1.2163rem + 1.1188vw, 2.2212rem);
+    --step-3: clamp(1.728rem, 1.3999rem + 1.6405vw, 2.8463rem);
+    --step-4: clamp(2.0736rem, 1.6022rem + 2.3571vw, 3.6119rem);
+    --step-5: clamp(2.4883rem, 1.8197rem + 3.3432vw, 4.5469rem);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-neutral-light text-neutral-dark font-sans;
+    min-height: 100dvh;
+    /* Safe areas for diverse screens / folding devices */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    font-size: var(--step-0);
   }
+  
+  /* Prevent zoom on iOS for inputs & optimize touch */
+  input, select, textarea, button {
+    touch-action: manipulation;
+  }
+  
+  input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+    font-size: max(16px, 1rem); 
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-semibold tracking-tight;
   }
+  
+  h1 { font-size: var(--step-4); }
+  h2 { font-size: var(--step-3); line-height: 1.1; }
+  h3 { font-size: var(--step-2); line-height: 1.2; }
+  h4 { font-size: var(--step-1); }
+  
+  small { font-size: var(--step--1); }
 }
 
-.glass {
-  @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-lg;
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl bg-white/70 border border-white/40 shadow-[0_8px_32px_0_rgba(10,43,78,0.1)];
+  }
+
+  .glass-card-3d {
+    @apply backdrop-blur-xl bg-white/70 border border-white/40 shadow-[0_8px_32px_0_rgba(10,43,78,0.1)] transition-all duration-300;
+    transform-style: preserve-3d;
+  }
+
+  .glass-card-3d:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(1deg) translateY(-2px);
+    box-shadow: 0 15px 35px -5px rgba(10, 43, 78, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  
+  .dark .glass {
+    @apply bg-[#121826]/70 border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+
+  .dark .glass-card-3d {
+    @apply bg-[#121826]/70 border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-all duration-300;
+    transform-style: preserve-3d;
+  }
+
+  /* Universal minimum touch target size */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
-.dark .glass {
-  @apply bg-[#121826]/70 border-white/10;
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 

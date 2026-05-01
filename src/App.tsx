@@ -18,6 +18,7 @@ import { RegisterForm } from './pages/RegisterForm';
 import { Solution } from './pages/Solution';
 import { Offres } from './pages/Offres';
 import { Blog } from './pages/Blog';
+import { BlogPost } from './pages/BlogPost';
 import { FAQ } from './pages/FAQ';
 import { Contact } from './pages/Contact';
 import { HelpCenter } from './pages/HelpCenter';
@@ -32,6 +33,10 @@ import { Settings } from './pages/dashboard/Settings';
 import { Calendar } from './pages/dashboard/Calendar';
 import { Messages } from './pages/dashboard/Messages';
 
+import { Building2 } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+
 // Placeholder Pages
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
@@ -43,15 +48,21 @@ const PlaceholderPage = ({ title }: { title: string }) => (
   </div>
 );
 
-import { Building2 } from 'lucide-react';
-
-import { Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-
 const DashboardRedirect = () => {
-  const { profile } = useAuth();
+  const { profile, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="w-12 h-12 border-4 border-primary border-t-secondary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (profile?.role === 'professionnel') return <Navigate to="/dashboard/pro" replace />;
   if (profile?.role === 'institution' || profile?.role === 'gestionnaire') return <Navigate to="/institutional" replace />;
+  
+  // Default to particulier if no recognized role
   return <Navigate to="/dashboard/particulier" replace />;
 };
 
@@ -66,6 +77,7 @@ export default function App() {
           <Route path="/solution" element={<Solution />} />
           <Route path="/offres" element={<Offres />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<HelpCenter />} />

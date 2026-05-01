@@ -27,12 +27,15 @@ interface NavItem {
   href: string;
   icon: React.ElementType;
   roles?: string[];
+  subRole?: string;
+  isExternal?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Tableau de bord', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Mes Dossiers', href: '/dossiers', icon: FileText },
   { label: 'Mes Leads', href: '/leads', icon: Users, roles: ['professionnel', 'institution'] },
+  { label: 'Outils Marketing', href: '/presentation-agents.html', icon: FileText, roles: ['professionnel'], subRole: 'agent_immobilier', isExternal: true },
   { label: 'Mes Annonces', href: '/ads', icon: Globe, roles: ['professionnel', 'institution'] },
   { label: 'Institutionnel', href: '/institutional', icon: BarChart3, roles: ['institution', 'gestionnaire'] },
   { label: 'Calendrier', href: '/calendar', icon: Calendar },
@@ -116,10 +119,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           )}
         >
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {NAV_ITEMS.filter(item => !item.roles || (profile && item.roles.includes(profile.role))).map((item) => (
-              <Link
+            {NAV_ITEMS.filter(item => {
+              if (item.roles && (!profile || !item.roles.includes(profile.role))) return false;
+              if (item.subRole && profile?.professionalData?.subRole !== item.subRole) return false;
+              return true;
+            }).map((item) => {
+              const LinkComponent = item.isExternal ? 'a' : Link;
+              const linkProps = item.isExternal 
+                ? { href: item.href, target: "_blank", rel: "noopener noreferrer" }
+                : { to: item.href };
+
+              return (
+              <LinkComponent
                 key={item.href}
-                to={item.href}
+                {...linkProps as any}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-xl transition-all group relative",
                   "hover:bg-primary/5 dark:hover:bg-white/5"
@@ -133,8 +146,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                     {item.label}
                   </div>
                 )}
-              </Link>
-            ))}
+              </LinkComponent>
+            )})}
           </nav>
           
           <div className="p-4 border-t border-black/5 dark:border-white/5">
@@ -152,9 +165,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-neutral-light/50 dark:bg-[#121826] flex flex-col">
+        <main className="flex-1 overflow-y-auto bg-neutral-light/50 dark:bg-[#121826] flex flex-col @container">
           <div className="flex-1 p-4 lg:p-8">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-[70rem] mx-auto w-full">
               {children}
             </div>
           </div>
@@ -194,17 +207,27 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
 
               <nav className="flex-1 space-y-2">
-                {NAV_ITEMS.filter(item => !item.roles || (profile && item.roles.includes(profile.role))).map((item) => (
-                  <Link
+                {NAV_ITEMS.filter(item => {
+                  if (item.roles && (!profile || !item.roles.includes(profile.role))) return false;
+                  if (item.subRole && profile?.professionalData?.subRole !== item.subRole) return false;
+                  return true;
+                }).map((item) => {
+                  const LinkComponent = item.isExternal ? 'a' : Link;
+                  const linkProps = item.isExternal 
+                    ? { href: item.href, target: "_blank", rel: "noopener noreferrer" }
+                    : { to: item.href };
+
+                  return (
+                  <LinkComponent
                     key={item.href}
-                    to={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    {...linkProps as any}
+                    onClick={item.isExternal ? undefined : () => setIsMobileMenuOpen(false)}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-primary hover:text-white transition-all group"
                   >
                     <item.icon className="w-6 h-6 text-primary dark:text-secondary group-hover:text-white" />
                     <span className="text-lg font-bold">{item.label}</span>
-                  </Link>
-                ))}
+                  </LinkComponent>
+                )})}
               </nav>
 
               <div className="pt-6 border-t border-black/5 dark:border-white/5">
