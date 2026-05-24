@@ -45,7 +45,7 @@ export function Dashboard() {
     <div className="space-y-8 pb-10">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold">Bonjour, {profile?.displayName}</h1>
+          <h1 className="text-app-2xl font-display font-bold">Bonjour, {profile?.displayName}</h1>
           <p className="text-neutral-dark/60">
             {profile?.isPro 
               ? `Espace Professionnel (${formatRole(profile.professionalData?.subRole || '')}) - Gestion de vos dossiers et leads.`
@@ -74,12 +74,12 @@ export function Dashboard() {
               <div className={cn("p-3 rounded-2xl bg-black/5 dark:bg-white/5", stat.color)}>
                 <stat.icon className="w-6 h-6" />
               </div>
-              <span className="text-xs font-bold text-success flex items-center gap-1">
+              <span className="text-app-xs font-bold text-success flex items-center gap-1">
                 +12% <TrendingUp className="w-3 h-3" />
               </span>
             </div>
-            <p className="text-sm font-medium opacity-60">{stat.label}</p>
-            <p className="text-2xl font-display font-bold mt-1">{stat.value}</p>
+            <p className="text-app-sm font-medium opacity-60">{stat.label}</p>
+            <p className="text-app-xl font-display font-bold mt-1">{stat.value}</p>
           </motion.div>
         ))}
       </div>
@@ -88,8 +88,8 @@ export function Dashboard() {
         {/* Main Chart */}
         <div className="lg:col-span-2 glass-card-3d p-8 rounded-3xl space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-display font-bold">Performance Financière</h2>
-            <select className="touch-target min-h-[44px] bg-transparent border border-black/10 dark:border-white/10 rounded-lg px-3 py-1 text-sm font-medium focus:outline-none">
+            <h2 className="text-app-lg font-display font-bold">Performance Financière</h2>
+            <select className="touch-target min-h-[44px] bg-transparent border border-black/10 dark:border-white/10 rounded-lg px-3 py-1 text-app-sm font-medium focus:outline-none">
               <option>6 derniers mois</option>
               <option>12 derniers mois</option>
             </select>
@@ -122,7 +122,7 @@ export function Dashboard() {
 
         {/* Action Needed */}
         <div className="glass-card-3d p-8 rounded-3xl space-y-6">
-          <h2 className="text-xl font-display font-bold">Actions Requises</h2>
+          <h2 className="text-app-lg font-display font-bold">Actions Requises</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-4 p-4 rounded-2xl bg-black/5 dark:bg-white/5 group hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
@@ -130,8 +130,8 @@ export function Dashboard() {
                   <AlertCircle className="w-6 h-6 text-warning" />
                 </div>
                 <div>
-                  <p className="font-bold text-sm">Document Manquant</p>
-                  <p className="text-xs opacity-60">Dossier #782 - Diagnostic ERP</p>
+                  <p className="font-bold text-app-sm">Document Manquant</p>
+                  <p className="text-app-xs opacity-60">Dossier #782 - Diagnostic ERP</p>
                   <p className="text-[10px] uppercase font-bold text-primary mt-2 flex items-center gap-1 cursor-pointer hover:underline">
                     Uploader <FileText className="w-3 h-3" />
                   </p>
@@ -139,7 +139,7 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="touch-target min-h-[44px] w-full p-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <button className="touch-target min-h-[44px] w-full p-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-app-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
             Voir tous les dossiers
           </button>
         </div>
@@ -148,10 +148,10 @@ export function Dashboard() {
       {/* Active Pipeline */}
       <div className="glass-card-3d p-8 rounded-3xl overflow-hidden">
         <div className="flex items-center justify-between mb-8">
-           <h2 className="text-xl font-display font-bold">Pipeline Dossiers</h2>
+           <h2 className="text-app-lg font-display font-bold">Pipeline Dossiers</h2>
            <div className="flex gap-2">
              {['Tous', 'En cours', 'Validés'].map(filter => (
-               <button key={filter} className={cn("px-4 py-1.5 rounded-full text-xs font-bold transition-all", filter === 'Tous' ? "bg-primary text-white" : "hover:bg-black/5 dark:hover:bg-white/5 opacity-60")}>
+               <button key={filter} className={cn("px-4 py-1.5 rounded-full text-app-xs font-bold transition-all", filter === 'Tous' ? "bg-primary text-white" : "hover:bg-black/5 dark:hover:bg-white/5 opacity-60")}>
                  {filter}
                </button>
              ))}
@@ -161,7 +161,7 @@ export function Dashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-sm font-medium opacity-60">
+              <tr className="text-app-sm font-medium opacity-60">
                 <th className="pb-4 pr-4">ID</th>
                 <th className="pb-4 px-4">Bien / Adresse</th>
                 <th className="pb-4 px-4">Offre</th>
@@ -173,10 +173,10 @@ export function Dashboard() {
             <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {[1, 2, 3, 4].map((i) => (
                 <tr key={i} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors group cursor-pointer">
-                  <td className="py-4 pr-4 font-mono text-sm">#WN-00{i}</td>
+                  <td className="py-4 pr-4 font-mono text-app-sm">#WN-00{i}</td>
                   <td className="py-4 px-4">
                     <p className="font-bold">Villa Mediterranean</p>
-                    <p className="text-xs opacity-60">Barcelone, Espagne</p>
+                    <p className="text-app-xs opacity-60">Barcelone, Espagne</p>
                   </td>
                   <td className="py-4 px-4">
                     <span className="px-2 py-1 rounded bg-secondary/20 text-primary text-[10px] font-bold uppercase transition-colors group-hover:bg-secondary group-hover:text-white">
@@ -187,7 +187,7 @@ export function Dashboard() {
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-success"></div>
-                      <span className="text-sm font-medium">Validé</span>
+                      <span className="text-app-sm font-medium">Validé</span>
                     </div>
                   </td>
                   <td className="py-4 pl-4 text-right">

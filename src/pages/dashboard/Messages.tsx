@@ -63,10 +63,10 @@ export function Messages() {
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0">
         <div>
-          <h1 className="text-4xl font-display font-bold text-primary flex items-center gap-3">
+          <h1 className="text-app-2xl md:text-app-3xl font-display font-bold text-primary flex items-center gap-3">
             Espace Messagerie
           </h1>
-          <p className="text-neutral-dark/60 mt-2 text-lg">Communiquez de manière ciblée avec vos partenaires immobiliers.</p>
+          <p className="text-neutral-dark/60 mt-2 text-app-md">Communiquez de manière ciblée avec vos partenaires immobiliers.</p>
         </div>
         <div className="flex items-center gap-4">
           <button 
@@ -105,14 +105,14 @@ export function Messages() {
         {/* Sidebar */}
         <div className="w-full md:w-64 border-r border-black/5 flex flex-col bg-white/40 shrink-0">
           <div className="p-6 space-y-2 flex-1 overflow-y-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-4 block">Boîte aux lettres</span>
+            <span className="text-app-xs font-bold uppercase tracking-wider text-primary/60 mb-4 block">Boîte aux lettres</span>
             <SidebarBtn icon={Inbox} label="Boîte de réception" count={3} active={activeTab === 'inbox'} onClick={() => setActiveTab('inbox')} />
             <SidebarBtn icon={Send} label="Messages envoyés" active={activeTab === 'sent'} onClick={() => setActiveTab('sent')} />
             <SidebarBtn icon={FileText} label="Brouillons" count={1} active={activeTab === 'drafts'} onClick={() => setActiveTab('drafts')} />
             
             <div className="h-px bg-black/5 my-6"></div>
             
-            <span className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-4 block">Annuaire & Groupes</span>
+            <span className="text-app-xs font-bold uppercase tracking-wider text-primary/60 mb-4 block">Annuaire & Groupes</span>
             <SidebarBtn icon={Users} label="Tous les contacts" active={activeTab === 'directory'} onClick={() => setActiveTab('directory')} />
             
             <div className="mt-4 space-y-1">
@@ -148,7 +148,7 @@ function SidebarBtn({ icon: Icon, label, count, active, onClick }: { icon: any, 
     <button 
       onClick={onClick}
       className={cn(
-        "w-full flex items-center justify-between px-4 py-2.5 rounded-xl font-bold transition-all text-sm group",
+        "w-full flex items-center justify-between px-4 py-2.5 rounded-xl font-bold transition-all text-app-sm group",
         active ? "bg-primary text-white shadow-md" : "text-primary/70 hover:bg-white/80"
       )}
     >
@@ -167,10 +167,10 @@ function SidebarBtn({ icon: Icon, label, count, active, onClick }: { icon: any, 
 
 function GroupBadge({ icon: Icon, label, count }: { icon: any, label: string, count: number }) {
   return (
-    <button className="w-full flex items-center justify-between px-4 py-2 rounded-lg text-sm transition-all text-primary/70 hover:bg-white/60">
+    <button className="w-full flex items-center justify-between px-4 py-2 rounded-lg text-app-sm transition-all text-primary/70 hover:bg-white/60">
       <div className="flex items-center gap-3">
         <Icon size={16} className="text-primary/40" />
-        <span className="font-medium text-xs">{label}</span>
+        <span className="font-medium text-app-xs">{label}</span>
       </div>
       <span className="text-[10px] text-primary/40">{count}</span>
     </button>
@@ -181,15 +181,15 @@ function DirectoryView({ contacts, onAddContact }: { contacts: Contact[], onAddC
   return (
     <div className="h-full flex flex-col">
       <div className="p-6 border-b border-black/5 flex items-center justify-between bg-white/40">
-        <h2 className="text-xl font-bold text-primary">Annuaire des Partenaires</h2>
+        <h2 className="text-app-lg font-bold text-primary">Annuaire des Partenaires</h2>
         <div className="flex items-center gap-3">
           <div className="relative hidden md:block">
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/40" />
-            <input type="text" placeholder="Rechercher un contact..." className="pl-10 pr-4 py-2 bg-white rounded-xl border border-black/5 text-sm outline-none focus:border-primary/40 transition-all w-64" />
+            <input type="text" placeholder="Rechercher un contact..." className="pl-10 pr-4 py-2 bg-white rounded-xl border border-black/5 text-app-sm outline-none focus:border-primary/40 transition-all w-64" />
           </div>
           <button 
             onClick={onAddContact}
-            className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold flex items-center gap-2 hover:bg-primary-light transition-all shadow-md group"
+            className="px-4 py-2 rounded-xl bg-primary text-white text-app-sm font-bold flex items-center gap-2 hover:bg-primary-light transition-all shadow-md group"
           >
             <UserPlus size={16} className="group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline">Ajouter</span>
@@ -206,16 +206,16 @@ function DirectoryView({ contacts, onAddContact }: { contacts: Contact[], onAddC
                      {c.name.charAt(0)}
                    </div>
                    <div>
-                     <h3 className="font-bold text-primary text-sm">{c.name}</h3>
+                     <h3 className="font-bold text-primary text-app-sm">{c.name}</h3>
                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary/60">{c.role}</span>
                    </div>
                  </div>
                  <button className="p-2 hover:bg-white rounded-full text-primary/40 hover:text-primary transition-colors"><MoreVertical size={16} /></button>
                </div>
-               {c.company && <p className="text-sm font-medium flex items-center gap-2"><Building size={14} className="text-primary/40"/> {c.company}</p>}
-               <a href={`mailto:${c.email}`} className="text-sm font-medium flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} className="text-primary/40"/> {c.email}</a>
+               {c.company && <p className="text-app-sm font-medium flex items-center gap-2"><Building size={14} className="text-primary/40"/> {c.company}</p>}
+               <a href={`mailto:${c.email}`} className="text-app-sm font-medium flex items-center gap-2 hover:text-primary transition-colors"><Mail size={14} className="text-primary/40"/> {c.email}</a>
                {c.dossierId && (
-                 <div className="mt-2 pt-2 border-t border-black/5 flex items-center gap-2 text-xs font-bold text-secondary">
+                 <div className="mt-2 pt-2 border-t border-black/5 flex items-center gap-2 text-app-xs font-bold text-secondary">
                    <Link size={12} /> Rattaché au dossier en cours
                  </div>
                )}
@@ -241,7 +241,7 @@ function MailListView({ type }: { type: string }) {
           <button className="p-2 bg-white rounded-lg border border-black/5 hover:bg-black/5 transition-colors"><RefreshCw size={16} className="text-primary/60" /></button>
           <button className="p-2 bg-white rounded-lg border border-black/5 hover:bg-black/5 transition-colors"><Trash2 size={16} className="text-primary/60" /></button>
         </div>
-        <div className="text-sm font-bold text-primary/60">
+        <div className="text-app-sm font-bold text-primary/60">
           1-3 sur 3
         </div>
       </div>
@@ -251,14 +251,14 @@ function MailListView({ type }: { type: string }) {
             <button className="text-primary/20 hover:text-yellow-400">
                <Star size={18} fill={m.isStarred ? "currentColor" : "none"} className={m.isStarred ? "text-yellow-400 group-hover:text-yellow-500" : ""} />
             </button>
-            <div className={cn("w-48 truncate text-sm", m.isRead ? "font-medium text-primary/80" : "font-bold text-primary")}>
+            <div className={cn("w-48 truncate text-app-sm", m.isRead ? "font-medium text-primary/80" : "font-bold text-primary")}>
               {m.sender}
             </div>
-            <div className="flex-1 truncate text-sm">
+            <div className="flex-1 truncate text-app-sm">
               <span className={cn("mr-2", m.isRead ? "text-primary/90 font-medium" : "text-primary font-bold")}>{m.subject}</span>
               <span className="text-neutral-dark/60 font-medium">- {m.snippet}</span>
             </div>
-            <div className="text-xs font-bold text-primary/60 w-16 text-right">
+            <div className="text-app-xs font-bold text-primary/60 w-16 text-right">
               {m.date}
             </div>
           </div>
@@ -306,7 +306,7 @@ function ComposeModal({ onClose, directory }: { onClose: () => void, directory: 
         className="relative w-full max-w-3xl bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         <div className="px-6 py-4 bg-primary text-white flex items-center justify-between shrink-0">
-          <h2 className="font-bold text-lg">Nouveau message</h2>
+          <h2 className="font-bold text-app-md">Nouveau message</h2>
           <button onClick={onClose} className="p-1 hover:bg-white/20 rounded-full transition-colors"><X size={20} /></button>
         </div>
 
@@ -315,19 +315,19 @@ function ComposeModal({ onClose, directory }: { onClose: () => void, directory: 
           {/* Outils Supérieurs (Templates & Groupes) */}
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
-              <label className="text-xs font-bold uppercase tracking-wider text-primary/60 block mb-1">Templates Experts</label>
+              <label className="text-app-xs font-bold uppercase tracking-wider text-primary/60 block mb-1">Templates Experts</label>
               <select 
                 value={template} 
                 onChange={handleApplyTemplate}
-                className="w-full bg-white border border-black/10 rounded-xl px-3 py-2 text-sm font-bold text-primary outline-none focus:border-primary/40 appearance-none"
+                className="w-full bg-white border border-black/10 rounded-xl px-3 py-2 text-app-sm font-bold text-primary outline-none focus:border-primary/40 appearance-none"
               >
                 <option value="">Sélectionner un modèle...</option>
                 {TEMPLATES.map(t => <option key={t.id} value={t.id}>{t.role} - {t.label}</option>)}
               </select>
             </div>
             <div className="flex-1">
-               <label className="text-xs font-bold uppercase tracking-wider text-primary/60 block mb-1">Rattacher à un dossier</label>
-               <select className="w-full bg-white border border-black/10 rounded-xl px-3 py-2 text-sm font-bold text-primary outline-none focus:border-primary/40 appearance-none">
+               <label className="text-app-xs font-bold uppercase tracking-wider text-primary/60 block mb-1">Rattacher à un dossier</label>
+               <select className="w-full bg-white border border-black/10 rounded-xl px-3 py-2 text-app-sm font-bold text-primary outline-none focus:border-primary/40 appearance-none">
                  <option value="">Aucun dossier</option>
                  <option value="1">12 Rue des Lilas, Lyon (Vente)</option>
                </select>
@@ -336,19 +336,19 @@ function ComposeModal({ onClose, directory }: { onClose: () => void, directory: 
 
           <div className="space-y-4 bg-white p-1 rounded-2xl border border-black/5">
             <div className="flex border-b border-black/5 px-2">
-              <span className="py-3 px-2 text-sm font-bold text-primary/60 w-16">À :</span>
-              <input type="text" placeholder="Email ou groupe (ex: Notaires)..." className="flex-1 py-3 text-sm outline-none font-medium text-primary" />
-              <button className="py-3 px-2 text-xs font-bold text-primary/60 hover:text-primary">Cc/Cci</button>
+              <span className="py-3 px-2 text-app-sm font-bold text-primary/60 w-16">À :</span>
+              <input type="text" placeholder="Email ou groupe (ex: Notaires)..." className="flex-1 py-3 text-app-sm outline-none font-medium text-primary" />
+              <button className="py-3 px-2 text-app-xs font-bold text-primary/60 hover:text-primary">Cc/Cci</button>
             </div>
             <div className="flex border-b border-black/5 px-2">
-              <span className="py-3 px-2 text-sm font-bold text-primary/60 w-16">Objet :</span>
-              <input value={subject} onChange={e => setSubject(e.target.value)} type="text" className="flex-1 py-3 text-sm outline-none font-medium text-primary" />
+              <span className="py-3 px-2 text-app-sm font-bold text-primary/60 w-16">Objet :</span>
+              <input value={subject} onChange={e => setSubject(e.target.value)} type="text" className="flex-1 py-3 text-app-sm outline-none font-medium text-primary" />
             </div>
             <div className="px-4 py-4 min-h-[200px]">
               <textarea 
                 value={body}
                 onChange={e => setBody(e.target.value)}
-                className="w-full h-full min-h-[200px] outline-none resize-none font-medium text-primary text-sm leading-relaxed" 
+                className="w-full h-full min-h-[200px] outline-none resize-none font-medium text-primary text-app-sm leading-relaxed" 
                 placeholder="Votre message..."
               />
             </div>
@@ -358,11 +358,11 @@ function ComposeModal({ onClose, directory }: { onClose: () => void, directory: 
         <div className="px-6 py-4 border-t border-black/5 bg-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <button className="p-3 text-primary bg-primary/5 hover:bg-primary/10 rounded-xl transition-colors flex items-center gap-2 group relative">
-               <div className="absolute bottom-full left-0 mb-2 w-max bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+               <div className="absolute bottom-full left-0 mb-2 w-max bg-black text-white text-app-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                  Agrafeuse numérique (Pièces Vault)
                </div>
                <Paperclip size={20} className="transform -rotate-45" />
-               <span className="text-sm font-bold opacity-0 w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all whitespace-nowrap">Lier une pièce</span>
+               <span className="text-app-sm font-bold opacity-0 w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all whitespace-nowrap">Lier une pièce</span>
             </button>
             <button className="p-3 text-primary/60 hover:bg-black/5 rounded-xl transition-colors">
               <MoreVertical size={20} />
@@ -403,8 +403,8 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
       >
         <div className="px-6 py-6 border-b border-black/5 flex items-center justify-between shrink-0">
           <div>
-            <h2 className="font-display font-bold text-2xl text-primary">Nouveau contact</h2>
-            <p className="text-sm text-neutral-dark/60 mt-1">Ajoutez un partenaire ou importez depuis vos sources.</p>
+            <h2 className="font-display font-bold text-app-xl text-primary">Nouveau contact</h2>
+            <p className="text-app-sm text-neutral-dark/60 mt-1">Ajoutez un partenaire ou importez depuis vos sources.</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors"><X size={20} /></button>
         </div>
@@ -414,19 +414,19 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
           <div className="flex bg-white rounded-xl p-1 border border-black/5 shadow-sm">
             <button 
               onClick={() => setImportMode('manual')}
-              className={cn("flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'manual' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
+              className={cn("flex-1 py-2 text-app-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'manual' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
             >
               <UserPlus size={16} /> Manuel
             </button>
             <button 
               onClick={() => setImportMode('gmail')}
-              className={cn("flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'gmail' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
+              className={cn("flex-1 py-2 text-app-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'gmail' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
             >
               <Mail size={16} /> Import Gmail
             </button>
             <button 
               onClick={() => setImportMode('file')}
-              className={cn("flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'file' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
+              className={cn("flex-1 py-2 text-app-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2", importMode === 'file' ? "bg-primary/10 text-primary" : "text-primary/60 hover:text-primary")}
             >
               <FileSpreadsheet size={16} /> VCF / Excel
             </button>
@@ -444,12 +444,12 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                       <label className="text-xs font-bold text-primary">Nom complet</label>
-                       <input type="text" placeholder="Ex: Jean Dupont" className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm" />
+                       <label className="text-app-xs font-bold text-primary">Nom complet</label>
+                       <input type="text" placeholder="Ex: Jean Dupont" className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-app-sm" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-xs font-bold text-primary">Rôle métier</label>
-                       <select className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm appearance-none">
+                       <label className="text-app-xs font-bold text-primary">Rôle métier</label>
+                       <select className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-app-sm appearance-none">
                          <option>Notaire</option>
                          <option>Agent Immobilier</option>
                          <option>Avocat</option>
@@ -459,21 +459,21 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
                        </select>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-xs font-bold text-primary">Email</label>
-                       <input type="email" placeholder="mail@exemple.com" className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm" />
+                       <label className="text-app-xs font-bold text-primary">Email</label>
+                       <input type="email" placeholder="mail@exemple.com" className="w-full bg-white border border-black/5 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-app-sm" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-xs font-bold text-primary">Téléphone</label>
+                       <label className="text-app-xs font-bold text-primary">Téléphone</label>
                        <div className="relative">
                          <Smartphone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/40" />
-                         <input type="tel" placeholder="+33 6..." className="w-full bg-white border border-black/5 rounded-xl pl-9 pr-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm" />
+                         <input type="tel" placeholder="+33 6..." className="w-full bg-white border border-black/5 rounded-xl pl-9 pr-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-app-sm" />
                        </div>
                     </div>
                     <div className="md:col-span-2 space-y-2">
-                       <label className="text-xs font-bold text-primary">Société / Étude / Agence (optionnel)</label>
+                       <label className="text-app-xs font-bold text-primary">Société / Étude / Agence (optionnel)</label>
                        <div className="relative">
                          <Building size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/40" />
-                         <input type="text" placeholder="Office Notarial..." className="w-full bg-white border border-black/5 rounded-xl pl-9 pr-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm" />
+                         <input type="text" placeholder="Office Notarial..." className="w-full bg-white border border-black/5 rounded-xl pl-9 pr-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-app-sm" />
                        </div>
                     </div>
                   </div>
@@ -486,7 +486,7 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
                     <Mail size={32} />
                   </div>
                   <h3 className="font-bold text-primary">Connecter Google Contacts</h3>
-                  <p className="text-sm text-neutral-dark/60 max-w-sm">
+                  <p className="text-app-sm text-neutral-dark/60 max-w-sm">
                     Recherchez directement parmi vos contacts Gmail et importez-les dans l'annuaire d'un simple clic.
                   </p>
                   <button className="px-6 py-3 bg-[#4285F4] text-white font-bold rounded-xl shadow hover:shadow-lg transition-all flex items-center gap-2 mt-2">
@@ -507,7 +507,7 @@ function AddContactModal({ onClose }: { onClose: () => void }) {
                     <UploadCloud size={32} />
                   </div>
                   <h3 className="font-bold text-primary mb-1 group-hover:text-primary-light transition-colors">Glissez-déposez votre fichier ici</h3>
-                  <p className="text-sm text-neutral-dark/60 mb-6">Supporte .vcf, .csv, ou .xlsx (Excel)</p>
+                  <p className="text-app-sm text-neutral-dark/60 mb-6">Supporte .vcf, .csv, ou .xlsx (Excel)</p>
                   <button className="px-5 py-2.5 bg-primary/10 text-primary font-bold rounded-xl flex items-center gap-2 pointer-events-none">
                     Parcourir les fichiers
                   </button>

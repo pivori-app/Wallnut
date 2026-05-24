@@ -75,7 +75,7 @@ export const PropertySearchSelect: React.FC<PropertySearchSelectProps> = ({ valu
                       setSearchQuery('');
                     }}
                     className={cn(
-                      "px-5 py-3 cursor-pointer transition-colors font-medium text-sm flex items-center justify-between",
+                      "px-5 py-3 cursor-pointer transition-colors font-medium text-app-sm flex items-center justify-between",
                       value === option ? "bg-primary/5 text-primary font-bold" : "hover:bg-black/5 text-neutral-dark/80 hover:text-primary"
                     )}
                   >
@@ -85,7 +85,7 @@ export const PropertySearchSelect: React.FC<PropertySearchSelectProps> = ({ valu
                 ))}
               </ul>
             ) : (
-              <div className="p-5 text-center text-sm font-medium text-primary/40">
+              <div className="p-5 text-center text-app-sm font-medium text-primary/40">
                 Aucun type de bien trouvé pour "{searchQuery}"
               </div>
             )}

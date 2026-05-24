@@ -34,8 +34,8 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({ documents, uploade
     <>
       <div className="flex items-center justify-between mb-6">
         <div>
-           <h3 className="text-xl font-bold font-display text-primary">Pièces Jointes</h3>
-           <p className="text-sm text-neutral-dark/60">Gérez les documents requis pour cette procédure.</p>
+           <h3 className="text-app-lg font-bold font-display text-primary">Pièces Jointes</h3>
+           <p className="text-app-sm text-neutral-dark/60">Gérez les documents requis pour cette procédure.</p>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -61,8 +61,8 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({ documents, uploade
                   <div className="flex items-center gap-3">
                     <Cloud className="text-[#4285F4] w-8 h-8" />
                     <div>
-                      <h2 className="text-xl font-bold text-primary">Google Drive</h2>
-                      <p className="text-xs font-medium text-neutral-dark/60">Sélectionnez un fichier pour l'import</p>
+                      <h2 className="text-app-lg font-bold text-primary">Google Drive</h2>
+                      <p className="text-app-xs font-medium text-neutral-dark/60">Sélectionnez un fichier pour l'import</p>
                     </div>
                   </div>
                   <button onClick={() => setIsDrivePickerOpen(false)} className="p-2 hover:bg-black/5 rounded-full"><X size={20} /></button>
@@ -71,8 +71,8 @@ export const DocumentVault: React.FC<DocumentVaultProps> = ({ documents, uploade
                   {['Titre_de_propriete.pdf', 'CNI_M_Dupont.pdf', 'DPE_14Avenue.pdf', 'Mandat_Exclusif_Signé.pdf'].map((fileName, idx) => (
                     <div key={idx} onClick={() => handleSimulateDriveSelect(fileName)} className="p-4 bg-white border border-black/5 rounded-xl flex items-center gap-4 cursor-pointer hover:border-[#4285F4]/30 hover:bg-[#4285F4]/5 transition-colors group">
                        <File className="text-neutral-dark/40 group-hover:text-[#4285F4]" size={20} />
-                       <span className="font-medium text-primary text-sm flex-1">{fileName}</span>
-                       <span className="text-xs text-neutral-dark/40 group-hover:text-[#4285F4]/70">Sélectionner</span>
+                       <span className="font-medium text-primary text-app-sm flex-1">{fileName}</span>
+                       <span className="text-app-xs text-neutral-dark/40 group-hover:text-[#4285F4]/70">Sélectionner</span>
                     </div>
                   ))}
                </div>
@@ -171,17 +171,17 @@ export const DocumentSlot: React.FC<DocumentSlotProps> = ({ document, status, on
               <Icon size={20} />
             </div>
             <div>
-              <h3 className="font-bold text-primary text-sm flex items-center gap-2 line-clamp-1 break-all" title={document.name}>
+              <h3 className="font-bold text-primary text-app-sm flex items-center gap-2 line-clamp-1 break-all" title={document.name}>
                 {document.name}
               </h3>
-              <p className={cn("text-xs font-bold mt-1", config.color)}>{config.label}</p>
+              <p className={cn("text-app-xs font-bold mt-1", config.color)}>{config.label}</p>
             </div>
           </div>
           
           {/* Tooltip implementation */}
           <div className="relative flex shrink-0 group/tooltip z-[60]">
             <Info size={16} className="text-primary/40 hover:text-primary cursor-help pointer-events-auto" onClick={(e) => e.stopPropagation()} />
-            <div className="absolute right-0 top-full mt-2 w-48 p-3 rounded-xl bg-primary text-white text-xs opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all shadow-xl">
+            <div className="absolute right-0 top-full mt-2 w-48 p-3 rounded-xl bg-primary text-white text-app-xs opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all shadow-xl">
               {document.description}
               <div className="absolute bottom-full right-1 w-2 h-2 bg-primary rotate-45 -mb-1"></div>
             </div>
@@ -197,14 +197,14 @@ export const DocumentSlot: React.FC<DocumentSlotProps> = ({ document, status, on
               </div>
               <button 
                 onClick={(e) => { e.stopPropagation(); onOpenDrive(); }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-black/5 bg-white shadow-sm hover:shadow-md transition-all text-xs font-bold hover:bg-[#4285F4]/5 pointer-events-auto"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-black/5 bg-white shadow-sm hover:shadow-md transition-all text-app-xs font-bold hover:bg-[#4285F4]/5 pointer-events-auto"
               >
                 <Cloud className="w-4 h-4 text-[#4285F4]" /> <span className="opacity-80">Google Drive</span>
               </button>
             </div>
           ) : (
             <div className="flex items-center justify-between p-3 rounded-xl bg-white/40 border border-white/60">
-              <span className="text-xs font-medium truncate">Document validé</span>
+              <span className="text-app-xs font-medium truncate">Document validé</span>
               {status === 'validating' && (
                 <button 
                   onClick={(e) => { e.stopPropagation(); onRemove(); }}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Camera, FileText, Plus, Check, X, Smartphone, AlertTriangle, Loader2, UploadCloud, RefreshCw, Layers } from 'lucide-react';
+import { Camera, FileText, Plus, Check, X, Smartphone, AlertTriangle, Loader2, UploadCloud, RefreshCw, Layers, Zap, ZapOff } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useCamera } from '../hooks/useCamera';
 
 // Types and Mocks
 type DocType = 'Identité (CNI/Passeport)' | 'Justificatif de domicile (Facture)' | 'Avis d’impôt' | 'Kbis';
@@ -24,42 +25,71 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
   const [validationStatus, setValidationStatus] = useState<'idle' | 'checking' | 'rejected' | 'accepted'>('idle');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // Nouveaux états de simulation Pro SDK
+  const [guidanceMsg, setGuidanceMsg] = useState("Recherche de document...");
+  const [perspectiveStyle, setPerspectiveStyle] = useState({ transform: 'perspective(500px) rotateX(15deg) rotateY(-10deg) scale(0.9)' });
+  const [autoCaptureProgress, setAutoCaptureProgress] = useState(0);
 
-  // 1. STABILISATEUR (Gyroscope Logic Simulation)
+  const { videoRef, canvasRef, state: cameraState, startCamera, stopCamera, captureFrame, hasFlash, flashOn, toggleFlash } = useCamera();
+
+  // Start/Stop camera on mount/unmount
   useEffect(() => {
-    let stabilityTimer: NodeJS.Timeout;
+    startCamera();
+    return () => stopCamera();
+  }, [startCamera, stopCamera]);
+
+  // 1. STABILISATEUR PRO (Scanbot/ML Simulation)
+  useEffect(() => {
+    let step = 0;
+    const steps = [
+      { msg: "Recherche de document...", transform: 'perspective(500px) rotateX(15deg) rotateY(-10deg) scale(0.9)', stable: false },
+      { msg: "Détection des contours...", transform: 'perspective(500px) rotateX(8deg) rotateY(5deg) scale(0.95)', stable: false },
+      { msg: "Correction de perspective...", transform: 'perspective(500px) rotateX(2deg) rotateY(-2deg) scale(0.98)', stable: false },
+      { msg: "Analyse luminosité (ISO)...", transform: 'perspective(500px) rotateX(0deg) rotateY(0deg) scale(1)', stable: false },
+      { msg: "Prêt (Maintenez fermement)", transform: 'perspective(500px) rotateX(0deg) rotateY(0deg) scale(1)', stable: true }
+    ];
+
+    setIsStable(false);
+    setAutoCaptureProgress(0);
     
-    // In a real device, we would use DeviceMotionEvent
-    // For web preview, we simulate movement and stabilization
-    const handleSimulatedMotion = () => {
-      setIsStable(false);
-      clearTimeout(stabilityTimer);
-      stabilityTimer = setTimeout(() => {
-        setIsStable(true);
-      }, 1000); // 1 second of stability required
-    };
+    // Si on a déjà scanné une page, on raccourcit le cycle
+    if (pages.length > 0) {
+      step = 3;
+    }
 
-    // Simulate phone movement randomly for demo
-    const interval = setInterval(handleSimulatedMotion, 3500);
-    handleSimulatedMotion(); // Initial calculation
+    const interval = setInterval(() => {
+      step++;
+      if (step < steps.length) {
+        setGuidanceMsg(steps[step].msg);
+        setPerspectiveStyle({ transform: steps[step].transform });
+        setIsStable(steps[step].stable);
+      } else {
+        clearInterval(interval);
+      }
+    }, 800);
 
-    // Real implementation pseudo-code:
-    /*
-    const handleMotion = (event: DeviceMotionEvent) => {
-      const { x, y, z } = event.acceleration || { x: 0, y: 0, z: 0 };
-      const movement = Math.abs(x || 0) + Math.abs(y || 0) + Math.abs(z || 0);
-      if (movement < 0.5) setIsStable(true);
-      else setIsStable(false);
-    };
-    window.addEventListener('devicemotion', handleMotion);
-    */
+    return () => clearInterval(interval);
+  }, [pages.length]);
 
-    return () => {
-      clearInterval(interval);
-      clearTimeout(stabilityTimer);
-    };
-  }, []);
+  // Auto-capture visuelle
+  useEffect(() => {
+    let progressTimer: NodeJS.Timeout;
+    if (isStable && validationStatus === 'idle' && !isCapturing) {
+      progressTimer = setInterval(() => {
+        setAutoCaptureProgress(prev => {
+          if (prev >= 100) {
+             clearInterval(progressTimer);
+             captureAndValidate();
+             return 100;
+          }
+          return prev + 4;
+        });
+      }, 50);
+    } else {
+      setAutoCaptureProgress(0);
+    }
+    return () => clearInterval(progressTimer);
+  }, [isStable, validationStatus, isCapturing]);
 
   // 2. IA PIPELINE 1 & PIPELINE 2 (Qualité et Pertinence)
   const captureAndValidate = async () => {
@@ -67,6 +97,10 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
     setIsCapturing(true);
 
     // Simulate capturing a frame from videoRef
+    let imageFrame = null;
+    if (cameraState === 'active') {
+      imageFrame = captureFrame(); // Getting real frame
+    }
     await new Promise(r => setTimeout(r, 500)); 
 
     setIsCapturing(false);
@@ -101,7 +135,8 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
       const confidence = aiResponse.confidence; // e.g., 95
       */
 
-      // Simulation de rejet ou d'acceptation de l'IA
+      /* 
+      // Simulation de rejet ou d'acceptation de l'IA (Désactivée pour une utilisation fluide)
       const randomOutcome = Math.random();
       
       if (randomOutcome < 0.3) {
@@ -111,9 +146,13 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
         // Simulation Mauvais document (ex: impôt au lieu de facture)
         throw new Error("wrong_document_type");
       }
+      */
 
       // Success
-      const newPage = { id: Math.random().toString(), url: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80&w=200&h=300' };
+      const newPage = { 
+        id: Math.random().toString(), 
+        url: imageFrame || 'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80&w=200&h=300' 
+      };
       setPages(prev => [...prev, newPage]);
       setValidationStatus('accepted');
       setTimeout(() => setValidationStatus('idle'), 1500);
@@ -154,7 +193,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
     */
     
     // Simulated Export
-    onComplete([]); // Should be the generated PDF files
+    onComplete(pages as any);
   };
 
   return (
@@ -166,44 +205,101 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
           <button onClick={onCancel} className="p-2 text-white/70 hover:text-white rounded-full bg-black/40 backdrop-blur-md transition-colors">
             <X size={20} />
           </button>
-          <div className="px-4 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/90 text-sm font-medium flex items-center gap-2">
+          <div className="px-4 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/90 text-app-sm font-medium flex items-center gap-2 shadow-lg shadow-black/20">
             <ScanAlertIcon /> {expectedDocType}
           </div>
-          <div className="w-9" /> {/* Spacer for balance */}
+          <div className="flex gap-2">
+            {hasFlash && (
+               <button onClick={toggleFlash} className={cn("p-2 rounded-full backdrop-blur-md transition-colors", flashOn ? "bg-white text-black" : "bg-black/40 text-white/70 hover:text-white")}>
+                 {flashOn ? <Zap size={20} /> : <ZapOff size={20} />}
+               </button>
+            )}
+            <div className="w-2" />
+          </div>
         </div>
 
         {/* Viewfinder & Edge Detection Overlay */}
         <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden">
-          {/* Simulated Camera Feed */}
-          <div className="absolute inset-0 bg-neutral-900 animate-pulse opacity-50" />
+          {/* Real Camera Feed */}
+          <video 
+            ref={videoRef} 
+            className="absolute inset-0 w-full h-full object-cover" 
+            playsInline 
+            muted 
+            autoPlay 
+          />
+          <canvas ref={canvasRef} className="hidden" />
           
-          <div className="absolute inset-8 border-2 border-dashed border-white/40 rounded-xl pointer-events-none transition-all duration-300" 
+          {cameraState === 'requesting' && (
+            <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-10">
+              <div className="text-center">
+                <Loader2 className="animate-spin text-white mb-2 mx-auto" size={32} />
+                <p className="text-white/60 text-sm">Initialisation de la caméra...</p>
+              </div>
+            </div>
+          )}
+
+          {cameraState === 'error' && (
+             <div className="absolute inset-0 bg-black/90 flex items-center justify-center z-10 p-6 text-center">
+               <div>
+                  <AlertTriangle size={48} className="text-red-500 mx-auto mb-4" />
+                  <h3 className="text-white font-bold mb-2">Impossible d'accéder à la caméra</h3>
+                  <p className="text-white/50 text-sm max-w-sm mx-auto mb-6">
+                    Pour scanner avec votre mobile, vous devez ouvrir l'application dans un nouvel onglet (Safari/Chrome) et autoriser l'accès à la caméra.
+                  </p>
+                  <button onClick={startCamera} className="px-4 py-2 bg-white text-black font-bold rounded-xl hover:bg-neutral-200 transition text-sm">
+                    Réessayer
+                  </button>
+               </div>
+             </div>
+          )}
+          
+          <div className="absolute inset-8 border-2 border-dashed border-white/40 rounded-xl pointer-events-none transition-all duration-500 ease-out flex items-center justify-center p-2" 
                style={{ 
+                 ...perspectiveStyle,
                  borderColor: validationStatus === 'checking' ? 'rgba(59, 130, 246, 0.6)' : 
                               isStable ? 'rgba(34, 197, 94, 0.8)' : 'rgba(255, 255, 255, 0.4)'
                }}
           >
+            {/* Auto Capture Progress overlay inside the bounding box */}
+            {isStable && autoCaptureProgress > 0 && autoCaptureProgress < 100 && validationStatus === 'idle' && (
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full border-4 border-white/20 flex items-center justify-center">
+                 {/* Simulate radial progress using conic-gradient if possible or just text */}
+                 <span className="text-white text-xs font-bold">{Math.round((100 - autoCaptureProgress)/20)}s</span>
+                 {/* Circular ring fill approximation */}
+                 <div className="absolute inset-[-4px] rounded-full border-4 border-green-500 transition-all duration-75" style={{ clipPath: `polygon(50% 50%, 50% 0%, ${autoCaptureProgress}% 0%, ${autoCaptureProgress}% 100%, 0% 100%, 0% 0%, 50% 0%)`, opacity: 0.8 }} />
+              </div>
+            )}
+
             {/* Corner Indicators */}
-            <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-white/80 rounded-tl-lg" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
-            <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-white/80 rounded-tr-lg" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
-            <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-white/80 rounded-bl-lg" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-white/80 rounded-br-lg" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
+            <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-white/80 rounded-tl-xl transition-colors duration-300" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
+            <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-white/80 rounded-tr-xl transition-colors duration-300" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
+            <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-white/80 rounded-bl-xl transition-colors duration-300" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-white/80 rounded-br-xl transition-colors duration-300" style={{ borderColor: isStable ? '#22c55e' : '#ffffff80' }}/>
           </div>
 
           {/* Stabilizer Indicator */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             {!isStable && validationStatus === 'idle' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center">
-                 <div className="w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center mb-2">
-                    <div className="w-2 h-2 bg-white/50 rounded-full animate-ping" />
+                 <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 rounded-full border-2 border-white/50 border-t-blue-400 animate-spin" />
                  </div>
-                 <span className="text-white/70 text-xs font-bold uppercase tracking-wider bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">Stabilisez l'appareil</span>
+                 <span className="text-white/90 text-sm font-bold tracking-wide bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg shadow-black/50 border border-white/10">{guidanceMsg}</span>
+              </motion.div>
+            )}
+            {isStable && validationStatus === 'idle' && (
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center">
+                 <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mb-3">
+                    <Check className="text-green-500" size={32} />
+                 </div>
+                 <span className="text-green-400 text-sm font-bold tracking-wide bg-green-950/80 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg border border-green-500/30">Capture automatique prête</span>
               </motion.div>
             )}
             {validationStatus === 'checking' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center">
-                 <Loader2 className="animate-spin text-blue-400 mb-2" size={32} />
-                 <span className="text-blue-200 text-xs font-bold uppercase tracking-wider bg-blue-900/40 px-3 py-1 rounded-full backdrop-blur-sm border border-blue-500/30">Analyse IA en cours...</span>
+                 <Loader2 className="animate-spin text-blue-400 mb-3" size={40} />
+                 <span className="text-blue-200 text-sm font-bold tracking-wide bg-blue-900/60 px-4 py-1.5 rounded-full backdrop-blur-md border border-blue-500/30">Analyse du document...</span>
               </motion.div>
             )}
           </div>
@@ -228,9 +324,9 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                     <AlertTriangle size={28} />
                   </div>
                   
-                  <h4 className="text-white font-display font-bold text-lg mb-2 tracking-tight">Erreur de Document</h4>
+                  <h4 className="text-white font-display font-bold text-app-md mb-2 tracking-tight">Erreur de Document</h4>
                   
-                  <p className="text-white/70 text-sm leading-relaxed mb-6 max-w-sm">
+                  <p className="text-white/70 text-app-sm leading-relaxed mb-6 max-w-sm">
                     {alertMessage}
                   </p>
                   
@@ -250,6 +346,11 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
         {/* Footer Controls */}
         <div className="relative z-20 bg-black/90 pb-8 pt-4 px-6 border-t border-white/10 shrink-0">
           
+          <div className="flex items-center gap-2 text-white/60 mb-2 justify-center">
+            <UploadCloud size={14} />
+            <span className="text-[10px] font-bold tracking-widest uppercase">Drive Client • Classification activée</span>
+          </div>
+
           {/* Thumbnails of scanned pages */}
           <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 custom-scrollbar">
             {pages.map((p, i) => (
@@ -302,7 +403,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                   ) : null}
                 </div>
               </div>
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-medium text-white/50">
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-app-xs font-medium text-white/50">
                 {pages.length > 0 ? "Ajouter page" : "Scanner"}
               </div>
             </button>

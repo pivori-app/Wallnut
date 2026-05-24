@@ -11,8 +11,10 @@ export function PublicHeader() {
 
   const links = [
     { label: 'Solution', href: '/solution' },
+    { label: 'Comment ça marche', href: '/comment-ca-marche' },
     { label: 'Offres', href: '/offres' },
-    { label: 'Blog', href: '/blog' },
+    { label: 'Situations', href: '/situations' },
+    { label: 'Partenaires', href: '/partenaires' },
     { label: 'FAQ', href: '/faq' },
   ];
 
@@ -31,7 +33,7 @@ export function PublicHeader() {
               <Link 
                 key={link.label}
                 to={link.href}
-                className="text-sm font-semibold opacity-70 hover:opacity-100 hover:text-primary transition-all underline-offset-8 hover:underline"
+                className="text-app-sm font-semibold opacity-70 hover:opacity-100 hover:text-primary transition-all underline-offset-8 hover:underline"
               >
                 {link.label}
               </Link>
@@ -40,7 +42,7 @@ export function PublicHeader() {
             {user ? (
               <Link 
                 to="/dashboard"
-                className="px-6 py-2.5 rounded-full bg-primary text-white text-sm font-bold hover:scale-105 transition-all shadow-lg shadow-primary/20"
+                className="px-6 py-2.5 rounded-full bg-primary text-white text-app-sm font-bold hover:scale-105 transition-all shadow-lg shadow-primary/20"
               >
                 Dashboard
               </Link>
@@ -48,13 +50,13 @@ export function PublicHeader() {
               <div className="flex items-center gap-4">
                 <button 
                   onClick={signIn}
-                  className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                  className="flex items-center gap-2 text-app-sm font-semibold text-primary hover:text-primary/80 transition-colors"
                 >
                   <LogIn className="w-4 h-4" /> Se connecter
                 </button>
                 <Link 
                   to="/register"
-                  className="px-5 py-2.5 rounded-full bg-secondary text-white text-sm font-bold hover:scale-105 transition-all shadow-lg shadow-secondary/20"
+                  className="px-5 py-2.5 rounded-full bg-secondary text-white text-app-sm font-bold hover:scale-105 transition-all shadow-lg shadow-secondary/20"
                 >
                   S'inscrire
                 </Link>
@@ -95,7 +97,7 @@ export function PublicHeader() {
                   key={link.label}
                   to={link.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="block p-4 rounded-2xl bg-black/5 dark:bg-white/5 text-lg font-bold hover:bg-primary hover:text-white transition-all"
+                  className="block p-4 rounded-2xl bg-black/5 dark:bg-white/5 text-app-md font-bold hover:bg-primary hover:text-white transition-all"
                 >
                   {link.label}
                 </Link>

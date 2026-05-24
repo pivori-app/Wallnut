@@ -4,26 +4,9 @@ import { Home, CheckCircle2, Clock, AlertCircle, ChevronRight, Building2, Trees,
 import { PropertyType } from '../constants/property';
 import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
+import { PropertyData } from '../features/particulier-dashboard/types/property';
 
-export interface PropertyData {
-  id: string;
-  type: PropertyType;
-  address: string;
-  city: string;
-  estimatedValue: number;
-  status: 'draft' | 'documents_pending' | 'analysis' | 'validated' | 'rejected';
-  isComplete: boolean;
-  createdAt: Date;
-  referenceNumber?: string;
-  pipelineStage?: string;
-  completeness?: number;
-  surface?: string | number;
-  rooms?: string | number;
-  condition?: string;
-  dpe?: string;
-  addressData?: any;
-  features?: string[];
-}
+export type { PropertyData };
 
 export interface PropertyCardProps {
   property: PropertyData;
@@ -65,15 +48,15 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
             <TypeIcon size={20} className="sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-bold text-base sm:text-lg text-primary truncate">{property.type}</h3>
-            <p className="text-xs sm:text-sm text-neutral-dark/60 flex items-center gap-1 mt-0.5 truncate">
+            <h3 className="font-bold text-app-sm sm:text-app-base text-primary truncate">{property.type}</h3>
+            <p className="text-[10px] sm:text-app-xs text-neutral-dark/60 flex items-center gap-1 mt-0.5 truncate">
               <MapPin size={12} className="shrink-0" /> {property.city}
             </p>
           </div>
         </div>
         
         <div className={cn(
-          "px-2 sm:px-3 py-1.5 rounded-xl flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold whitespace-nowrap shrink-0", 
+          "px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg flex items-center gap-1.5 text-[10px] sm:text-app-xs font-bold whitespace-nowrap shrink-0", 
           statusConfig.bg, 
           statusConfig.color
         )}>
@@ -83,21 +66,21 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex justify-between items-end border-b border-black/5 pb-4">
-          <span className="text-sm opacity-60">Valeur estimée</span>
-          <span className="font-display font-bold text-xl">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(property.estimatedValue)}</span>
+      <div className="space-y-3">
+        <div className="flex justify-between items-end border-b border-black/5 pb-3">
+          <span className="text-app-xs sm:text-app-sm opacity-60">Valeur estimée</span>
+          <span className="font-display font-bold text-app-md sm:text-app-lg">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(property.estimatedValue)}</span>
         </div>
         
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-2">
             <div className={cn("w-2 h-2 rounded-full", property.isComplete ? "bg-success" : "bg-warning animate-pulse")} />
-            <span className="text-xs font-semibold opacity-80">
-              {property.isComplete ? "Dossier Médical Complet" : "Documents requis"}
+            <span className="text-[10px] sm:text-app-xs font-semibold opacity-80">
+              {property.isComplete ? "Dossier Complet" : "Documents requis"}
             </span>
           </div>
-          <div className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-secondary group-hover:text-primary transition-colors">
-            <ChevronRight size={16} />
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-secondary group-hover:text-primary transition-colors">
+            <ChevronRight size={14} className="sm:w-4 sm:h-4" />
           </div>
         </div>
       </div>

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  User, 
-  Briefcase, 
-  Mail, 
-  Lock, 
-  Phone, 
-  Building2, 
+import {
+  User,
+  Briefcase,
+  Mail,
+  Lock,
+  Phone,
+  Building2,
   CreditCard,
   CheckCircle2,
   ChevronRight,
@@ -17,578 +17,939 @@ import {
   EyeOff,
   AlertCircle,
   Shield,
-  Fingerprint
+  MapPin,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import confetti from 'canvas-confetti';
 import { AddressSearchInput } from '../components/AddressSearchInput';
+import {
+  validateName,
+  formatName,
+  validatePhone,
+  formatPhone,
+  validateSIRET,
+  formatSIRET,
+} from '../utils/validators';
 
+// ─────────────────────────────────────────────────────────
+// TYPES
+// ─────────────────────────────────────────────────────────
+type RegisterType = 'particulier' | 'professionnel';
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+  subRole: string;
+  customSubRole: string;
+  companyName: string;
+  siret: string;
+  professionalCard: string;
+}
+
+// ─────────────────────────────────────────────────────────
+// SOUS-COMPOSANTS UI UNIFIÉS
+// ─────────────────────────────────────────────────────────
+
+/** Label unifié */
+const FieldLabel = ({
+  children,
+  required,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+}) => (
+  <label className="block text-[13px] font-semibold text-neutral-dark/80 mb-1.5 ml-1">
+    {children}
+    {required && <span className="text-red-400 ml-0.5">*</span>}
+  </label>
+);
+
+/** Message d'erreur unifié */
+const FieldError = ({ message }: { message?: string }) =>
+  message ? (
+    <p className="flex items-center gap-1 text-[12px] text-red-500 mt-1 ml-1">
+      <AlertCircle size={11} className="flex-shrink-0" />
+      {message}
+    </p>
+  ) : null;
+
+/** Input de base unifié */
+const inputClass = (hasError?: boolean) =>
+  `w-full px-4 py-3 rounded-2xl text-[14px] leading-snug
+   bg-white/60 border transition-all outline-none
+   placeholder:text-slate-400 placeholder:text-[13px]
+   ${
+     hasError
+       ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100'
+       : 'border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10'
+   }`;
+
+/** Input avec icône gauche */
+const inputWithIconClass = (hasError?: boolean) =>
+  `${inputClass(hasError)} pl-11`;
+
+// ─────────────────────────────────────────────────────────
+// COMPOSANT PRINCIPAL
+// ─────────────────────────────────────────────────────────
 export function RegisterForm() {
-  const { type } = useParams<{ type: 'particulier' | 'professionnel' }>();
+  const { type } = useParams<{ type: RegisterType }>();
   const navigate = useNavigate();
   const { signIn } = useAuth();
-  
+
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
-
-  const { register, handleSubmit, watch, trigger, formState: { errors } } = useForm();
-  const password = watch("password", "");
-  const selectedSubRole = watch("subRole", "");
-
+  const [error, setError] = useState<string | null>(null);
   const [attestationStatus, setAttestationStatus] = useState<string | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    trigger,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      password: '',
+      subRole: '',
+      customSubRole: '',
+      companyName: '',
+      siret: '',
+      professionalCard: '',
+    },
+  });
+
+  const password = watch('password', '');
+  const selectedSubRole = watch('subRole', '');
+  const isPro = type === 'professionnel';
+
+  // ── Attestation simulée ──────────────────────────────
   const simulateAttestation = async () => {
-    setAttestationStatus("Calcul de la preuve de possession (DPoP)...");
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setAttestationStatus("Génération de l'attestation cryptographique (Anti-Bot)...");
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setAttestationStatus("Score d'attestation validé (Score: 0.98).");
-    await new Promise(resolve => setTimeout(resolve, 500));
+    setAttestationStatus('Calcul de la preuve DPoP...');
+    await new Promise((r) => setTimeout(r, 700));
+    setAttestationStatus('Génération attestation cryptographique...');
+    await new Promise((r) => setTimeout(r, 700));
+    setAttestationStatus('Score validé (0.98).');
+    await new Promise((r) => setTimeout(r, 400));
     setAttestationStatus(null);
   };
 
-  const handleGoogleSignIn = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await simulateAttestation();
-      
-      if (import.meta.env.VITE_SUPABASE_URL === undefined || import.meta.env.VITE_SUPABASE_URL.includes('xxxx')) {
-        alert("⚠️ Supabase n'est pas encore configuré ! L'authentification va échouer. Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans les variables d'environnement.");
-        setIsSubmitting(false);
-        return;
-      }
-      
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + '/dashboard'
-        }
-      });
-      
-      if (error) throw error;
-      
-      // Note: we'll handle the profile creation in a webhook or trigger in supabase,
-      // or we just rely on standard oauth behavior.
-      
-    } catch (error: any) {
-      console.error("Google Auth error:", error);
-      alert(error.message || "Erreur lors de l'authentification Google");
-    } finally {
-      setIsSubmitting(false);
+  // ── Google OAuth ─────────────────────────────────────
+  const handleGoogleSignIn = async () => {
+    if (window.top !== window.self) {
+      setError(
+        "L'Aperçu (iFrame) peut bloquer Google Auth. Veuillez ouvrir l'application dans un nouvel onglet, et surtout, assurez-vous d'avoir configuré le provider Google dans Supabase."
+      );
+      return;
+    }
+    
+    // Check if the user really wants to proceed since Google Auth requires a configured client_id
+    const confirmGoogle = window.confirm("ATTENTION: Pour que la connexion Google fonctionne, vous DEVEZ d'abord obtenir un 'Client ID' depuis Google Cloud Console et le configurer dans 'Supabase > Authentication > Providers > Google'.\\n\\nSi c'est fait (ou pour vérifier), cliquez sur OK. Sinon, cliquez sur Annuler et utilisez l'inscription par Email en dessous.");
+    
+    if (!confirmGoogle) return;
+
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { access_type: 'offline', prompt: 'consent' },
+      },
+    });
+    if (oauthError) {
+      setError('Erreur de connexion Google. Veuillez réessayer.');
     }
   };
 
-  const handleLinkedInSignIn = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    alert("L'intégration LinkedIn nécessite une configuration dans Supabase. Veuillez utiliser l'inscription par email ou Google en attendant.");
-  };
-
-  const onSubmit = async (data: any) => {
-    setIsSubmitting(true);
-    try {
-      if (import.meta.env.VITE_SUPABASE_URL === undefined || import.meta.env.VITE_SUPABASE_URL.includes('xxxx')) {
-        alert("⚠️ Supabase n'est pas configuré. Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans les variables d'environnement.");
-        setIsSubmitting(false);
-        return;
-      }
-      
-      await simulateAttestation();
-      
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (authError) throw authError;
-      
-      const currentUser = authData.user;
-      if (!currentUser) throw new Error("Erreur lors de la création de compte");
-
-      const profileData = {
-        id: currentUser.id,
-        email: currentUser.email || data.email,
-        displayName: data.firstName ? `${data.firstName} ${data.lastName}` : '',
-        role: type,
-        phoneNumber: data.phone || '',
-        city: selectedAddress?.city || data.city || '',
-        createdAt: new Date().toISOString(),
-        isPro: type === 'professionnel',
-        ...(type === 'professionnel' && {
-          professionalData: {
-            proId: `WP-${currentUser.id.slice(0, 5).toUpperCase()}-${Math.floor(Math.random() * 90000 + 10000)}`,
-            subRole: data.subRole,
-            customSubRole: data.subRole === 'autre' ? data.customSubRole || '' : '',
-            companyName: data.companyName,
-            siret: data.siret,
-            professionalCard: data.professionalCard || '',
-            address: selectedAddress?.fullAddress || data.address || '',
-            isValidated: false
-          }
-        })
-      };
-
-      const { error: dbError } = await supabase
-        .from('users')
-        .upsert(profileData);
-        
-      if (dbError) throw dbError;
-      
-      setStep(3);
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      alert(error.message || "Erreur lors de l'inscription");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const getPasswordStrength = () => {
+  // ── Force du mot de passe ────────────────────────────
+  const getPasswordStrength = (): number => {
     if (!password) return 0;
     let score = 0;
-    if (password.length > 8) score += 25;
+    if (password.length >= 8) score += 25;
     if (/[A-Z]/.test(password)) score += 25;
     if (/[0-9]/.test(password)) score += 25;
     if (/[^A-Za-z0-9]/.test(password)) score += 25;
     return score;
   };
 
-  React.useEffect(() => {
-    if (step === 3) {
-      const duration = 3 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  const strengthColor = () => {
+    const s = getPasswordStrength();
+    if (s < 50) return 'bg-red-400';
+    if (s < 75) return 'bg-amber-400';
+    if (s < 100) return 'bg-blue-400';
+    return 'bg-green-400';
+  };
 
-      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+  const strengthLabel = () => {
+    const s = getPasswordStrength();
+    if (!password) return '';
+    if (s < 50) return 'Faible';
+    if (s < 75) return 'Moyen';
+    if (s < 100) return 'Fort';
+    return 'Très fort';
+  };
 
-      const interval: any = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
+  // ── Soumission ────────────────────────────────────────
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    setError(null);
 
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
-        }
+    try {
+      if (
+        !import.meta.env.VITE_SUPABASE_URL ||
+        !import.meta.env.VITE_SUPABASE_URL.startsWith('https')
+      ) {
+        setError(
+          'Configuration Supabase manquante. Vérifiez vos variables d\'environnement.'
+        );
+        return;
+      }
 
-        const particleCount = 50 * (timeLeft / duration);
-        confetti({
-          ...defaults, particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      await simulateAttestation();
+
+      const profileData = isPro
+        ? {
+            displayName:
+              data.companyName ||
+              `${data.firstName} ${data.lastName}`.trim(),
+            role: 'professional',
+            phoneNumber: data.phone,
+            city: selectedAddress?.city || '',
+            isPro: true,
+            professionalData: JSON.stringify({
+              proId: `WP-PRO-${Math.floor(Math.random() * 90000 + 10000)}`,
+              subRole: data.subRole,
+              activity: data.customSubRole || data.subRole,
+              companyName: data.companyName,
+              siret: data.siret.replace(/\s/g, ''),
+              professionalCard: data.professionalCard || '',
+              address: selectedAddress?.fullAddress || '',
+              isValidated: false,
+            }),
+          }
+        : {
+            displayName: `${data.firstName} ${data.lastName}`.trim(),
+            role: 'particular',
+            phoneNumber: data.phone,
+            city: selectedAddress?.city || '',
+            isPro: false,
+            professionalData: null,
+          };
+
+      const { data: authData, error: authError } =
+        await supabase.auth.signUp({
+          email: data.email,
+          password: data.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: profileData,
+          },
         });
-        confetti({
-          ...defaults, particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-        });
-      }, 250);
+
+      if (authError) throw authError;
+      if (!authData.user) throw new Error('Erreur lors de la création du compte.');
+
+      setStep(3);
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      let msg = err.message || "Erreur lors de l'inscription.";
+      if (msg === 'Failed to fetch') {
+        msg = 'Erreur réseau. Vérifiez votre connexion et la configuration Supabase.';
+      } else if (msg.includes('already registered')) {
+        msg = 'Cet email est déjà utilisé. Essayez de vous connecter.';
+      } else if (msg.includes('Password should be')) {
+        msg = 'Le mot de passe doit contenir au moins 8 caractères.';
+      }
+      setError(msg);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  // ── Confetti sur succès ───────────────────────────────
+  React.useEffect(() => {
+    if (step !== 3) return;
+    const duration = 3000;
+    const end = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+    const rnd = (min: number, max: number) => Math.random() * (max - min) + min;
+    const interval = setInterval(() => {
+      const timeLeft = end - Date.now();
+      if (timeLeft <= 0) return clearInterval(interval);
+      const count = 50 * (timeLeft / duration);
+      confetti({ ...defaults, particleCount: count, origin: { x: rnd(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount: count, origin: { x: rnd(0.7, 0.9), y: Math.random() - 0.2 } });
+    }, 250);
+    return () => clearInterval(interval);
   }, [step]);
 
-  // Render success modal instead of full page replacement when step === 3
-  const renderSuccessPopup = () => (
+  // ── Popup succès ──────────────────────────────────────
+  const SuccessPopup = () => (
     <AnimatePresence>
       {step === 3 && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
-          />
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0, y: 40 }}
+        <motion.div
+          key="success-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[200] flex items-center justify-center 
+                     p-4 bg-slate-900/50 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0, y: 32 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: 40 }}
-            className="glass p-12 rounded-[3rem] text-center max-w-md w-full shadow-2xl z-10 border border-white/60 relative overflow-hidden"
+            exit={{ scale: 0.85, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="relative bg-white rounded-[2rem] shadow-2xl 
+                       w-full max-w-md mx-auto p-8 overflow-hidden
+                       border border-white/60"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -z-10" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/10 blur-3xl -z-10" />
-            
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 shadow-inner">
-              <CheckCircle2 size={60} />
+            {/* Déco arrière-plan */}
+            <div className="absolute top-0 right-0 w-40 h-40 
+                            bg-primary/5 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 
+                            bg-secondary/5 blur-3xl pointer-events-none" />
+
+            {/* Icône */}
+            <div className="w-20 h-20 bg-green-50 rounded-full 
+                            flex items-center justify-center mx-auto mb-5
+                            ring-4 ring-green-100">
+              <CheckCircle2 size={44} className="text-green-500" />
             </div>
-            <h2 className="text-3xl font-display font-bold text-primary mb-4">Inscription Réussie !</h2>
-            <p className="text-neutral-dark/70 mb-6 font-medium">
-              Bienvenue dans l'écosystème Wallnut{type === 'professionnel' ? ' Pro' : ''}.
+
+            {/* Titre */}
+            <h2 className="text-[22px] font-bold text-center text-neutral-dark 
+                           mb-2 tracking-tight">
+              Inscription réussie ! 🎉
+            </h2>
+            <p className="text-[14px] text-center text-neutral-dark/60 mb-6">
+              Bienvenue dans l'écosystème Wallnut
+              {isPro ? ' Pro' : ''}.
             </p>
-            <div className="bg-white/60 rounded-2xl p-5 mb-6 border border-white/80 shadow-sm relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-              <p className="font-bold text-primary text-lg">Veuillez valider votre compte</p>
-              <p className="text-sm text-neutral-dark/70 mt-2 leading-relaxed">
-                Rendez-vous dans <span className="font-bold">votre boîte mail</span> et cliquez sur le lien que nous venons de vous envoyer pour activer votre accès au dashboard.
+
+            {/* Bloc email */}
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl 
+                            p-5 mb-5">
+              <p className="text-[15px] font-bold text-primary mb-1">
+                Validez votre adresse email
+              </p>
+              <p className="text-[13px] text-neutral-dark/70 leading-relaxed">
+                Rendez-vous dans votre boîte mail et cliquez sur le
+                lien de confirmation pour activer votre accès au dashboard.
               </p>
             </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 flex items-start gap-3 text-left">
-               <Shield size={20} className="text-blue-600 shrink-0 mt-0.5" />
-               <div>
-                  <h4 className="text-xs font-bold text-blue-900 uppercase tracking-widest">Sécurité Anti-Phishing (2026)</h4>
-                  <p className="text-xs text-blue-800/80 mt-1">
-                    Notre domaine enforce <strong>DMARC strict</strong> et <strong>BIMI</strong>. Cherchez le logo Wallnut certifié (Checkmark) directement dans votre client mail pour garantir l'authenticité de l'expéditeur.
-                  </p>
-               </div>
+
+            {/* Bloc sécurité */}
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl 
+                            p-4 mb-7 flex items-start gap-3">
+              <Shield size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[12px] font-bold text-blue-900 
+                               uppercase tracking-wider mb-1">
+                  Sécurité Anti-Phishing
+                </p>
+                <p className="text-[12px] text-blue-800/70 leading-relaxed">
+                  Recherchez le logo Wallnut certifié dans votre client
+                  mail pour garantir l'authenticité de l'expéditeur.
+                </p>
+              </div>
             </div>
-            <button 
+
+            {/* CTA */}
+            <button
               onClick={() => navigate('/dashboard')}
-              className="touch-target min-h-[44px] w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-primary/90 text-white font-bold hover:scale-[1.02] transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+              className="w-full flex items-center justify-center gap-2
+                         min-h-[48px] py-3 px-6 rounded-2xl
+                         text-[15px] font-bold text-white
+                         bg-gradient-to-r from-primary to-primary/90
+                         hover:from-primary/90 hover:to-primary
+                         shadow-lg shadow-primary/20
+                         transition-all hover:scale-[1.02] active:scale-95"
             >
-              Aller au dashboard <ChevronRight size={18} />
+              Aller au dashboard
+              <ChevronRight size={18} />
             </button>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
 
+  // ─────────────────────────────────────────────────────
+  // RENDER
+  // ─────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-6 py-12">
-      <div className="max-w-xl w-full">
-        {renderSuccessPopup()}
-        {/* Header */}
-        <div className="text-center mb-10">
-          <Link to="/register" className="inline-flex items-center gap-2 text-primary hover:underline mb-6 font-medium">
-            <ChevronLeft size={20} /> Retour au choix
+    <div className="min-h-screen flex items-center justify-center 
+                    bg-gradient-to-br from-slate-50 to-slate-100 
+                    px-4 py-10 sm:px-6">
+      <SuccessPopup />
+
+      <div className="w-full max-w-lg">
+        {/* ── En-tête ── */}
+        <div className="text-center mb-6">
+          <Link
+            to="/register"
+            className="inline-flex items-center justify-center 
+                       w-10 h-10 rounded-full text-primary 
+                       hover:bg-slate-100 transition-colors mb-3"
+            aria-label="Retour"
+          >
+            <ChevronLeft size={22} />
           </Link>
-          <h1 className="text-3xl font-display font-bold text-primary">
-            Inscription {type === 'particulier' ? 'Particulier' : 'Professionnel'}
+
+          <h1 className="text-[22px] sm:text-[26px] font-bold 
+                         text-primary tracking-tight">
+            Inscription{' '}
+            {isPro ? 'Professionnel' : 'Particulier'}
           </h1>
-          {type === 'professionnel' && (
-            <div className="flex justify-center mt-6 gap-2">
-              <div className={`h-1.5 w-12 rounded-full transition-all ${step >= 1 ? 'bg-secondary' : 'bg-slate-200'}`} />
-              <div className={`h-1.5 w-12 rounded-full transition-all ${step >= 2 ? 'bg-secondary' : 'bg-slate-200'}`} />
+
+          <p className="text-[13px] text-neutral-dark/50 mt-1">
+            {isPro
+              ? 'Accédez à tous les outils pros Wallnut'
+              : 'Créez votre espace personnel gratuit'}
+          </p>
+
+          {/* Stepper pro */}
+          {isPro && (
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {[1, 2].map((s) => (
+                <div key={s} className="flex items-center gap-2">
+                  <div
+                    className={`flex items-center justify-center w-7 h-7 
+                                rounded-full text-[12px] font-bold
+                                transition-all duration-300
+                                ${
+                                  step >= s
+                                    ? 'bg-secondary text-white shadow-md shadow-secondary/30'
+                                    : 'bg-slate-200 text-slate-400'
+                                }`}
+                  >
+                    {s}
+                  </div>
+                  <span
+                    className={`text-[12px] font-medium transition-colors
+                                ${step >= s ? 'text-secondary' : 'text-slate-400'}`}
+                  >
+                    {s === 1 ? 'Informations' : 'Société'}
+                  </span>
+                  {s < 2 && (
+                    <ChevronRight size={14} className="text-slate-300 mx-1" />
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>
 
-        <motion.div 
-          layout
-          className="glass-card-3d p-8 md:p-10 rounded-[2.5rem] relative"
-        >
-          {/* Glass background elements */}
-          <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden -z-10 pointer-events-none">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/5 blur-3xl" />
+        {/* ── Carte principale ── */}
+        <div className="relative bg-white/80 backdrop-blur-sm 
+                        rounded-[2rem] border border-white/60
+                        shadow-xl shadow-slate-200/60 p-6 sm:p-8">
+          {/* Déco */}
+          <div className="absolute inset-0 rounded-[2rem] 
+                          overflow-hidden pointer-events-none -z-10">
+            <div className="absolute top-0 right-0 w-32 h-32 
+                            bg-primary/5 blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 
+                            bg-secondary/5 blur-3xl" />
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit, (errs) => console.log('Validation errors:', errs))} className="space-y-6">
-            <div className={step === 1 ? "block space-y-5" : "hidden"}>
+          {/* ── Erreur globale ── */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-start gap-2.5 p-4 mb-5
+                         bg-red-50 border border-red-200 
+                         rounded-2xl text-[13px] text-red-700"
+            >
+              <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </motion.div>
+          )}
+
+          {/* ── Bouton Google ── */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-3
+                       min-h-[48px] px-5 py-3
+                       bg-white border border-slate-200 rounded-2xl
+                       text-[14px] font-semibold text-slate-700
+                       hover:border-slate-300 hover:bg-slate-50
+                       shadow-sm transition-all hover:shadow-md
+                       active:scale-[0.98]"
+          >
+            {/* SVG Google */}
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+            Continuer avec Google
+          </button>
+
+          {/* Séparateur */}
+          <div className="relative my-5">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 bg-white/80 text-[12px] 
+                               text-slate-400 font-medium">
+                ou créez un compte
+              </span>
+            </div>
+          </div>
+
+          {/* ── FORMULAIRE ── */}
+          <form
+            onSubmit={handleSubmit(onSubmit, (errs) =>
+              console.log('Validation errors:', errs)
+            )}
+            noValidate
+          >
+            {/* ════════════════════════════════════════
+                ÉTAPE 1 — Infos personnelles
+                ════════════════════════════════════════ */}
+            <div className={step === 1 ? 'block' : 'hidden'}>
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="space-y-5"
+                transition={{ duration: 0.25 }}
+                className="space-y-4"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-neutral-dark ml-1">Prénom</label>
+                {/* Prénom + Nom */}
+                <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
+                  <div>
+                    <FieldLabel required>Prénom</FieldLabel>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                      <User
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                   text-slate-400 pointer-events-none"
+                      />
                       <input
-                        {...register("firstName", { 
-                          required: "Prénom requis",
-                          minLength: { value: 2, message: "Prénom trop court" }
+                        {...register('firstName', {
+                          required: 'Prénom requis',
+                          validate: validateName,
+                          onChange: (e) => {
+                            e.target.value = formatName(e.target.value);
+                          },
                         })}
                         placeholder="Jean"
-                        className={`w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border ${errors.firstName ? 'border-red-400' : 'border-slate-200'} focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none`}
+                        autoComplete="given-name"
+                        className={inputWithIconClass(!!errors.firstName)}
                       />
                     </div>
-                    {errors.firstName && <span className="text-red-500 text-xs flex items-center gap-1"><AlertCircle size={12} /> {errors.firstName.message as string}</span>}
+                    <FieldError message={errors.firstName?.message as string} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-neutral-dark ml-1">Nom</label>
+
+                  <div>
+                    <FieldLabel required>Nom</FieldLabel>
                     <input
-                      {...register("lastName", { 
-                        required: "Nom requis",
-                        minLength: { value: 2, message: "Nom trop court" }
+                      {...register('lastName', {
+                        required: 'Nom requis',
+                        validate: validateName,
+                        onChange: (e) => {
+                          e.target.value = formatName(e.target.value);
+                        },
                       })}
                       placeholder="Dupont"
-                      className={`w-full px-4 py-3.5 rounded-2xl bg-white/50 border ${errors.lastName ? 'border-red-400' : 'border-slate-200'} focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none`}
+                      autoComplete="family-name"
+                      className={inputClass(!!errors.lastName)}
                     />
-                    {errors.lastName && <span className="text-red-500 text-xs flex items-center gap-1"><AlertCircle size={12} /> {errors.lastName.message as string}</span>}
+                    <FieldError message={errors.lastName?.message as string} />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-neutral-dark ml-1">Email {type === 'professionnel' ? 'professionnel' : ''}</label>
+                {/* Email */}
+                <div>
+                  <FieldLabel required>
+                    Email{isPro ? ' professionnel' : ''}
+                  </FieldLabel>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <Mail
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                 text-slate-400 pointer-events-none"
+                    />
                     <input
-                      {...register("email", { 
-                        required: "Email requis", 
-                        pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: "Format d'email invalide" } 
+                      {...register('email', {
+                        required: 'Email requis',
+                        pattern: {
+                          value:
+                            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                          message: "Format d'email invalide",
+                        },
                       })}
                       type="email"
                       placeholder="jean.dupont@email.com"
-                      className={`w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border ${errors.email ? 'border-red-400' : 'border-slate-200'} focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none`}
+                      autoComplete="email"
+                      className={inputWithIconClass(!!errors.email)}
                     />
                   </div>
-                  {errors.email && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.email.message as string}</span>}
+                  <FieldError message={errors.email?.message as string} />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-neutral-dark ml-1">Téléphone</label>
+                {/* Téléphone */}
+                <div>
+                  <FieldLabel required>Téléphone</FieldLabel>
                   <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <Phone
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                 text-slate-400 pointer-events-none"
+                    />
                     <input
-                      {...register("phone", {
-                        required: "Téléphone requis",
-                        pattern: { value: /^(\+?[0-9\s\-\.]{8,20})$/, message: "Format de numéro invalide" }
+                      {...register('phone', {
+                        required: 'Téléphone requis',
+                        validate: (v) =>
+                          validatePhone(v, isPro),
+                        onChange: (e) => {
+                          e.target.value = formatPhone(e.target.value);
+                        },
                       })}
-                      placeholder="06 12 34 56 78"
-                      className={`w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border ${errors.phone ? 'border-red-400' : 'border-slate-200'} focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none`}
+                      placeholder={isPro ? '01 23 45 67 89' : '06 12 34 56 78'}
+                      autoComplete="tel"
+                      className={inputWithIconClass(!!errors.phone)}
                     />
                   </div>
-                  {errors.phone && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.phone.message as string}</span>}
+                  <FieldError message={errors.phone?.message as string} />
                 </div>
 
-                {type === 'particulier' && (
-                  <div className="space-y-2 relative z-50">
-                    <label className="text-sm font-semibold text-neutral-dark ml-1">Adresse (Recherche auto / Géolocalisation)</label>
-                    <AddressSearchInput onAddressSelect={(addr) => setSelectedAddress(addr)} placeholder="Saisissez votre adresse..." />
+                {/* Adresse — Particulier seulement */}
+                {!isPro && (
+                  <div className="relative z-50">
+                    <FieldLabel>Adresse</FieldLabel>
+                    <AddressSearchInput
+                      onAddressSelect={(addr) => setSelectedAddress(addr)}
+                      placeholder="Saisissez votre adresse..."
+                    />
                   </div>
                 )}
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-neutral-dark ml-1">Mot de passe</label>
+                {/* Mot de passe */}
+                <div>
+                  <FieldLabel required>Mot de passe</FieldLabel>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                    <input
-                      {...register("password", { required: "Mot de passe requis", minLength: { value: 8, message: "8 caractères minimum" } })}
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      className={`w-full pl-12 pr-12 py-3.5 rounded-2xl bg-white/50 border ${errors.password ? 'border-red-400' : 'border-slate-200'} focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none`}
+                    <Lock
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                 text-slate-400 pointer-events-none"
                     />
-                    <button 
+                    <input
+                      {...register('password', {
+                        required: 'Mot de passe requis',
+                        minLength: {
+                          value: 8,
+                          message: '8 caractères minimum',
+                        },
+                      })}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      className={inputWithIconClass(!!errors.password)}
+                      style={{ paddingRight: '44px' }}
+                    />
+                    <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 
+                                 text-slate-400 hover:text-primary 
+                                 transition-colors p-1"
+                      aria-label={
+                        showPassword
+                          ? 'Masquer le mot de passe'
+                          : 'Afficher le mot de passe'
+                      }
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
-                  {errors.password && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.password.message as string}</span>}
-                  {/* Password Strength */}
-                  <div className="h-1 w-full bg-slate-100 rounded-full mt-2 overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-500 rounded-full ${
-                        getPasswordStrength() < 50 ? 'bg-red-400' : 
-                        getPasswordStrength() < 100 ? 'bg-amber-400' : 'bg-green-400'
-                      }`}
-                      style={{ width: `${getPasswordStrength()}%` }}
-                    />
-                  </div>
+                  <FieldError message={errors.password?.message as string} />
+
+                  {/* Barre de force */}
+                  {password && (
+                    <div className="mt-2 space-y-1">
+                      <div className="flex gap-1">
+                        {[25, 50, 75, 100].map((threshold) => (
+                          <div
+                            key={threshold}
+                            className={`h-1 flex-1 rounded-full transition-all duration-500
+                              ${
+                                getPasswordStrength() >= threshold
+                                  ? strengthColor()
+                                  : 'bg-slate-100'
+                              }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-[12px] text-slate-500 text-right">
+                        {strengthLabel()}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </div>
 
-            {type === 'professionnel' && (
-              <div className={step === 2 ? "block space-y-5" : "hidden"}>
+            {/* ════════════════════════════════════════
+                ÉTAPE 2 — Infos professionnelles
+                ════════════════════════════════════════ */}
+            {isPro && (
+              <div className={step === 2 ? 'block' : 'hidden'}>
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="space-y-5"
+                  transition={{ duration: 0.25 }}
+                  className="space-y-4"
                 >
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-neutral-dark ml-1">Votre métier</label>
-                      <div className="relative">
-                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <select 
-                          {...register("subRole", { required: "Veuillez sélectionner un métier" })}
-                          className={`w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border ${errors.subRole ? 'border-red-400' : 'border-slate-200'} focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all outline-none appearance-none`}
-                        >
-                          <option value="">Sélectionnez votre profession</option>
-                          <option value="agent_immobilier">Agent Immobilier</option>
-                          <option value="notaire">Notaire</option>
-                          <option value="cgp">CGP (Gestion de Patrimoine)</option>
-                          <option value="courtier">Courtier</option>
-                          <option value="avocat">Avocat</option>
-                          <option value="diagnostiqueur">Diagnostiqueur</option>
-                          <option value="architecte">Architecte</option>
-                          <option value="autre">Autre</option>
-                        </select>
-                      </div>
-                      {errors.subRole && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.subRole.message as string}</span>}
+                  {/* Métier */}
+                  <div>
+                    <FieldLabel required>Votre métier</FieldLabel>
+                    <div className="relative">
+                      <Briefcase
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                   text-slate-400 pointer-events-none z-10"
+                      />
+                      <select
+                        {...register('subRole', {
+                          required: 'Veuillez sélectionner un métier',
+                        })}
+                        className={`${inputWithIconClass(!!errors.subRole)} 
+                                    appearance-none bg-white/60 cursor-pointer`}
+                      >
+                        <option value="">Sélectionnez votre profession</option>
+                        <option value="agent_immobilier">Agent Immobilier</option>
+                        <option value="notaire">Notaire</option>
+                        <option value="cgp">CGP — Gestion de Patrimoine</option>
+                        <option value="courtier">Courtier</option>
+                        <option value="avocat">Avocat</option>
+                        <option value="diagnostiqueur">Diagnostiqueur</option>
+                        <option value="architecte">Architecte</option>
+                        <option value="geometre">Géomètre</option>
+                        <option value="promoteur">Promoteur Immobilier</option>
+                        <option value="autre">Autre profession</option>
+                      </select>
                     </div>
-
-                    <AnimatePresence>
-                      {selectedSubRole === 'autre' && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="space-y-2"
-                        >
-                          <label className="text-sm font-semibold text-neutral-dark ml-1">Précisez votre profession</label>
-                          <input
-                            {...register("customSubRole", { required: selectedSubRole === 'autre' ? "Précision requise" : false })}
-                            placeholder="Ex: Expert Immobilier"
-                            className={`w-full px-4 py-3.5 rounded-2xl bg-white/50 border ${errors.customSubRole ? 'border-red-400' : 'border-slate-200'} focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all outline-none`}
-                          />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-neutral-dark ml-1">Nom de la société</label>
-                        <div className="relative">
-                          <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                          <input
-                            {...register("companyName", { 
-                               required: "Requis",
-                               minLength: { value: 2, message: "Nom trop court" },
-                               pattern: { value: /^[^!@#$%^&*()_=+\[\]{};':"\\|,.<>\/?]+$/, message: "Caractères spéciaux interdits" }
-                            })}
-                            placeholder="Wallnut Immobilier"
-                            className={`w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border ${errors.companyName ? 'border-red-400' : 'border-slate-200'} focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all outline-none`}
-                          />
-                        </div>
-                        {errors.companyName && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.companyName.message as string}</span>}
-                      </div>
-                      <div className="space-y-4">
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                            <Shield size={16} />
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-bold text-blue-900">Vérification eIDAS 2.0 (Identity Wallet)</h4>
-                            <p className="text-xs text-blue-800/70 mt-1">Gagnez du temps en autorisant Wallnut à lire votre numéro de SIRET et vos informations professionnelles depuis votre portefeuille d'identité européen.</p>
-                            <button type="button" onClick={() => alert("Simulation : Le Wallet demanderait votre consentement pour partager le SIRET.")} className="touch-target mt-3 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1.5 px-3 min-h-[44px] rounded-lg transition-colors">
-                              Connecter mon Wallet
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-sm font-semibold text-neutral-dark ml-1">SIRET</label>
-                          <input
-                            {...register("siret", { 
-                              required: "Requis",
-                              pattern: { value: /^[\s0-9]{14,20}$/, message: "SIRET composé de 14 chiffres (espaces autorisés)" }
-                            })}
-                            placeholder="123 456 789 00012"
-                            className={`w-full px-4 py-3.5 rounded-2xl bg-white/50 border ${errors.siret ? 'border-red-400' : 'border-slate-200'} focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all outline-none`}
-                          />
-                          {errors.siret && <span className="text-red-500 text-xs ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.siret.message as string}</span>}
-                        </div>
-                      </div>
-                    </div>
+                    <FieldError message={errors.subRole?.message as string} />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-neutral-dark ml-1">N° Carte Pro / ORIAS (Optionnel)</label>
+                  {/* Autre profession */}
+                  <AnimatePresence>
+                    {selectedSubRole === 'autre' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FieldLabel required>Précisez votre profession</FieldLabel>
+                        <input
+                          {...register('customSubRole', {
+                            required:
+                              selectedSubRole === 'autre'
+                                ? 'Précision requise'
+                                : false,
+                          })}
+                          placeholder="Ex: Expert en évaluation immobilière"
+                          className={inputClass(!!errors.customSubRole)}
+                        />
+                        <FieldError
+                          message={errors.customSubRole?.message as string}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Nom société */}
+                  <div>
+                    <FieldLabel required>Nom de la société</FieldLabel>
                     <div className="relative">
-                      <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                      <Building2
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 
+                                   text-slate-400 pointer-events-none"
+                      />
                       <input
-                        {...register("professionalCard")}
+                        {...register('companyName', {
+                          required: 'Nom de société requis',
+                          minLength: {
+                            value: 2,
+                            message: 'Nom trop court',
+                          },
+                          pattern: {
+                            value:
+                              /^[^!@#$%^&*()_=+[\]{};':"\\|<>/?]+$/,
+                            message: 'Caractères spéciaux interdits',
+                          },
+                        })}
+                        placeholder="Mon Agence Immobilière"
+                        autoComplete="organization"
+                        className={inputWithIconClass(!!errors.companyName)}
+                      />
+                    </div>
+                    <FieldError
+                      message={errors.companyName?.message as string}
+                    />
+                  </div>
+
+                  {/* SIRET */}
+                  <div>
+                    <FieldLabel required>Numéro SIRET</FieldLabel>
+                    <input
+                      {...register('siret', {
+                        required: 'SIRET requis',
+                        validate: validateSIRET,
+                        onChange: (e) => {
+                          const formatted = formatSIRET(e.target.value);
+                          e.target.value = formatted;
+                          setValue('siret', formatted, { shouldValidate: true });
+                        },
+                      })}
+                      placeholder="732 829 320 00074"
+                      inputMode="numeric"
+                      className={`${inputClass(!!errors.siret)} font-mono tracking-wider`}
+                    />
+                    <FieldError message={errors.siret?.message as string} />
+                    <p className="text-[11px] text-slate-400 mt-1 ml-1">
+                      14 chiffres — Validé par l'algorithme 
+                    </p>
+                  </div>
+                  
+                  {/* Carte PRO */}
+                  {['agent_immobilier', 'cgp', 'courtier'].includes(selectedSubRole) && (
+                  <div>
+                    <FieldLabel>N° Carte Pro / ORIAS (Optionnel)</FieldLabel>
+                    <div className="relative">
+                      <CreditCard size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                      <input
+                        {...register('professionalCard')}
                         placeholder="CPI 7501 2024..."
-                        className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/50 border border-slate-200 focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all outline-none"
+                        className={inputWithIconClass()}
                       />
                     </div>
                   </div>
+                  )}
 
-                  <div className="space-y-2 relative z-50">
-                    <label className="text-sm font-semibold text-neutral-dark ml-1">Adresse du cabinet/agence (Recherche auto)</label>
-                    <AddressSearchInput onAddressSelect={(addr) => setSelectedAddress(addr)} placeholder="Saisissez l'adresse de votre cabinet..." />
+                  {/* Adresse */}
+                  <div className="relative z-40">
+                    <FieldLabel>Adresse du cabinet/agence</FieldLabel>
+                    <AddressSearchInput
+                      onAddressSelect={(addr) => setSelectedAddress(addr)}
+                      placeholder="Recherche automatique..."
+                    />
                   </div>
                 </motion.div>
               </div>
             )}
 
-            {step === 1 && type === 'professionnel' ? (
-              <button
-                type="button"
-                onClick={async () => {
-                  const isValid = await trigger(['firstName', 'lastName', 'email', 'phone', 'password']);
-                  if (isValid) setStep(2);
-                }}
-                disabled={isSubmitting}
-                className={`touch-target min-h-[44px] w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg bg-secondary text-white shadow-secondary/20 hover:scale-[1.02] active:scale-95 disabled:opacity-50`}
-              >
-                Continuer
-                <ChevronRight size={20} />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`touch-target min-h-[44px] w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                  type === 'particulier' ? 'bg-primary text-white shadow-primary/20' : 'bg-secondary text-white shadow-secondary/20'
-                } hover:scale-[1.02] active:scale-95 disabled:opacity-50`}
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {attestationStatus || 'Inscription en cours...'}
-                  </span>
-                ) : (
-                  <>
-                    Créer mon compte
-                    <ChevronRight size={20} />
-                  </>
-                )}
-              </button>
-            )}
+            {/* BUTTONS */}
+            <div className="mt-8 flex gap-3">
+              {isPro && step === 1 ? (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const ok = await trigger(['firstName', 'lastName', 'email', 'phone', 'password']);
+                    if (ok) setStep(2);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 bg-secondary text-white font-bold rounded-2xl transition-all shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95"
+                >
+                  Suivant
+                  <ChevronRight size={18} />
+                </button>
+              ) : (
+                <div className="w-full flex gap-3">
+                  {isPro && step === 2 && (
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="flex items-center justify-center w-12 min-h-[48px] bg-slate-100 text-slate-600 rounded-2xl transition-all hover:bg-slate-200"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`flex-1 flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 text-white font-bold rounded-2xl transition-all shadow-lg ${
+                      isPro 
+                        ? 'bg-secondary shadow-secondary/20 hover:bg-secondary/90' 
+                        : 'bg-primary shadow-primary/20 hover:bg-primary/90'
+                    } hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:scale-100`}
+                  >
+                    {isSubmitting ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        Terminer l'inscription
+                        <CheckCircle2 size={18} />
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
             
-            {step === 2 && type === 'professionnel' && (
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                disabled={isSubmitting}
-                className="touch-target min-h-[44px] w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 bg-slate-100 text-neutral-dark hover:bg-slate-200 transition-all"
-              >
-                <ChevronLeft size={20} />
-                Retour à l'étape 1
-              </button>
-            )}
+            {/* Simulation attestation */}
+            <AnimatePresence>
+              {attestationStatus && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4 text-[12px] text-center text-slate-500 flex items-center justify-center gap-2"
+                >
+                  <div className="w-3 h-3 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                  {attestationStatus}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </form>
 
-          {step === 1 && (
-            <div className="mt-8">
-              <div className="relative py-4">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200" /></div>
-                <div className="relative flex justify-center text-xs uppercase"><span className="bg-white/80 px-2 text-slate-400">Ou s'inscrire avec</span></div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                <button 
-                  onClick={handleGoogleSignIn}
-                  disabled={isSubmitting}
-                  className="touch-target min-h-[44px] flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all disabled:opacity-50"
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
-                  <span className="text-sm font-bold text-neutral-dark">Google</span>
-                </button>
-                <button 
-                  onClick={handleLinkedInSignIn}
-                  disabled={isSubmitting}
-                  className="touch-target min-h-[44px] flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all disabled:opacity-50"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#0077b5"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                  <span className="text-sm font-bold text-neutral-dark">LinkedIn</span>
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => alert("L\'authentification Passkey (FIDO2) sera disponible dans la prochaine mise à jour du système CIAM. (Recommandation 2026)")}
-                  disabled={isSubmitting}
-                  className="touch-target sm:col-span-2 flex items-center justify-center gap-3 py-3.5 px-4 min-h-[56px] rounded-2xl border-2 border-secondary/20 bg-primary/5 hover:bg-primary/10 transition-all disabled:opacity-50 text-primary group"
-                >
-                  <Fingerprint className="text-secondary w-6 h-6 group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-bold">Continuer avec Passkey (sans mot de passe)</span>
-                </button>
+          {/* Footer form */}
+          <div className="mt-8 text-center border-t border-slate-100 pt-6">
+            <p className="text-[13px] text-slate-500">
+              Déjà un compte ?{' '}
+              <Link to="/" onClick={signIn} className="text-primary font-bold hover:underline">
+                Se connecter
+              </Link>
+            </p>
+            <div className="mt-4 text-[11px] text-slate-400 flex flex-col items-center gap-1">
+              <p>Protégé par reCAPTCHA — Wallnut Technologies SAS</p>
+              <div className="flex gap-2">
+                <Link to="/legal" className="hover:text-slate-600 transition-colors">Confidentialité</Link>
+                <span>•</span>
+                <Link to="/legal" className="hover:text-slate-600 transition-colors">CGU</Link>
               </div>
             </div>
-          )}
-
-          <p className="mt-8 text-center text-sm text-neutral-dark/60">
-            Déjà un compte ? <Link to="/" onClick={signIn} className="text-primary font-bold hover:underline">Se connecter</Link>
-          </p>
-          <div className="mt-4 text-center text-xs text-neutral-dark/40 flex flex-col items-center justify-center">
-             <span className="flex items-center gap-1"><Shield size={12} /> Sécurisé par reCAPTCHA Enterprise & AppCheck</span>
-             <span>Ce site est protégé par reCAPTCHA et les Règles de confidentialité et Conditions d'utilisation de Google s'appliquent. Les vérifications de sécurité de type attestation de bot (2026) sont actives.</span>
-             {type === 'professionnel' && <span className="mt-1 font-semibold">Les environnements Particulier et Professionnel sont strictement isolés (Zero-Trust).</span>}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

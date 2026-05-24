@@ -19,6 +19,8 @@ export function Offres() {
         "Rachat prioritaire garanti"
       ],
       color: "bg-slate-50",
+      titleColor: "text-primary",
+      descColor: "opacity-70",
       accent: "text-slate-500",
       btn: "border-primary text-primary"
     },
@@ -34,7 +36,9 @@ export function Offres() {
         "Support juridique dédié"
       ],
       current: true,
-      color: "bg-primary text-white",
+      color: "bg-primary !text-white",
+      titleColor: "!text-white",
+      descColor: "!text-slate-200",
       accent: "text-secondary",
       btn: "bg-secondary text-primary"
     },
@@ -50,6 +54,8 @@ export function Offres() {
         "Disponibilité VIP 7j/7"
       ],
       color: "bg-slate-50",
+      titleColor: "text-primary",
+      descColor: "opacity-70",
       accent: "text-primary",
       btn: "border-primary text-primary"
     }
@@ -69,7 +75,7 @@ export function Offres() {
             <h1 className="text-5xl lg:text-7xl font-display font-bold text-primary">
               Des offres <span className="text-secondary">adaptées</span> à vos besoins
             </h1>
-            <p className="text-xl text-neutral-dark/60">
+            <p className="text-app-lg text-neutral-dark/60">
               Découvrez nos 3 niveaux d'intervention. Une transparence totale sur les taux de portage et les conditions de sortie.
             </p>
           </motion.div>
@@ -91,19 +97,19 @@ export function Offres() {
                   </div>
                 )}
                 
-                <h3 className={`text-2xl font-display font-bold mb-2`}>{plan.name}</h3>
+                <h3 className={`text-app-xl font-display font-bold mb-2 ${plan.titleColor}`}>{plan.name}</h3>
                 <div className="flex items-baseline gap-1 mb-6">
                   <span className={`text-5xl font-display font-black ${plan.accent}`}>{plan.price}</span>
-                  <span className="opacity-50 text-sm font-medium">LTV Max*</span>
+                  <span className="opacity-50 text-app-sm font-medium">LTV Max*</span>
                 </div>
                 
-                <p className="text-sm opacity-70 mb-8 leading-relaxed">
+                <p className={`text-app-sm mb-8 leading-relaxed ${plan.descColor}`}>
                   {plan.description}
                 </p>
 
                 <ul className="space-y-4 mb-12 flex-1">
                   {plan.features.map(feature => (
-                    <li key={feature} className="flex items-start gap-3 text-sm font-medium">
+                    <li key={feature} className="flex items-start gap-3 text-app-sm font-medium">
                       <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${plan.current ? 'bg-secondary text-primary' : 'bg-primary/10 text-primary'}`}>
                         <Check size={12} strokeWidth={3} />
                       </div>
@@ -113,7 +119,7 @@ export function Offres() {
                 </ul>
 
                 <Link 
-                  to="/register/particulier"
+                  to="/dashboard/particulier"
                   className={`w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all hover:scale-105 ${plan.btn.includes('bg-') ? plan.btn : 'border-2 ' + plan.btn}`}
                 >
                   Choisir cette offre <ArrowRight size={18} />
@@ -121,7 +127,7 @@ export function Offres() {
               </motion.div>
             ))}
           </div>
-          <p className="mt-12 text-center text-xs text-neutral-dark/40 font-medium">
+          <p className="mt-12 text-center text-app-xs text-neutral-dark/40 font-medium">
             *LTV (Loan-To-Value) : Ratio du financement accordé par rapport à la valeur vénale du bien expertisé.<br/>
             Toutes nos offres incluent une faculté de rachat de 24 mois maximum.
           </p>
@@ -131,7 +137,7 @@ export function Offres() {
         <section className="bg-slate-50 mt-32 py-24">
           <div className="max-w-7xl mx-auto px-4 lg:px-8">
             <div className="text-center mb-16 space-y-4">
-              <h2 className="text-3xl font-display font-bold text-primary">Les engagements Wallnut</h2>
+              <h2 className="text-app-2xl font-display font-bold text-primary">Les engagements Wallnut</h2>
               <p className="text-neutral-dark/60">Nous structurons l'offre financière pour protéger votre patrimoine.</p>
             </div>
             
@@ -147,7 +153,7 @@ export function Offres() {
                     <item.icon size={24} />
                   </div>
                   <h4 className="font-bold mb-2">{item.title}</h4>
-                  <p className="text-xs text-neutral-dark/60 leading-relaxed">{item.desc}</p>
+                  <p className="text-app-xs text-neutral-dark/60 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>

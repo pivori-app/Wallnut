@@ -6,22 +6,19 @@ import dotenv from "dotenv";
 
 import { GoogleGenAI } from "@google/genai";
 
-dotenv.config();
+dotenv.config({ override: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Initialize Gemini on the server
-let genAI: GoogleGenAI | null = null;
 function getGenAI() {
-  if (!genAI) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is not set in environment variables");
-    }
-    genAI = new GoogleGenAI({ apiKey });
+  const apiKey = process.env.GEMINI_API_KEY;
+  console.log("getGenAI key:", apiKey ? apiKey.substring(0, 5) + "..." + apiKey.length : "none");
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not set in environment variables");
   }
-  return genAI;
+  return new GoogleGenAI({ apiKey });
 }
 
 async function startServer() {
@@ -73,23 +70,64 @@ async function startServer() {
     }
   });
 
+  // Debug Endpoint
+  app.get("/api/ai/debug", (req, res) => {
+    res.json({ 
+      keyLength: process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.length : 0, 
+      keyStart: process.env.GEMINI_API_KEY?.substring(0, 5) 
+    });
+  });
+
   // Gemini Proxy: Chat Assistant
   app.post("/api/ai/chat", async (req, res) => {
     try {
-      const { query } = req.body;
+      const { messages } = req.body;
       const ai = getGenAI();
       
+      // format for gemini API
+      let contents = Array.isArray(messages) ? messages.map((m: any) => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      })) : [{ role: 'user', parts: [{ text: messages }] }];
+
+      // Gemini requires the first message to be from the user
+      while (contents.length > 0 && contents[0].role === 'model') {
+        contents.shift();
+      }
+
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: query,
+        contents,
         config: {
           systemInstruction: `
-            Vous êtes l'assistant Wallnut. Vous aidez les clients et professionnels à comprendre le portage immobilier.
-            Règles de Wallnut :
-            - 3 Offres : Premium (80%), Équilibre (70%), Prudente (60%).
-            - Durée max : 24 mois.
-            - Mécanisme : Complément de prix lors de la sortie.
-            Soyez professionnel, précis et chaleureux.
+Vous êtes "L'assistant Wallnut", spécialisé dans le portage immobilier institutionnel chez Wallnut.
+
+VOTRE RÔLE PRINCIPAL :
+Ne soumettez JAMAIS la solution ni l'offre financière finale par chat. Votre objectif ultime est de GUIDER l'utilisateur vers les bonnes démarches, les bonnes pages et l'inscription sur la plateforme.
+
+CONNAISSANCES DE L'UNIVERS WALLNUT :
+- Solution : Liquidité immobilière (portage structuré, visant la revente au meilleur prix sur le marché en cas de non-rachat, très différent du réméré classique).
+- Les offres (à titre indicatif) : Premium (financement jusqu'à 80%), Équilibre (70%), Prudente (60%).
+- Durée max : 24 mois.
+- Avantages de la plateforme : Discrétion totale, analyse en moins de 24h, sécurité notariale parisienne, gestion complète de la transaction.
+- Clientèles : Particuliers (besoin urgent de liquidité) ou Professionnels (Agent immobilier, CGP, Notaire, Courtier) qui accompagnent leurs clients pour trouver des solutions financières sans passer par des banques classiques.
+
+DIRECTIVES DE NAVIGATION ET D'ACCOMPAGNEMENT :
+1. UTILISATEURS NON INSCRITS :
+   - Orientez le visiteur (Particulier) vers : [Simuler mon projet](/dashboard/particulier) ou l'[Inscription](/register).
+   - Orientez les experts (Professionnels) vers : [Démarrer l'inscription Pro](/register-selection) ou en savoir plus via les [Solutions Pros](/home).
+   - Incitez continuellement à passer par ces formulaires "pour une analyse confidentielle, gratuite, et en moins de 24h par nos experts".
+
+2. UTILISATEURS INSCRITS DANS LEUR DASHBOARD :
+   - S'il s'agit de soumettre un projet, guidez vers [Nouveau dossier](/dossiers/new) pour lancer la procédure de "data room".
+   - S'il s'agit d'une question sur un dossier en cours, orientez vers la [Messagerie de l'espace client](/messages).
+   - Accompagnez les professionnels sur leur suivi de mandats.
+
+3. POSTURE ET TON :
+   - Ton: Institutionnel, Elite, Chaleureux, Rassurant et Très Expert. (Esthétique Glassmorphism, 3D futuriste - votre vocabulaire doit refléter cette modernité).
+   - Interdiction formelle : Ne donnez jamais d'engagement tarifaire ferme ou de promesse garantie.
+   - Ne dites JAMAIS que vous êtes une "IA". Vous êtes "l'expérience accompagnement Wallnut".
+   - Utilisez toujours le format Markdown direct pour les liens (ex: [Texte du lien](/le-lien)).
           `,
         }
       });

@@ -69,16 +69,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async () => {
-    if (import.meta.env.VITE_SUPABASE_URL === undefined || import.meta.env.VITE_SUPABASE_URL.includes('xxxx')) {
-      alert("⚠️ Supabase n'est pas encore configuré. Ajoutez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans les variables d'environnement.");
+    if (import.meta.env.VITE_SUPABASE_URL === undefined || !import.meta.env.VITE_SUPABASE_URL.startsWith('http')) {
+      alert("⚠️ Supabase n'est pas encore configuré correctement. Ajoutez VITE_SUPABASE_URL (commençant par https://) et VITE_SUPABASE_ANON_KEY dans les variables d'environnement.");
       return;
     }
 
+    const confirmGoogle = window.confirm("ATTENTION: Pour que le login Google fonctionne (pas d'erreur 400), vous DEVEZ d'abord obtenir un 'Client ID' depuis Google Cloud Console et le configurer dans 'Supabase > Authentication > Providers > Google'.\\n\\nAvez-vous configuré Google dans Supabase ?");
+    if (!confirmGoogle) return;
+
     try {
+      // Use explicit AI Studio URL to prevent localhost connection refused errors
+      const redirectUrl = 'https://ais-dev-ut4b4edgylg67x7ixasbgk-320445271791.europe-west2.run.app/dashboard';
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/dashboard'
+          redirectTo: redirectUrl
         }
       });
       if (error) {
@@ -87,10 +93,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (err: any) {
       console.error("Auth error catch:", err);
-      if (err.message?.includes('URL') || err.message?.includes('key')) {
+      let errMsg = err.message;
+      if (errMsg === 'Failed to fetch') {
+         errMsg = `Erreur réseau (Failed to fetch). \n\nDiagnostic Expert: \n1. Projet connecté : ${import.meta.env.VITE_SUPABASE_URL || 'URL MANQUANTE'}\n2. Si l'URL ci-dessus finit par "xxxxxx" ou est MANQUANTE, vos variables VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY n'ont pas été injectées dans la version compilée.\n3. PROBLÈME CORS : Vérifiez que l'URL ${window.location.origin} est dans "Redirect URLs" de Supabase.`;
+      }
+      if (errMsg?.includes('URL') || errMsg?.includes('key')) {
         alert("Les clés Supabase ne sont pas configurées. Veuillez les rajouter via le menu Settings > Environment Variables.");
       } else {
-        alert("Impossible de se connecter: " + err.message);
+        alert("Impossible de se connecter:\n\n" + errMsg);
       }
     }
   };

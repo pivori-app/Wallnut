@@ -1,5 +1,30 @@
 
 export type UserRole = 'particulier' | 'professionnel' | 'institution' | 'gestionnaire';
+export type ClientType = 'particulier' | 'professionnel';
+
+export interface ScannedPage {
+  id: string;
+  dataUrl: string;
+  timestamp: number;
+  brightness: number;
+}
+
+export type ScanQualityStatus = 'idle' | 'checking' | 'accepted' | 'rejected';
+
+export interface DocumentItem {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  required: boolean;
+  status: 'pending' | 'scanning' | 'completed' | 'skipped' | 'error';
+  icon: string | React.ReactNode;
+  pages: ScannedPage[];
+  clientType?: 'all' | 'particulier' | 'professionnel';
+  validationKeywords?: string[];
+}
+
+export type StapleMode = 'auto' | 'manual' | 'none';
 
 export type ProfessionalSubRole = 
   | 'agent_immobilier' 

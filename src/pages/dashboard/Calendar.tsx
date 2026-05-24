@@ -101,8 +101,8 @@ export function Calendar() {
     <div className="space-y-8 max-w-7xl mx-auto">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-display font-bold text-primary">Calendrier & Échéances</h1>
-          <p className="text-neutral-dark/60 mt-2 text-lg">Centralisez vos rendez-vous, alertes et échéances notariales.</p>
+          <h1 className="text-app-2xl md:text-app-3xl font-display font-bold text-primary">Calendrier & Échéances</h1>
+          <p className="text-neutral-dark/60 mt-2 text-app-md">Centralisez vos rendez-vous, alertes et échéances notariales.</p>
         </div>
         
         <div className="flex items-center gap-4">
@@ -146,10 +146,10 @@ export function Calendar() {
         {/* Main Calendar View / Agenda */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-display font-bold text-primary">À venir</h2>
+            <h2 className="text-app-xl font-display font-bold text-primary">À venir</h2>
             <div className="flex gap-2">
               {['Tous', 'Signatures', 'Notaire', 'Alertes'].map(filter => (
-                <button key={filter} className="text-xs font-bold px-3 py-1.5 rounded-lg bg-white/40 border border-black/5 hover:bg-white transition-colors text-primary">
+                <button key={filter} className="text-app-xs font-bold px-3 py-1.5 rounded-lg bg-white/40 border border-black/5 hover:bg-white transition-colors text-primary">
                   {filter}
                 </button>
               ))}
@@ -170,10 +170,10 @@ export function Calendar() {
                   <div className="flex flex-col sm:flex-row gap-6">
                     {/* Time Column */}
                     <div className="flex flex-col items-center justify-center shrink-0 min-w-[100px] border-b sm:border-b-0 sm:border-r border-black/10 pb-4 sm:pb-0 sm:pr-6">
-                      <span className="text-sm font-bold opacity-60">
+                      <span className="text-app-sm font-bold opacity-60">
                         {event.date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}
                       </span>
-                      <span className="text-2xl font-display font-bold text-primary">{event.time}</span>
+                      <span className="text-app-xl font-display font-bold text-primary">{event.time}</span>
                       {event.isSync && (
                         <span className="text-[10px] font-bold uppercase tracking-wider text-success mt-2 flex items-center gap-1">
                           <RefreshCw size={10} /> Sync
@@ -188,14 +188,14 @@ export function Calendar() {
                           <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider mb-2", config.color, "bg-white/60")}>
                             <Icon size={12} /> {config.label}
                           </div>
-                          <h3 className="text-lg font-bold text-primary leading-tight">{event.title}</h3>
+                          <h3 className="text-app-md font-bold text-primary leading-tight">{event.title}</h3>
                         </div>
                         <button className="p-2 hover:bg-black/5 rounded-full transition-colors">
                           <MoreVertical size={20} className="text-primary/40" />
                         </button>
                       </div>
 
-                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-neutral-dark/80">
+                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-app-sm font-medium text-neutral-dark/80">
                         <div className="flex items-center gap-2">
                           <Building size={16} className="opacity-40" />
                           {event.property}
@@ -216,10 +216,10 @@ export function Calendar() {
 
                   {/* Actions Footer */}
                   <div className="mt-4 pt-4 border-t border-black/10 flex justify-end gap-3 opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity">
-                    <button className="px-4 py-2 rounded-xl text-sm font-bold bg-white/60 hover:bg-white text-primary border border-black/5 transition-colors flex items-center gap-2">
+                    <button className="px-4 py-2 rounded-xl text-app-sm font-bold bg-white/60 hover:bg-white text-primary border border-black/5 transition-colors flex items-center gap-2">
                       <RefreshCw size={16} /> Reporter
                     </button>
-                    <button className="px-4 py-2 rounded-xl text-sm font-bold bg-white/60 hover:bg-white text-primary border border-black/5 transition-colors flex items-center gap-2">
+                    <button className="px-4 py-2 rounded-xl text-app-sm font-bold bg-white/60 hover:bg-white text-primary border border-black/5 transition-colors flex items-center gap-2">
                       <Share2 size={16} /> Partager
                     </button>
                   </div>
@@ -232,7 +232,7 @@ export function Calendar() {
         {/* Sidebar Widgets */}
         <div className="space-y-6">
           <div className="glass p-6 rounded-[2rem] border border-black/5">
-            <h3 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+            <h3 className="text-app-md font-bold text-primary mb-4 flex items-center gap-2">
               <Bell size={20} className="text-secondary" />
               Rappels Automatiques
             </h3>
@@ -242,8 +242,8 @@ export function Calendar() {
                   <FileWarning size={16} className="text-secondary" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-primary">Relance automatique DPE</p>
-                  <p className="text-xs text-neutral-dark/60 mt-0.5">Activé pour "12 Rue des Lilas"</p>
+                  <p className="text-app-sm font-bold text-primary">Relance automatique DPE</p>
+                  <p className="text-app-xs text-neutral-dark/60 mt-0.5">Activé pour "12 Rue des Lilas"</p>
                 </div>
                 <div className="ml-auto w-10 h-6 bg-secondary/20 rounded-full relative">
                   <div className="w-4 h-4 bg-secondary rounded-full absolute top-1 right-1"></div>
@@ -255,15 +255,15 @@ export function Calendar() {
                   <Mail size={16} className="text-success" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-primary">Confirmation Notaire (J-3)</p>
-                  <p className="text-xs text-neutral-dark/60 mt-0.5">Mails de rappel configurés</p>
+                  <p className="text-app-sm font-bold text-primary">Confirmation Notaire (J-3)</p>
+                  <p className="text-app-xs text-neutral-dark/60 mt-0.5">Mails de rappel configurés</p>
                 </div>
                  <div className="ml-auto w-10 h-6 bg-success/20 rounded-full relative">
                   <div className="w-4 h-4 bg-success rounded-full absolute top-1 right-1"></div>
                 </div>
               </div>
             </div>
-            <button className="w-full mt-4 py-3 rounded-xl border border-dashed border-primary/20 text-sm font-bold text-primary/60 hover:bg-primary/5 transition-colors flex items-center justify-center gap-2">
+            <button className="w-full mt-4 py-3 rounded-xl border border-dashed border-primary/20 text-app-sm font-bold text-primary/60 hover:bg-primary/5 transition-colors flex items-center justify-center gap-2">
               <Plus size={16} /> Ajouter une règle
             </button>
           </div>
@@ -274,7 +274,7 @@ export function Calendar() {
                <h3 className="font-bold text-primary">Mini-Calendrier</h3>
              </div>
              {/* Simple static representation of a mini-calendar for UI purposes */}
-             <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-medium text-neutral-dark/60">
+             <div className="mt-4 grid grid-cols-7 gap-1 text-center text-app-xs font-medium text-neutral-dark/60">
                 {['L','M','M','J','V','S','D'].map(d => <div key={d} className="py-2">{d}</div>)}
                 {Array.from({length: 31}).map((_, i) => (
                   <div key={i} className={cn("py-2 rounded-lg", i===14 ? "bg-primary text-white font-bold" : i===15 || i===18 ? "bg-secondary/20 text-primary font-bold" : "hover:bg-white/60")}>
@@ -313,17 +313,17 @@ function CreateEventModal({ onClose }: { onClose: () => void }) {
         className="relative w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl overflow-hidden"
       >
         <div className="p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-display font-bold text-primary">Programmer un événement</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-app-lg font-display font-bold text-primary">Programmer un événement</h2>
             <button onClick={onClose} className="p-2 bg-black/5 hover:bg-black/10 rounded-full transition-colors">
-              <X size={20} />
+              <X size={18} />
             </button>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Type d'événement */}
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-primary">Type d'alerte / RDV</label>
+            <div className="space-y-2">
+              <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Type d'alerte / RDV</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {(Object.keys(EVENT_CONFIG) as EventType[]).map(type => {
                   const config = EVENT_CONFIG[type];
@@ -334,11 +334,11 @@ function CreateEventModal({ onClose }: { onClose: () => void }) {
                       key={type}
                       onClick={() => setEventType(type)}
                       className={cn(
-                        "p-3 rounded-xl flex flex-col items-center justify-center gap-2 text-xs font-bold transition-all border text-center h-24",
+                        "p-3 rounded-xl flex flex-col items-center justify-center gap-2 text-[11px] font-bold transition-all border text-center h-20",
                         isSelected ? "bg-primary text-white border-primary shadow-md" : "bg-neutral-50 border-neutral-200 text-neutral-600 hover:border-primary/40"
                       )}
                     >
-                      <Icon size={24} className={isSelected ? "text-white" : config.color} />
+                      <Icon size={20} className={isSelected ? "text-white" : config.color} />
                       {config.label}
                     </button>
                   )
@@ -346,33 +346,33 @@ function CreateEventModal({ onClose }: { onClose: () => void }) {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-primary">Titre de l'événement</label>
-              <input type="text" placeholder="Ex: Signature Compromis..." defaultValue={EVENT_CONFIG[eventType].label} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
+            <div className="space-y-2">
+              <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Titre de l'événement</label>
+              <input type="text" placeholder="Ex: Signature Compromis..." defaultValue={EVENT_CONFIG[eventType].label} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-app-sm font-medium" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-primary">Date</label>
+              <div className="space-y-2">
+                <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Date</label>
                 <div className="relative">
-                  <CalendarIcon size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
-                  <input type="date" className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
+                  <CalendarIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                  <input type="date" className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-11 pr-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-app-sm font-medium" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-primary">Heure</label>
+              <div className="space-y-2">
+                <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Heure</label>
                 <div className="relative">
-                  <Clock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
-                  <input type="time" className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
+                  <Clock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                  <input type="time" className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-11 pr-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-app-sm font-medium" />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-primary">Bien concerné (Optionnel)</label>
+            <div className="space-y-2">
+              <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Bien concerné (Optionnel)</label>
               <div className="relative">
-                <Building size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
-                <select className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium appearance-none">
+                <Building size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <select className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-11 pr-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-app-sm font-medium appearance-none">
                   <option value="">Sélectionner une fiche bien...</option>
                   <option value="1">12 Rue des Lilas, Lyon</option>
                   <option value="2">45 Avenue de la République, Paris</option>
@@ -380,27 +380,27 @@ function CreateEventModal({ onClose }: { onClose: () => void }) {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-primary">Partager l'événement (Notifications)</label>
+            <div className="space-y-2">
+              <label className="text-app-xs font-bold text-primary/70 uppercase tracking-wider">Partager l'événement (Notifications)</label>
               <div className="relative">
-                <Mail size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
-                <input type="text" placeholder="Adresses emails (séparées par une virgule)..." className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
+                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <input type="text" placeholder="Adresses emails (séparées par une virgule)..." className="w-full bg-neutral-50 border border-neutral-200 rounded-xl pl-11 pr-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-app-sm font-medium" />
               </div>
             </div>
             
             <label className="flex items-center gap-3 cursor-pointer p-4 rounded-xl bg-blue-50/50 border border-blue-100">
-               <input type="checkbox" defaultChecked className="w-5 h-5 rounded border-blue-200 text-blue-600 focus:ring-blue-500" />
-               <span className="text-sm font-medium text-blue-900">Synchroniser avec mon calendrier par défaut (Google Workspace)</span>
+               <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-blue-200 text-blue-600 focus:ring-blue-500" />
+               <span className="text-app-xs font-medium text-blue-900">Synchroniser avec mon calendrier par défaut (Google Workspace)</span>
             </label>
 
           </div>
 
           <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-black/5">
-            <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold bg-neutral-100 text-neutral-600 hover:bg-neutral-200 transition-all">
+            <button onClick={onClose} className="px-5 py-2.5 rounded-xl text-app-sm font-bold bg-neutral-100 text-neutral-600 hover:bg-neutral-200 transition-all">
               Annuler
             </button>
-            <button onClick={onClose} className="px-8 py-3 rounded-xl font-bold bg-primary text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center gap-2">
-              <CheckCircle2 size={20} /> Valider l'alerte
+            <button onClick={onClose} className="px-6 py-2.5 rounded-xl text-app-sm font-bold bg-primary text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center gap-2">
+              <CheckCircle2 size={18} /> Valider l'alerte
             </button>
           </div>
         </div>

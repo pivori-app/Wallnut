@@ -9,11 +9,11 @@ export async function analyzeRealEstateDocument(base64Data: string, mimeType: st
   return data.text;
 }
 
-export async function getInvestmentAssistantResponse(query: string) {
+export async function getInvestmentAssistantResponse(messages: { role: string, content: string }[]) {
   const response = await fetch('/api/ai/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query })
+    body: JSON.stringify({ messages })
   });
   const data = await response.json();
   if (data.error) throw new Error(data.error);

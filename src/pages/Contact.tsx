@@ -15,11 +15,11 @@ export function Contact() {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl lg:text-7xl font-display font-bold text-primary"
+              className="text-app-3xl lg:text-7xl font-display font-bold text-primary"
             >
               Contactez <span className="text-secondary">Wallnut</span>
             </motion.h1>
-            <p className="text-xl text-neutral-dark/60 max-w-2xl mx-auto">
+            <p className="text-app-lg text-neutral-dark/60 max-w-2xl mx-auto">
               Une question sur le portage ? Nos experts vous accompagnent dans la structuration de votre patrimoine.
             </p>
           </div>
@@ -44,8 +44,8 @@ export function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-primary">{item.title}</h3>
-                    <p className="text-lg font-display font-bold text-primary/80">{item.info}</p>
-                    <p className="text-sm text-neutral-dark/60">{item.sub}</p>
+                    <p className="text-app-md font-display font-bold text-primary/80">{item.info}</p>
+                    <p className="text-app-sm text-neutral-dark/60">{item.sub}</p>
                   </div>
                 </motion.div>
               ))}
@@ -55,7 +55,7 @@ export function Contact() {
                   <Clock className="text-secondary" />
                   <span className="font-bold">Support Prioritaire</span>
                 </div>
-                <p className="text-sm opacity-80">
+                <p className="text-app-sm opacity-80">
                   Déjà client ? Utilisez votre messagerie sécurisée dans votre tableau de bord pour un traitement plus rapide.
                 </p>
               </div>
@@ -71,7 +71,7 @@ export function Contact() {
                 <form className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold text-primary ml-1">Nom Complet</label>
+                      <label className="text-app-sm font-semibold text-primary ml-1">Nom Complet</label>
                       <input 
                         type="text" 
                         placeholder="Jean Dupont"
@@ -79,7 +79,7 @@ export function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold text-primary ml-1">Email</label>
+                      <label className="text-app-sm font-semibold text-primary ml-1">Email</label>
                       <input 
                         type="email" 
                         placeholder="jean@exemple.com"
@@ -89,7 +89,7 @@ export function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-primary ml-1">Sujet</label>
+                    <label className="text-app-sm font-semibold text-primary ml-1">Sujet</label>
                     <select className="w-full px-6 py-4 rounded-2xl bg-white border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none appearance-none">
                       <option>Demande d'information portage</option>
                       <option>Partenariat Professionnel</option>
@@ -99,7 +99,7 @@ export function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-primary ml-1">Message</label>
+                    <label className="text-app-sm font-semibold text-primary ml-1">Message</label>
                     <textarea 
                       rows={6}
                       placeholder="Comment pouvons-nous vous aider ?"

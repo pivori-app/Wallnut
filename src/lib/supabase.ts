@@ -1,43 +1,32 @@
-/// <reference types="vite/client" />
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://xxxxxxxxxxxxxxxxxxxx.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.xx';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-let supabaseClient: ReturnType<typeof createClient> | any = null;
-
-try {
-  supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-} catch (e) {
-  console.warn("Supabase initialization failed. Check your environment variables.", e);
-  // Provide a minimal mock to prevent the app from crashing completely
-  supabaseClient = {
-    auth: {
-      getSession: async () => ({ data: { session: null }, error: null }),
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-      signInWithOAuth: async () => ({ data: null, error: new Error("Supabase non configuré") }),
-      signOut: async () => {},
-    },
-    from: () => ({
-      select: () => ({ eq: () => ({ single: async () => ({ data: null, error: null }) }) }),
-      insert: async () => ({ error: null }),
-      upsert: async () => ({ error: null }),
-    })
-  };
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn("⚠️ Supabase n'est pas configuré. Veuillez copier .env.example vers .env et ajouter vos clés.");
 }
 
-export const supabase = supabaseClient;
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder'
+);
 
-export enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-export function handleSupabaseError(error: unknown, operationType: OperationType, path: string | null) {
-  console.error(`Supabase Error (${operationType} on ${path}):`, error);
-  throw error;
-}
+export const checkSupabaseConnection = async () => {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return { success: false, message: "Variables d'environnement manquantes." };
+  }
+  
+  try {
+    // Vérification légère sur la table profiles (ou via une requête RPC si dispo)
+    // Ici nous simulons un ping en demandant juste le count
+    const { error } = await supabase.from('properties').select('id', { count: 'exact', head: true }).limit(1);
+    if (error) {
+      console.error("Erreur de connexion Supabase:", error);
+      return { success: false, message: error.message };
+    }
+    return { success: true, message: "Connexion réussie à Supabase !" };
+  } catch (err: any) {
+    return { success: false, message: err.message || "Erreur de réseau." };
+  }
+};

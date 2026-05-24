@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, X, Bot, User, Loader2, HelpCircle } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { getInvestmentAssistantResponse } from '../services/geminiService';
 import { cn } from '../lib/utils';
+import { Link } from 'react-router-dom';
 
 export function ChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,14 +27,20 @@ export function ChatAssistant() {
 
     const userMessage = input;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    const newMessages: { role: 'user' | 'assistant', content: string }[] = [...messages, { role: 'user', content: userMessage }];
+    setMessages(newMessages);
     setIsLoading(true);
 
     try {
-      const response = await getInvestmentAssistantResponse(userMessage);
+      const response = await getInvestmentAssistantResponse(newMessages);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Désolé, j'ai rencontré une erreur. Veuillez réessayer." }]);
+    } catch (error: any) {
+      const errorMessage = error.message.includes('API key not valid') || error.message.includes('API_KEY_INVALID')
+        ? "⚠️ Erreur API : La clé d'API Gemini n'est pas valide ou n'a pas été configurée. Veuillez vérifier votre clé dans le panneau **Settings > Secrets** en haut à droite."
+        : "Désolé, j'ai rencontré une erreur de serveur. Vérifiez votre configuration.";
+        
+      setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }]);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -42,9 +50,9 @@ export function ChatAssistant() {
     <>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-secondary text-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 border-4 border-white dark:border-[#121826]"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-secondary text-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-[60] border-2 border-white dark:border-[#121826]"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <HelpCircle className="w-8 h-8" />}
+        {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />}
       </button>
 
       <AnimatePresence>
@@ -80,12 +88,31 @@ export function ChatAssistant() {
                     {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                   </div>
                   <div className={cn(
-                    "max-w-[80%] p-3 rounded-2xl text-sm",
+                    "max-w-[80%] p-3 rounded-2xl text-app-sm",
                     msg.role === 'user' 
-                      ? "bg-primary text-white rounded-tr-none" 
-                      : "bg-black/5 dark:bg-white/5 rounded-tl-none"
+                      ? "bg-primary text-white rounded-tr-none px-4" 
+                      : "bg-black/5 dark:bg-white/5 rounded-tl-none px-4 markdown-body-chat"
                   )}>
-                    {msg.content}
+                    {msg.role === 'user' ? (
+                      msg.content
+                    ) : (
+                      <ReactMarkdown
+                        components={{
+                          a: ({ node, ...props }) => {
+                            const isInternal = props.href?.startsWith('/');
+                            if (isInternal) {
+                              return <Link to={props.href!} className="text-secondary font-bold underline underline-offset-2 hover:text-secondary/80 focus:outline-none">{props.children}</Link>;
+                            }
+                            return <a target="_blank" rel="noopener noreferrer" className="text-secondary font-bold underline underline-offset-2 hover:text-secondary/80 focus:outline-none" {...props} />;
+                          },
+                          p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+                          ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
+                          ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
+                    )}
                   </div>
                 </div>
               ))}
@@ -108,7 +135,7 @@ export function ChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Posez votre question..."
-                className="flex-1 bg-black/5 dark:bg-white/5 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                className="flex-1 bg-black/5 dark:bg-white/5 border-none rounded-xl px-4 py-3 text-app-sm focus:ring-2 focus:ring-primary/20 outline-none"
               />
               <button 
                 type="submit"

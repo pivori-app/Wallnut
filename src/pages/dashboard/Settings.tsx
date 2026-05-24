@@ -21,8 +21,8 @@ export function Settings() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-4xl font-display font-bold text-primary">Paramètres du compte</h1>
-        <p className="text-neutral-dark/60 mt-2 text-lg">Gérez vos préférences, votre sécurité et vos données personnelles.</p>
+        <h1 className="text-app-2xl md:text-app-3xl font-display font-bold text-primary">Paramètres du compte</h1>
+        <p className="text-neutral-dark/60 mt-2 text-app-md">Gérez vos préférences, votre sécurité et vos données personnelles.</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -60,7 +60,7 @@ export function Settings() {
             {activeTab === 'profile' && (
               <div className="space-y-10">
                 <div>
-                  <h2 className="text-2xl font-display font-bold text-primary mb-6">Photo de profil</h2>
+                  <h2 className="text-app-xl font-display font-bold text-primary mb-6">Photo de profil</h2>
                   <div className="flex items-center gap-6">
                     <div className="relative group cursor-pointer">
                       <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-primary/20 to-primary/5 flex items-center justify-center border-4 border-white shadow-lg overflow-hidden transition-transform group-hover:scale-105">
@@ -71,42 +71,42 @@ export function Settings() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                       <p className="text-sm font-medium text-neutral-dark/80">Recommandé : Image carrée, max 5 Mo.</p>
+                       <p className="text-app-sm font-medium text-neutral-dark/80">Recommandé : Image carrée, max 5 Mo.</p>
                        <div className="flex gap-3">
-                         <button className="px-4 py-2 bg-primary text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all">Changer</button>
-                         <button className="px-4 py-2 bg-white/60 text-primary rounded-xl text-sm font-bold border border-black/5 hover:bg-white transition-all">Supprimer</button>
+                         <button className="px-4 py-2 bg-primary text-white rounded-xl text-app-sm font-bold shadow-md hover:shadow-lg transition-all">Changer</button>
+                         <button className="px-4 py-2 bg-white/60 text-primary rounded-xl text-app-sm font-bold border border-black/5 hover:bg-white transition-all">Supprimer</button>
                        </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="border-t border-black/5 pt-10">
-                  <h2 className="text-2xl font-display font-bold text-primary mb-6">Coordonnées</h2>
+                  <h2 className="text-app-xl font-display font-bold text-primary mb-6">Coordonnées</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Prénom</label>
+                      <label className="text-app-sm font-bold text-primary">Prénom</label>
                       <input type="text" defaultValue="Jean" className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
                     </div>
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Nom</label>
+                      <label className="text-app-sm font-bold text-primary">Nom</label>
                       <input type="text" defaultValue="Dupont" className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
                     </div>
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Email</label>
+                      <label className="text-app-sm font-bold text-primary">Email</label>
                       <div className="relative">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
                         <input type="email" defaultValue={user?.email === 'particulier@demo.com' ? 'jean.dupont@email.com' : user?.email || ''} className="w-full bg-white/60 border border-black/10 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Téléphone</label>
+                      <label className="text-app-sm font-bold text-primary">Téléphone</label>
                       <div className="relative">
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
                         <input type="tel" defaultValue="+33 6 12 34 56 78" className="w-full bg-white/60 border border-black/10 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
                       </div>
                     </div>
                     <div className="space-y-3 md:col-span-2">
-                      <label className="text-sm font-bold text-primary">Adresse (Norme 2026 CEDEX)</label>
+                      <label className="text-app-sm font-bold text-primary">Adresse (Norme 2026 CEDEX)</label>
                       <div className="relative">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" size={20} />
                         <input type="text" defaultValue="12 Rue des Lilas, 69002 Lyon" className="w-full bg-white/60 border border-black/10 rounded-xl pl-12 pr-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
@@ -126,14 +126,14 @@ export function Settings() {
             {activeTab === 'security' && (
               <div className="space-y-10">
                 <div>
-                  <h2 className="text-2xl font-display font-bold text-primary mb-6">Changer le mot de passe</h2>
+                  <h2 className="text-app-xl font-display font-bold text-primary mb-6">Changer le mot de passe</h2>
                   <div className="space-y-6 max-w-md">
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Mot de passe actuel</label>
+                      <label className="text-app-sm font-bold text-primary">Mot de passe actuel</label>
                       <input type="password" placeholder="••••••••" className="w-full bg-white/60 border border-black/10 rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium" />
                     </div>
                     <div className="space-y-3">
-                      <label className="text-sm font-bold text-primary">Nouveau mot de passe</label>
+                      <label className="text-app-sm font-bold text-primary">Nouveau mot de passe</label>
                       <div className="relative">
                         <input 
                           type={showPassword ? 'text' : 'password'} 
@@ -157,7 +157,7 @@ export function Settings() {
                 <div className="border-t border-black/5 pt-10">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h2 className="text-2xl font-display font-bold text-primary">Authentification Double Facteur (2FA)</h2>
+                      <h2 className="text-app-xl font-display font-bold text-primary">Authentification Double Facteur (2FA)</h2>
                       <p className="text-neutral-dark/60 mt-2">Sécurisez votre compte avec un code envoyé sur votre mobile.</p>
                     </div>
                     <button className="px-6 py-3 bg-white/60 text-primary border border-black/10 rounded-xl font-bold hover:bg-white transition-all">
@@ -173,7 +173,7 @@ export function Settings() {
                 <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Shield className="text-accent" size={28} />
-                    <h2 className="text-2xl font-display font-bold text-primary">Espace RGPD & Normes 2026</h2>
+                    <h2 className="text-app-xl font-display font-bold text-primary">Espace RGPD & Normes 2026</h2>
                   </div>
                   <p className="text-neutral-dark/80 mb-6">Conformément aux nouvelles directives européennes de 2026 sur la portabilité accrue et le droit à l'oubli absolu, vous avez le contrôle total sur vos données.</p>
                   
@@ -181,10 +181,10 @@ export function Settings() {
                     <div className="bg-white/40 p-5 rounded-2xl border border-black/5 flex flex-col items-start gap-4 hover:shadow-md transition-all">
                       <div className="p-3 bg-primary/10 rounded-xl text-primary"><Download size={24} /></div>
                       <div>
-                        <h3 className="font-bold text-primary text-lg">Portabilité 3.0</h3>
-                        <p className="text-sm text-neutral-dark/70 mt-1">Téléchargez l'intégralité de votre vault chiffré incluant actes, DPE et historiques au format JSON/PDF.</p>
+                        <h3 className="font-bold text-primary text-app-md">Portabilité 3.0</h3>
+                        <p className="text-app-sm text-neutral-dark/70 mt-1">Téléchargez l'intégralité de votre vault chiffré incluant actes, DPE et historiques au format JSON/PDF.</p>
                       </div>
-                      <button className="mt-auto px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg font-bold text-sm transition-all">
+                      <button className="mt-auto px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg font-bold text-app-sm transition-all">
                         Télécharger mes données
                       </button>
                     </div>
@@ -192,10 +192,10 @@ export function Settings() {
                     <div className="bg-white/40 p-5 rounded-2xl border border-black/5 flex flex-col items-start gap-4 hover:shadow-md transition-all">
                       <div className="p-3 bg-primary/10 rounded-xl text-primary"><Share2 size={24} /></div>
                       <div>
-                        <h3 className="font-bold text-primary text-lg">Interopérabilité Notaire</h3>
-                        <p className="text-sm text-neutral-dark/70 mt-1">Générez un lien sécurisé éphémère (norme ANSSI 2026) pour transférer vos données à un office notarial.</p>
+                        <h3 className="font-bold text-primary text-app-md">Interopérabilité Notaire</h3>
+                        <p className="text-app-sm text-neutral-dark/70 mt-1">Générez un lien sécurisé éphémère (norme ANSSI 2026) pour transférer vos données à un office notarial.</p>
                       </div>
-                      <button className="mt-auto px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg font-bold text-sm transition-all">
+                      <button className="mt-auto px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg font-bold text-app-sm transition-all">
                         Créer un accès
                       </button>
                     </div>
@@ -203,7 +203,7 @@ export function Settings() {
                 </div>
 
                 <div className="border-t border-black/5 pt-10">
-                   <h2 className="text-2xl font-display font-bold text-primary mb-2">Consentements</h2>
+                   <h2 className="text-app-xl font-display font-bold text-primary mb-2">Consentements</h2>
                    <div className="space-y-4 max-w-2xl mt-6">
                       {[
                         "Exploitation anonymisée pour statistiques territoriales",
@@ -211,7 +211,7 @@ export function Settings() {
                         "Réception de la newsletter technologique"
                       ].map((text, i) => (
                         <label key={i} className="flex items-center justify-between p-4 bg-white/40 border border-black/5 rounded-xl cursor-pointer hover:bg-white/60 transition-colors">
-                          <span className="font-medium text-primary text-sm">{text}</span>
+                          <span className="font-medium text-primary text-app-sm">{text}</span>
                           <div className="relative">
                             <input type="checkbox" className="peer sr-only" defaultChecked={i === 0} />
                             <div className="w-11 h-6 bg-black/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary transition-colors"></div>
@@ -223,10 +223,10 @@ export function Settings() {
 
                 <div className="border-t border-red-500/20 pt-10 mt-10">
                   <div className="bg-red-500/5 border border-red-500/20 p-6 rounded-2xl">
-                    <h2 className="text-xl font-display font-bold text-red-600 mb-2 flex items-center gap-2">
+                    <h2 className="text-app-lg font-display font-bold text-red-600 mb-2 flex items-center gap-2">
                        <Trash2 size={24} /> Droit à l'oubli (Zone de danger)
                     </h2>
-                    <p className="text-red-600/80 mb-6 text-sm">La suppression de votre compte est définitive. Toutes vos données immobilières, vos contrats et votre coffre-fort seront détruits de manière irréversible sous 24h ouvrées.</p>
+                    <p className="text-red-600/80 mb-6 text-app-sm">La suppression de votre compte est définitive. Toutes vos données immobilières, vos contrats et votre coffre-fort seront détruits de manière irréversible sous 24h ouvrées.</p>
                     
                     <button className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold shadow-lg shadow-red-600/20 hover:shadow-xl hover:-translate-y-0.5 hover:bg-red-700 transition-all flex items-center gap-2">
                       Supprimer mon compte définitivement

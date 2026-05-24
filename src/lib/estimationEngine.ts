@@ -19,9 +19,11 @@ export function calculateRealTimeEstimation(
     features: string[];
     dpe: string;
     propertyType: string;
+    floor?: string;
+    totalFloors?: string;
   }
 ): EstimationResult | null {
-  const { surface, zipCode, condition, features, dpe, propertyType } = params;
+  const { surface, zipCode, condition, features, dpe, propertyType, floor, totalFloors } = params;
   
   if (!surface || surface <= 0) return null;
 
@@ -74,9 +76,32 @@ export function calculateRealTimeEstimation(
   if (features.includes('Proche transports')) trackMultiplier('Proximité Transports', 0.05);
   if (features.includes('Écoles à proximité')) trackMultiplier('Scolarité', 0.03);
 
-  // --- MOINS-VALUES (Décotes) ---
-  if (features.includes('Rez-de-jardin') && propertyType.toLowerCase().includes('appartement')) {
-    trackMultiplier('Rez-de-chaussée', -0.10);
+  // --- ÉTAGE ET ASCENSEUR (Appartements) ---
+  if (propertyType.toLowerCase().includes('appartement')) {
+    const f = floor ? parseInt(floor, 10) : NaN;
+    const tF = totalFloors ? parseInt(totalFloors, 10) : NaN;
+
+    if (!isNaN(f)) {
+      if (f === 0 || features.includes('Rez-de-jardin')) {
+        trackMultiplier('Rez-de-chaussée', -0.10);
+      } else if (f === 1) {
+        trackMultiplier('1er Étage', -0.05); // Souvent moins recherché
+      } else if (!isNaN(tF) && f === tF && f > 1) {
+        trackMultiplier('Dernier Étage', 0.08); // Premium pour le dernier étage
+      } else if (f >= 4 && !features.includes('Ascenseur')) {
+        trackMultiplier('Étage élevé sans ascenseur', -0.15); // Décote importante
+      } else if (f >= 4 && features.includes('Ascenseur')) {
+        trackMultiplier('Étage élevé avec ascenseur', 0.05); // Étage élevé valorisé
+      }
+    }
+  }
+
+  // --- MOINS-VALUES (Décotes supplémentaires) ---
+  if (features.includes('Rez-de-jardin') && propertyType.toLowerCase().includes('appartement') && (Number.isNaN(parseInt(floor || '', 10)) || parseInt(floor || '', 10) !== 0)) {
+    // Already handled above if floor is 0
+    if (!multipliersApplied['Rez-de-chaussée']) {
+      trackMultiplier('Rez-de-jardin', -0.10);
+    }
   }
 
   // LISSAGE DES PLUS-VALUES (Plafond de verre à +35%)

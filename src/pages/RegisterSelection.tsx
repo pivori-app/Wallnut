@@ -12,7 +12,7 @@ export function RegisterSelection() {
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-display font-bold text-primary mb-4"
+            className="text-app-xl md:text-app-2xl font-display font-bold text-primary mb-4"
           >
             Bienvenue sur Wallnut
           </motion.h1>
@@ -20,7 +20,7 @@ export function RegisterSelection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-neutral-dark/60"
+            className="text-app-base text-neutral-dark/60"
           >
             Choisissez votre espace pour commencer l'aventure immobilière
           </motion.p>
@@ -35,18 +35,18 @@ export function RegisterSelection() {
             whileHover={{ scale: 1.02 }}
             className="glass p-8 rounded-[2rem] border border-white/40 shadow-xl flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <User size={40} />
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <User size={32} />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Je suis un Particulier</h2>
-            <p className="text-neutral-dark/60 mb-8">
+            <h2 className="text-app-lg font-bold mb-3">Je suis un Particulier</h2>
+            <p className="text-app-sm text-neutral-dark/60 mb-6">
               Suivi de projet, coffre-fort numérique et outils d'aide à la décision pour vos projets personnels.
             </p>
             <Link 
-              to="/register/particulier"
-              className="mt-auto w-full py-4 rounded-2xl bg-primary text-white font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all"
+              to="/dashboard/particulier"
+              className="mt-auto w-full min-h-[44px] px-6 py-3 rounded-2xl bg-primary text-white text-app-sm font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
             >
-              C'est mon cas <ArrowRight size={20} />
+              C'est mon cas <ArrowRight size={18} />
             </Link>
           </motion.div>
 
@@ -58,24 +58,24 @@ export function RegisterSelection() {
             whileHover={{ scale: 1.02 }}
             className="glass p-8 rounded-[2rem] border border-white/40 shadow-xl flex flex-col items-center text-center group cursor-pointer"
           >
-            <div className="w-20 h-20 bg-secondary/10 rounded-3xl flex items-center justify-center mb-6 text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-300">
-              <Briefcase size={40} />
+            <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6 text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-300">
+              <Briefcase size={32} />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Je suis un Professionnel</h2>
-            <p className="text-neutral-dark/60 mb-8">
+            <h2 className="text-app-lg font-bold mb-3">Je suis un Professionnel</h2>
+            <p className="text-app-sm text-neutral-dark/60 mb-6">
               Gestion de leads, publication d'annonces, outils inter-cabinet et services dédiés à votre métier.
             </p>
             <Link 
-              to="/register/professionnel"
-              className="mt-auto w-full py-4 rounded-2xl bg-secondary text-white font-bold flex items-center justify-center gap-2 hover:bg-secondary/90 transition-all"
+              to="/dashboard/pro"
+              className="mt-auto w-full min-h-[44px] px-6 py-3 rounded-2xl bg-secondary text-white text-app-sm font-bold flex items-center justify-center gap-2 hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/20"
             >
-              Accès Pro <ArrowRight size={20} />
+              Accès Pro <ArrowRight size={18} />
             </Link>
           </motion.div>
         </div>
 
-        <div className="mt-12 text-center">
-          <Link to="/" className="text-primary font-medium hover:underline">
+        <div className="mt-8 text-center">
+          <Link to="/" className="text-primary text-app-sm font-medium hover:underline">
             Retour à l'accueil
           </Link>
         </div>

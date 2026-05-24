@@ -10,15 +10,19 @@ export function Footer() {
     {
       title: "Navigation",
       links: [
+        { label: "À propos", href: "/a-propos" },
         { label: "Notre Solution", href: "/solution" },
+        { label: "Comment ça marche", href: "/comment-ca-marche" },
         { label: "Nos Offres", href: "/offres" },
-        { label: "Simulateur", href: "/#simulateur" },
+        { label: "Situations", href: "/situations" },
         { label: "Blog", href: "/blog" },
       ]
     },
     {
-      title: "Support",
+      title: "Support & Partenaires",
       links: [
+        { label: "Partenaires", href: "/partenaires" },
+        { label: "Investisseurs", href: "/investisseurs" },
         { label: "Contact", href: "/contact" },
         { label: "FAQ", href: "/faq" },
         { label: "Centre d'aide", href: "/help" },
@@ -28,6 +32,7 @@ export function Footer() {
       title: "Légal",
       links: [
         { label: "Mentions légales", href: "/mentions-legales" },
+        { label: "Mentions importantes", href: "/mentions-importantes" },
         { label: "RGPD", href: "/rgpd" },
         { label: "CGU / CGV", href: "/cgu" },
         { label: "Cookies", href: "/cookies" },
@@ -36,13 +41,13 @@ export function Footer() {
   ];
 
   return (
-    <footer className="mt-20 border-t border-black/5 dark:border-white/5 pt-16 pb-8 bg-black/2 dark:bg-white/2">
+    <footer className="mt-4 border-t border-black/5 dark:border-white/5 pt-6 pb-4 bg-black/2 dark:bg-white/2 text-app-sm">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 mb-8">
           {/* Brand */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4">
             <Logo />
-            <p className="text-sm opacity-60 leading-relaxed max-w-sm">
+            <p className="opacity-60 leading-relaxed max-w-sm">
               Wallnut redéfinit la liquidité immobilière par le portage structuré. 
               Une approche institutionnelle accessible à tous les propriétaires.
             </p>
@@ -61,12 +66,12 @@ export function Footer() {
 
           {/* Links */}
           {sections.map((section) => (
-            <div key={section.title} className="space-y-4">
-              <h4 className="font-display font-bold text-sm uppercase tracking-wider opacity-40">{section.title}</h4>
-              <ul className="space-y-3">
+            <div key={section.title} className="space-y-3">
+              <h4 className="font-display font-bold text-app-xs uppercase tracking-wider opacity-40">{section.title}</h4>
+              <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <Link to={link.href} className="text-sm hover:text-primary transition-colors opacity-70 hover:opacity-100">
+                    <Link to={link.href} className="text-app-sm hover:text-primary transition-colors opacity-70 hover:opacity-100">
                       {link.label}
                     </Link>
                   </li>
@@ -76,7 +81,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="pt-8 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium opacity-50">
+        <div className="pt-6 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-app-xs opacity-50">
           <div className="flex items-center gap-4">
              <p>© {currentYear} Wallnut Technologies SAS. Tous droits réservés.</p>
              <div className="h-4 w-px bg-black/20 dark:bg-white/20"></div>

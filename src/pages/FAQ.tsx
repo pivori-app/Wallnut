@@ -37,10 +37,10 @@ export function FAQ() {
       <main className="pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-4">
           <header className="mb-16 text-center space-y-4">
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold uppercase tracking-widest">
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-app-xs font-bold uppercase tracking-widest">
                <HelpCircle size={14} /> Centre d'aide
              </div>
-             <h1 className="text-4xl lg:text-6xl font-display font-bold text-primary">Questions <span className="text-secondary">Fréquentes</span></h1>
+             <h1 className="text-app-2xl md:text-app-3xl lg:text-5xl font-display font-bold text-primary">Questions <span className="text-secondary">Fréquentes</span></h1>
              <p className="text-neutral-dark/60 leading-relaxed max-w-xl mx-auto">
                Tout ce que vous devez savoir sur le portage immobilier institutionnel et la liquidité patrimoniale.
              </p>
@@ -57,7 +57,7 @@ export function FAQ() {
                   onClick={() => setActiveIndex(activeIndex === idx ? null : idx)}
                   className="w-full text-left p-8 flex items-center justify-between gap-4"
                 >
-                  <span className={`text-lg font-bold transition-colors ${activeIndex === idx ? 'text-primary' : 'text-primary/70'}`}>
+                  <span className={`text-app-md font-bold transition-colors ${activeIndex === idx ? 'text-primary' : 'text-primary/70'}`}>
                     {faq.q}
                   </span>
                   <div className={`p-2 rounded-xl transition-all ${activeIndex === idx ? 'bg-primary text-white rotate-180' : 'bg-primary/5 text-primary'}`}>
@@ -73,7 +73,7 @@ export function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-8 pb-8 text-neutral-dark/60 leading-relaxed text-base">
+                      <div className="px-8 pb-8 text-neutral-dark/60 leading-relaxed text-app-base">
                         {faq.a}
                       </div>
                     </motion.div>
@@ -85,8 +85,8 @@ export function FAQ() {
 
           <div className="mt-20 glass p-12 rounded-[3rem] border border-black/5 flex flex-col md:flex-row items-center justify-between gap-8 bg-white shadow-sm">
             <div className="space-y-2 text-center md:text-left">
-              <h3 className="text-2xl font-display font-bold text-primary">Vous ne trouvez pas votre réponse ?</h3>
-              <p className="text-sm text-neutral-dark/60">Nos experts immobiliers et financiers vous répondent en direct.</p>
+              <h3 className="text-app-xl font-display font-bold text-primary">Vous ne trouvez pas votre réponse ?</h3>
+              <p className="text-app-sm text-neutral-dark/60">Nos experts immobiliers et financiers vous répondent en direct.</p>
             </div>
             <button className="px-8 py-4 rounded-2xl bg-primary text-white font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/10">
               <MessageCircle size={20} /> Discuter avec un expert

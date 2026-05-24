@@ -9,6 +9,7 @@ export const KANBAN_COLUMNS = [
   { id: 'leads', title: 'Leads & Estimations' },
   { id: 'collecte', title: 'Collecte Documentaire' },
   { id: 'validation', title: 'Validation Pro' },
+  { id: 'expertise', title: 'Contre-Expertise / Offre' },
   { id: 'mandat', title: 'Mandat & Commercialisation' },
   { id: 'notaire', title: 'Chez le Notaire' },
   { id: 'clos', title: 'Signé / Clos' },
@@ -18,12 +19,13 @@ interface BoardKanbanProps {
   properties: PropertyData[];
   onDragEnd: (result: DropResult) => void;
   onOpenAgrafe: (prop: PropertyData) => void;
+  onSelectProperty?: (prop: PropertyData) => void;
 }
 
-export const BoardKanban: React.FC<BoardKanbanProps> = ({ properties, onDragEnd, onOpenAgrafe }) => {
+export const BoardKanban: React.FC<BoardKanbanProps> = ({ properties, onDragEnd, onOpenAgrafe, onSelectProperty }) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-6 overflow-x-auto pb-8 pt-4 px-2 no-scrollbar min-h-[70vh] snap-x snap-mandatory">
+      <div className="flex gap-6 overflow-x-auto pb-8 pt-4 px-2 no-scrollbar min-h-[50vh] snap-x snap-mandatory">
         {KANBAN_COLUMNS.map(column => {
           const columnProps = properties.filter(
             p => (p.pipelineStage || 'leads') === column.id
@@ -38,13 +40,13 @@ export const BoardKanban: React.FC<BoardKanbanProps> = ({ properties, onDragEnd,
                   className={cn(
                     "flex-shrink-0 w-[85vw] sm:w-80 flex flex-col gap-4 rounded-[2rem] p-4 transition-all duration-300 border snap-center",
                     snapshot.isDraggingOver 
-                      ? "bg-secondary/10 border-secondary/30 shadow-[0_0_30px_rgba(var(--color-secondary),0.15)]" 
-                      : "bg-white/10 backdrop-blur-md border-white/20 shadow-xl"
+                      ? "bg-gray-50 dark:bg-white/5 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]" 
+                      : "bg-white dark:bg-white/5 backdrop-blur-xl border-gray-200 dark:border-white/10 shadow-xl dark:shadow-2xl"
                   )}
                 >
                   <div className="flex items-center justify-between px-2 mb-2">
-                    <h3 className="font-bold text-primary/80">{column.title}</h3>
-                    <span className="bg-white/40 text-primary text-xs font-bold px-2.5 py-1 rounded-full border border-white/50 shadow-sm">
+                    <h3 className="font-medium text-slate-900 dark:!text-white/90 text-sm tracking-wide">{column.title}</h3>
+                    <span className="bg-gray-200 dark:bg-white/10 text-slate-900 dark:!text-white text-xs font-bold px-2.5 py-1 rounded-full border border-gray-300 dark:border-white/10 shadow-sm">
                       {columnProps.length}
                     </span>
                   </div>
@@ -65,6 +67,7 @@ export const BoardKanban: React.FC<BoardKanbanProps> = ({ properties, onDragEnd,
                                 : provided.draggableProps.style?.transform,
                               zIndex: snapshot.isDragging ? 999 : 1
                             }}
+                            onClick={() => onSelectProperty && onSelectProperty(prop)}
                             className={cn(
                               "transition-shadow duration-200 cursor-grab active:cursor-grabbing",
                               snapshot.isDragging ? "shadow-2xl opacity-90 drop-shadow-2xl" : ""

@@ -15,6 +15,8 @@ import { AppLayout } from './components/AppLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { RegisterSelection } from './pages/RegisterSelection';
 import { RegisterForm } from './pages/RegisterForm';
+import { AuthCallback } from './pages/AuthCallback';
+import { CompleteProfile } from './pages/CompleteProfile';
 import { Solution } from './pages/Solution';
 import { Offres } from './pages/Offres';
 import { Blog } from './pages/Blog';
@@ -22,9 +24,18 @@ import { BlogPost } from './pages/BlogPost';
 import { FAQ } from './pages/FAQ';
 import { Contact } from './pages/Contact';
 import { HelpCenter } from './pages/HelpCenter';
+import { MobileScannerPage } from './pages/MobileScannerPage';
 
 import { MentionsLegales, RGPD, CGU, Cookies } from './pages/Legal';
+import { MentionsImportantes } from './pages/MentionsImportantes';
 import { ScrollToTop } from './components/ScrollToTop';
+import { DocScanPage } from './pages/DocScanPage';
+
+import { HowItWorks } from './pages/HowItWorks';
+import { Situations } from './pages/Situations';
+import { Partenaires } from './pages/Partenaires';
+import { Investisseurs } from './pages/Investisseurs';
+import { About } from './pages/About';
 
 import { ParticulierDashboard } from './pages/dashboard/ParticulierDashboard';
 import { ProDashboard } from './pages/dashboard/ProDashboard';
@@ -43,7 +54,7 @@ const PlaceholderPage = ({ title }: { title: string }) => (
     <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center">
       <Building2 className="w-10 h-10 text-primary opacity-20" />
     </div>
-    <h2 className="text-2xl font-display font-bold">{title}</h2>
+    <h2 className="text-app-xl font-display font-bold">{title}</h2>
     <p className="text-neutral-dark/40 italic">Module en cours de déploiement V4.1</p>
   </div>
 );
@@ -66,20 +77,43 @@ const DashboardRedirect = () => {
   return <Navigate to="/dashboard/particulier" replace />;
 };
 
+import { ErrorBoundary } from './ErrorBoundary';
+import { Settings as SettingsIcon } from 'lucide-react';
+
+const DevNav = () => (
+  <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2">
+    <div className="bg-slate-900/90 dark:bg-white/90 backdrop-blur text-white dark:text-slate-900 p-2 rounded-xl shadow-2xl flex items-center gap-2 border border-white/10 dark:border-slate-900/10">
+      <SettingsIcon className="w-4 h-4 opacity-50" />
+      <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">Dev:</span>
+      <a href="/dashboard/pro" className="text-xs font-semibold hover:opacity-70 px-2 py-1 bg-white/10 rounded">Pro</a>
+      <a href="/dashboard/particulier" className="text-xs font-semibold hover:opacity-70 px-2 py-1 bg-white/10 rounded">Particulier</a>
+      <a href="/" className="text-xs font-semibold hover:opacity-70 px-2 py-1 bg-white/10 rounded">Home</a>
+    </div>
+  </div>
+);
+
 export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <AuthProvider>
+    <ErrorBoundary>
+      <Router>
+        <ScrollToTop />
+        <AuthProvider>
+        <DevNav />
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<Home />} />
           <Route path="/solution" element={<Solution />} />
+          <Route path="/comment-ca-marche" element={<HowItWorks />} />
           <Route path="/offres" element={<Offres />} />
+          <Route path="/situations" element={<Situations />} />
+          <Route path="/partenaires" element={<Partenaires />} />
+          <Route path="/investisseurs" element={<Investisseurs />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/a-propos" element={<About />} />
+          <Route path="/mentions-importantes" element={<MentionsImportantes />} />
           <Route path="/help" element={<HelpCenter />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/rgpd" element={<RGPD />} />
@@ -87,6 +121,10 @@ export default function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/register" element={<RegisterSelection />} />
           <Route path="/register/:type" element={<RegisterForm />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/mobile-scanner" element={<MobileScannerPage />} />
+          <Route path="/doc-scan" element={<DocScanPage />} />
 
           {/* Protected Routes */}
           <Route
@@ -203,6 +241,7 @@ export default function App() {
         </Routes>
       </AuthProvider>
     </Router>
+    </ErrorBoundary>
   );
 }
 

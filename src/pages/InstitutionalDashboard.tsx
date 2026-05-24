@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import { useProperties } from '../features/particulier-dashboard/hooks/useProperties';
 import { 
   DollarSign, 
   Users, 
@@ -31,6 +32,7 @@ import {
   Cell
 } from 'recharts';
 import { calculateAssetUnderwriting, synthesizePortfolio, AssetData } from '../lib/underwritingEngine';
+import { PropertyDetailsView } from '../components/PropertyDetailsView';
 
 const OFFERS_DATA = [
   { name: 'Premium', value: 45, color: '#0A2B4E' },
@@ -81,8 +83,35 @@ const mockAssets: AssetData[] = [
 
 export function InstitutionalDashboard() {
   const [activeTab, setActiveTab] = useState<'comite' | 'fonds' | 'clients'>('comite');
+  const [selectedPropertyDetails, setSelectedPropertyDetails] = useState<any>(null);
+  const { properties, isLoading } = useProperties();
   
-  const underwrittenAssets = useMemo(() => mockAssets.map(calculateAssetUnderwriting), []);
+  const mergedAssets = useMemo(() => {
+    // Convert real properties to AssetData shape, fallback/append to mockAssets if needed.
+    // For now we map real properties and append existing mock assets for a rich dashboard.
+    const realAssets: AssetData[] = properties.map(p => ({
+      id: "D" + p.id.substring(0, 4).toUpperCase(),
+      clientId: "CL_" + p.id.substring(0, 3).toUpperCase(),
+      clientName: "Client " + p.id.substring(0, 3),
+      clientType: "PP",
+      clientStatus: "Particulier",
+      city: p.city || p.address?.city || 'Paris',
+      propertyType: p.type || 'Appartement',
+      referenceValue: typeof p.estimatedValue === 'number' ? p.estimatedValue : parseFloat((p.estimatedValue as any) || '250000'),
+      surface: typeof p.surface === 'number' ? p.surface : parseFloat((p.surface as any) || '65'),
+      offerTarget: 'Équilibre',
+      existingDebt: p.estimatedValue * 0.1, // mock assumption
+      agencyFees: 10000,
+      actFees: 5000,
+      marketLiquidityDelay: 45,
+      legalQualityScore: 85,
+      assetQuality: 4, exitReadability: 4, sellerProfile: 3, complexity: 2, benchmarkPrice: 6200,
+      distanceLargeCity: 2, accessTimeLargeCity: 10, population: 2000000
+    }));
+    return [...realAssets, ...mockAssets];
+  }, [properties]);
+
+  const underwrittenAssets = useMemo(() => mergedAssets.map(calculateAssetUnderwriting), [mergedAssets]);
   const synthesis = useMemo(() => synthesizePortfolio(underwrittenAssets), [underwrittenAssets]);
 
   const clients = useMemo(() => {
@@ -127,43 +156,53 @@ export function InstitutionalDashboard() {
     { label: 'Marge Sécurité Moy.', value: `${(synthesis.avgSecurityMargin * 100).toFixed(1)}%`, icon: TrendingUp, positive: synthesis.avgSecurityMargin >= 0.2 },
   ];
 
+  if (selectedPropertyDetails) {
+    return (
+       <div className="relative min-h-[90vh] bg-[#0A0A0E] text-white p-4 sm:p-10 xs:rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 rounded-[2.5rem]">
+          <PropertyDetailsView property={selectedPropertyDetails} onBack={() => setSelectedPropertyDetails(null)} />
+       </div>
+    );
+  }
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-display font-bold">Pilotage Institutionnel & Comité</h1>
-          <p className="text-neutral-dark/60 italic mt-1 font-medium">Validation, Synthèse Fonds et Consolidation Clients (V4.1).</p>
+    <div className="relative min-h-[90vh] bg-[#0A0A0E] text-white p-4 sm:p-10 xs:rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 rounded-[2.5rem]">
+      {/* 3D Background Elements */}
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-900/40 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-900/20 blur-[150px] rounded-full pointer-events-none" />
+
+      <div className="relative z-10 space-y-8 animate-in fade-in duration-700">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-display font-black text-white tracking-tight">Pilotage Institutionnel & Comité</h1>
+            <p className="text-white/50 italic mt-1 font-medium">Validation, Synthèse Fonds et Consolidation Clients (V4.1) — Accès Habilité.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button className="touch-target flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+              <Download className="w-4 h-4" /> Exporter Data
+            </button>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <button className="touch-target flex items-center justify-center gap-2 px-4 py-2 min-h-[44px] rounded-xl border border-black/10 dark:border-white/10 text-sm font-bold hover:bg-black/5 transition-all">
-            <Download className="w-4 h-4" /> Exporter Data
+
+        <div className="flex gap-2 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl w-fit overflow-x-auto no-scrollbar">
+          <button 
+            onClick={() => setActiveTab('comite')} 
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'comite' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+          >
+            Page Comité
+          </button>
+          <button 
+            onClick={() => setActiveTab('fonds')} 
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'fonds' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+          >
+            Synthèse Fonds (Biens)
+          </button>
+          <button 
+            onClick={() => setActiveTab('clients')} 
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'clients' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+          >
+            Dossiers Clients Consol.
           </button>
         </div>
-      </div>
-
-      <div className="flex gap-4 border-b border-black/10 dark:border-white/10 pb-4">
-        <button 
-          onClick={() => setActiveTab('comite')} 
-          className={cn("text-lg font-bold transition-all relative touch-target px-2", activeTab === 'comite' ? "text-primary" : "text-neutral-dark/40 hover:text-neutral-dark/70")}
-        >
-          Page Comité
-          {activeTab === 'comite' && <motion.div layoutId="tab" className="absolute -bottom-[17px] left-0 right-0 h-1 bg-primary rounded-t-full" />}
-        </button>
-        <button 
-          onClick={() => setActiveTab('fonds')} 
-          className={cn("text-lg font-bold transition-all relative touch-target px-2", activeTab === 'fonds' ? "text-primary" : "text-neutral-dark/40 hover:text-neutral-dark/70")}
-        >
-          Synthèse Fonds (Biens)
-          {activeTab === 'fonds' && <motion.div layoutId="tab" className="absolute -bottom-[17px] left-0 right-0 h-1 bg-primary rounded-t-full" />}
-        </button>
-        <button 
-          onClick={() => setActiveTab('clients')} 
-          className={cn("text-lg font-bold transition-all relative touch-target px-2", activeTab === 'clients' ? "text-primary" : "text-neutral-dark/40 hover:text-neutral-dark/70")}
-        >
-          Dossiers Clients Consol.
-          {activeTab === 'clients' && <motion.div layoutId="tab" className="absolute -bottom-[17px] left-0 right-0 h-1 bg-primary rounded-t-full" />}
-        </button>
-      </div>
 
       {activeTab === 'comite' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
@@ -182,8 +221,8 @@ export function InstitutionalDashboard() {
                     <kpi.icon className={cn("w-5 h-5", kpi.color)} />
                   </div>
                 </div>
-                <p className="text-sm font-medium opacity-60 mb-1">{kpi.label}</p>
-                <p className="text-2xl font-display font-bold">{kpi.value}</p>
+                <p className="text-app-sm font-medium opacity-60 mb-1">{kpi.label}</p>
+                <p className="text-app-xl font-display font-bold">{kpi.value}</p>
               </motion.div>
             ))}
           </div>
@@ -192,7 +231,7 @@ export function InstitutionalDashboard() {
             {/* Synthèse Financière */}
             <div className="glass-card-3d p-8 rounded-3xl space-y-6">
               <div className="flex items-center justify-between">
-                 <h2 className="text-xl font-display font-bold flex items-center gap-2">
+                 <h2 className="text-app-lg font-display font-bold flex items-center gap-2">
                    <DollarSign className="w-5 h-5 text-secondary" /> Base d'Intervention Consolidée
                  </h2>
               </div>
@@ -202,7 +241,7 @@ export function InstitutionalDashboard() {
                      <span className="font-display font-bold text-primary">{formatCurrency(synthesis.totalBaseIntervention)}</span>
                    </div>
                    <div className="flex justify-between border-b border-black/5 pb-2">
-                     <span className="font-bold">Passif total :</span>
+                     <span className="font-bold">Passif total (Dettes) :</span>
                      <span className="font-display font-bold text-danger">{formatCurrency(synthesis.totalDebt)}</span>
                    </div>
                    <div className="flex justify-between border-b border-black/5 pb-2">
@@ -222,7 +261,7 @@ export function InstitutionalDashboard() {
 
             {/* Decisions Dashboard */}
             <div className="glass-card-3d p-8 rounded-3xl space-y-6">
-              <h2 className="text-xl font-display font-bold">Répartition Décisions (D01-D10)</h2>
+              <h2 className="text-app-lg font-display font-bold">Répartition Décisions (Portfolio)</h2>
               <div className="h-[250px] flex items-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <RePieChart>
@@ -245,7 +284,7 @@ export function InstitutionalDashboard() {
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '1rem', border: 'none', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)' }} />
                   </RePieChart>
                 </ResponsiveContainer>
                 <div className="space-y-4 pr-4">
@@ -257,12 +296,41 @@ export function InstitutionalDashboard() {
                     <div key={offer.name} className="flex items-center gap-3">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: offer.color }}></div>
                       <div className="flex-1">
-                        <p className="text-sm font-bold">{offer.name}</p>
-                        <p className="text-xs opacity-60">{offer.value} dossiers</p>
+                        <p className="text-app-sm font-bold">{offer.name}</p>
+                        <p className="text-app-xs opacity-60">{offer.value} dossiers</p>
                       </div>
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+
+            {/* Exposition au Risque (LTV vs Passif) Graph */}
+            <div className="glass-card-3d p-8 rounded-3xl space-y-6 lg:col-span-2">
+              <h2 className="text-app-lg font-display font-bold">Exposition au Risque par Dossier (Base vs Passif)</h2>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={underwrittenAssets.slice(0, 10)}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.2} />
+                    <XAxis dataKey="id" axisLine={false} tickLine={false} tick={{ fontSize: 12, opacity: 0.6 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, opacity: 0.6 }} tickFormatter={(val) => `€${val / 1000}k`} />
+                    <Tooltip 
+                      cursor={{fill: 'rgba(0,0,0,0.05)'}} 
+                      contentStyle={{ borderRadius: '1rem', border: 'none', backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} 
+                      formatter={(val: number) => formatCurrency(val)} 
+                    />
+                    <Bar dataKey="baseIntervention" name="Base Intervention" fill="#0A2B4E" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                    <Bar dataKey="existingDebt" name="Passif (Dettes)" fill="#A32A2A" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
@@ -272,10 +340,10 @@ export function InstitutionalDashboard() {
       {activeTab === 'fonds' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card-3d rounded-3xl overflow-hidden">
            <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
-             <h2 className="text-xl font-display font-bold">Consolidation des biens D01 à D10</h2>
+             <h2 className="text-app-lg font-display font-bold">Consolidation des biens D01 à D10</h2>
            </div>
            <div className="overflow-x-auto w-full">
-            <table className="w-full text-left whitespace-nowrap text-sm">
+            <table className="w-full text-left whitespace-nowrap text-app-sm">
               <thead>
                 <tr className="font-bold uppercase tracking-wider opacity-40 px-4 bg-black/5">
                   <th className="py-4 pl-6 pr-4">ID Bien</th>
@@ -292,7 +360,14 @@ export function InstitutionalDashboard() {
               </thead>
               <tbody className="divide-y divide-black/5 dark:divide-white/5">
                 {underwrittenAssets.map((asset, i) => (
-                  <tr key={i} className="hover:bg-black/2 dark:hover:bg-white/2 transition-colors">
+                  <motion.tr 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.5, ease: "easeOut" }}
+                    key={i} 
+                    className="hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                    onClick={() => setSelectedPropertyDetails(asset)}
+                  >
                     <td className="py-4 pl-6 pr-4 font-bold">{asset.id}</td>
                     <td className="py-4 px-4">{asset.clientId} - {asset.clientName}</td>
                     <td className="py-4 px-4">{asset.city}</td>
@@ -311,7 +386,7 @@ export function InstitutionalDashboard() {
                         {asset.dossierLight}
                       </span>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
@@ -322,10 +397,10 @@ export function InstitutionalDashboard() {
       {activeTab === 'clients' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card-3d rounded-3xl overflow-hidden">
            <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
-             <h2 className="text-xl font-display font-bold">Consolidation Multi-Biens (Dossiers Clients)</h2>
+             <h2 className="text-app-lg font-display font-bold">Consolidation Multi-Biens (Dossiers Clients)</h2>
            </div>
            <div className="overflow-x-auto w-full">
-            <table className="w-full text-left whitespace-nowrap text-sm">
+            <table className="w-full text-left whitespace-nowrap text-app-sm">
               <thead>
                 <tr className="font-bold uppercase tracking-wider opacity-40 px-4 bg-black/5">
                   <th className="py-4 pl-6 pr-4">ID Client</th>
@@ -340,7 +415,14 @@ export function InstitutionalDashboard() {
               </thead>
               <tbody className="divide-y divide-black/5 dark:divide-white/5">
                 {clients.map((client, i) => (
-                  <tr key={i} className="hover:bg-black/2 dark:hover:bg-white/2 transition-colors">
+                  <motion.tr 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.5, ease: "easeOut" }}
+                    key={i} 
+                    className="hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                    onClick={() => setSelectedPropertyDetails(client.assets[0] || null)}
+                  >
                     <td className="py-4 pl-6 pr-4 font-bold">{client.clientId}</td>
                     <td className="py-4 px-4">{client.clientName}</td>
                     <td className="py-4 px-4 font-bold">{client.assets.length}</td>
@@ -349,14 +431,14 @@ export function InstitutionalDashboard() {
                     <td className="py-4 px-4 font-bold">{client.avgLiquidity.toFixed(1)}/100</td>
                     <td className="py-4 px-4 font-bold">{client.avgFundScore.toFixed(1)}/100</td>
                     <td className="py-4 px-4 font-bold text-secondary">{client.decision}</td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
            </div>
         </motion.div>
       )}
-
+      </div>
     </div>
   );
 }

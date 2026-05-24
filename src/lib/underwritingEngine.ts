@@ -145,6 +145,32 @@ export function calculateAssetUnderwriting(asset: AssetData) {
 
   const securityMargin = 1 - (baseIntervention / asset.referenceValue);
 
+  // Génération des insights de l'expert institutionnel
+  const expertInsights: string[] = [];
+  if (fundScore >= 75) {
+    expertInsights.push("🟢 Couverture risque excellente. La décote appliquée sécurise le fonds de portage.");
+  } else if (fundScore >= 55) {
+    expertInsights.push("🟠 Point d'attention : L'asset quality et la liquidité nécessitent une validation par le comité.");
+  } else {
+    expertInsights.push("🔴 Profil fortement dégradé. Le ratio Loan-To-Value est hors charte d'invest.");
+  }
+
+  if (asset.marketLiquidityDelay > 120) {
+    expertInsights.push("⚠️ Risque d'illiquidité : Le délai de revente estimé dépasse les 4 mois. Exiger des garanties annexes.");
+  } else if (asset.marketLiquidityDelay <= 45) {
+    expertInsights.push("✅ Très bonne liquidité marché : Sortie de portage prévisible à court terme.");
+  }
+
+  if (asset.legalQualityScore < 60) {
+    expertInsights.push("⚖️ Risque Juridique : Des anomalies graves ont été détectées au niveau notarié (servitudes, titres manquants).");
+  }
+
+  if (priceDiffVsBenchmark > 0.10) {
+    expertInsights.push("💰 Surchauffe de la valeur de référence par rapport à la macro locale (+10%). Arbitrage recommandé.");
+  } else if (priceDiffVsBenchmark < -0.10) {
+    expertInsights.push("📈 Décote intrinsèque : Opportunité de création de valeur à la revente.");
+  }
+
   return {
     ...asset,
     baseIntervention,
@@ -162,6 +188,7 @@ export function calculateAssetUnderwriting(asset: AssetData) {
     securityMargin,
     legalQualityScore: asset.legalQualityScore,
     legalLight: asset.legalQualityScore >= 80 ? "Vert" : asset.legalQualityScore >= 50 ? "Orange" : "Rouge",
+    expertInsights,
   };
 }
 

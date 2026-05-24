@@ -104,6 +104,11 @@ export function getRequiredDocuments(propertyType: PropertyType, isPro: boolean,
         { id: 'mandat_vente', name: 'Mandat ou Contrat', description: 'Mandat valide ou contrat de mission.', isMandatory: true },
       );
     }
+    
+    // Ajout du Pack Partenaire / Accord de Principe pour tous les pros
+    docs.push(
+      { id: 'accord_principe', name: 'Accord de principe (Pack Partenaire)', description: 'Accord de principe sous réserves généré par Hilios Capital.', isMandatory: false }
+    );
   } else {
     docs.push(
       { id: 'piece_identite', name: 'Pièce d\'identité', description: 'CNI ou Passeport en cours de validité.', isMandatory: true },

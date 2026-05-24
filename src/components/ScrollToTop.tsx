@@ -41,10 +41,10 @@ export function ScrollToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[100] p-4 rounded-2xl bg-primary text-white shadow-2xl shadow-primary/20 hover:bg-secondary hover:text-primary transition-all group lg:bottom-12 lg:right-12"
+          className="fixed bottom-[4.5rem] right-4 sm:bottom-[5.5rem] sm:right-6 lg:bottom-[6.5rem] lg:right-8 z-[50] w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-full bg-primary text-white shadow-2xl shadow-primary/20 hover:bg-secondary hover:text-primary transition-all group flex items-center justify-center"
           aria-label="Retour en haut"
         >
-          <ChevronUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+          <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 group-hover:-translate-y-1 transition-transform" />
         </motion.button>
       )}
     </AnimatePresence>

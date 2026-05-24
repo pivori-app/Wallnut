@@ -123,7 +123,7 @@ export function NewDossier() {
   return (
     <div className="max-w-4xl mx-auto space-y-12 pb-20">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-display font-bold">Nouveau Dossier de Portage</h1>
+        <h1 className="text-app-3xl font-display font-bold">Nouveau Dossier de Portage</h1>
         <div className="flex justify-center items-center gap-4">
           {[1, 2, 3].map(i => (
             <React.Fragment key={i}>
@@ -153,32 +153,32 @@ export function NewDossier() {
             >
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="text-sm font-bold opacity-60 uppercase tracking-wider">Valeur & Besoin</label>
+                  <label className="text-app-sm font-bold opacity-60 uppercase tracking-wider">Valeur & Besoin</label>
                   <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/5 space-y-4">
                     <div className="flex justify-between">
-                      <span className="text-sm">Valeur du bien</span>
+                      <span className="text-app-sm">Valeur du bien</span>
                       <span className="font-bold">{formatCurrency(form.propertyValue)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm">Besoin</span>
+                      <span className="text-app-sm">Besoin</span>
                       <span className="font-bold text-primary">{formatCurrency(form.fundingNeed)}</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <label className="text-sm font-bold opacity-60 uppercase tracking-wider">Offre Sélectionnée</label>
+                  <label className="text-app-sm font-bold opacity-60 uppercase tracking-wider">Offre Sélectionnée</label>
                   <div className="p-4 rounded-2xl bg-secondary/10 border-2 border-secondary text-primary">
-                    <p className="text-xs font-bold uppercase mb-1">{form.offerType}</p>
-                    <p className="text-sm">Portage à {form.offerType === 'premium' ? '80%' : form.offerType === 'equilibre' ? '70%' : '60%'}</p>
+                    <p className="text-app-xs font-bold uppercase mb-1">{form.offerType}</p>
+                    <p className="text-app-sm">Portage à {form.offerType === 'premium' ? '80%' : form.offerType === 'equilibre' ? '70%' : '60%'}</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <label className="text-sm font-bold opacity-60 uppercase tracking-wider">Informations du Bien</label>
+                <label className="text-app-sm font-bold opacity-60 uppercase tracking-wider">Informations du Bien</label>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Adresse complète</label>
+                    <label className="text-app-sm font-medium">Adresse complète</label>
                     <div className="relative">
                       <MapPin className="absolute left-4 top-4 w-5 h-5 opacity-40" />
                       <input 
@@ -191,7 +191,7 @@ export function NewDossier() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Surface (m²)</label>
+                    <label className="text-app-sm font-medium">Surface (m²)</label>
                     <div className="relative">
                       <Building2 className="absolute left-4 top-4 w-5 h-5 opacity-40" />
                       <input 
@@ -227,7 +227,7 @@ export function NewDossier() {
               className="space-y-8"
             >
               <div className="text-center space-y-2">
-                 <h3 className="text-2xl font-display font-bold">Analyse Documentaire IA</h3>
+                 <h3 className="text-app-xl font-display font-bold">Analyse Documentaire IA</h3>
                  <p className="text-neutral-dark/60">Uploadez vos pièces. Notre IA les vérifie instantanément (OCR V4.1).</p>
               </div>
 
@@ -239,15 +239,15 @@ export function NewDossier() {
                   </div>
                   <div className="text-center">
                     <p className="font-bold">Déposer vos fichiers</p>
-                    <p className="text-xs opacity-40 mt-1">PDF, PNG, JPG jusqu'à 10MB</p>
+                    <p className="text-app-xs opacity-40 mt-1">PDF, PNG, JPG jusqu'à 10MB</p>
                   </div>
                 </label>
 
                 <div className="space-y-4">
-                   <h4 className="text-sm font-bold opacity-60 uppercase">Documents détectés</h4>
+                   <h4 className="text-app-sm font-bold opacity-60 uppercase">Documents détectés</h4>
                    <div className="space-y-3">
                      {form.documents.length === 0 && (
-                       <div className="p-10 rounded-2xl bg-black/5 dark:bg-white/5 text-center italic text-sm opacity-40">
+                       <div className="p-10 rounded-2xl bg-black/5 dark:bg-white/5 text-center italic text-app-sm opacity-40">
                          Aucun document pour le moment.
                        </div>
                      )}
@@ -257,7 +257,7 @@ export function NewDossier() {
                            <FileUp className="w-5 h-5 text-primary" />
                          </div>
                          <div className="flex-1 min-w-0">
-                           <p className="text-sm font-bold truncate">{doc.file.name}</p>
+                           <p className="text-app-sm font-bold truncate">{doc.file.name}</p>
                            <p className="text-[10px] text-primary/60 font-bold uppercase">{doc.type}</p>
                          </div>
                          {doc.status === 'analyzing' ? (
@@ -304,7 +304,7 @@ export function NewDossier() {
               </div>
               
               <div className="space-y-4">
-                <h3 className="text-3xl font-display font-bold">Prêt pour soumission</h3>
+                <h3 className="text-app-2xl font-display font-bold">Prêt pour soumission</h3>
                 <p className="text-neutral-dark/60 max-w-lg mx-auto">
                   Votre dossier est complet. En cliquant sur soumettre, un juriste Wallnut 
                   analysera votre demande sous 24h ouvrées.
@@ -313,7 +313,7 @@ export function NewDossier() {
 
               <div className="p-6 rounded-3xl bg-primary/5 text-left space-y-4">
                 <h4 className="font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-success" /> Récapitulatif</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-2 gap-4 text-app-sm">
                    <div>
                      <p className="opacity-60 text-[10px] uppercase font-bold">Bien</p>
                      <p className="font-medium truncate">{form.address}</p>

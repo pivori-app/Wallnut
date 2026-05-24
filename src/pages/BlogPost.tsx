@@ -16,7 +16,7 @@ export function BlogPost() {
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
         <PublicHeader />
         <div className="text-center">
-          <h1 className="text-4xl font-display font-bold text-primary mb-4">Article introuvable</h1>
+          <h1 className="text-app-3xl font-display font-bold text-primary mb-4">Article introuvable</h1>
           <p className="text-neutral-dark/60 mb-8">Cet article n'existe pas ou a été déplacé.</p>
           <Link to="/blog" className="text-secondary font-bold hover:underline">
             Retour au blog
@@ -39,7 +39,7 @@ export function BlogPost() {
 
           <article>
             <header className="mb-12">
-              <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-primary mb-6">
+              <div className="flex items-center gap-4 text-app-xs font-bold uppercase tracking-widest text-primary mb-6">
                 <span className="px-3 py-1 bg-primary/5 rounded-full">
                   {post.category}
                 </span>
@@ -47,7 +47,7 @@ export function BlogPost() {
                 <span className="flex items-center gap-1 opacity-50"><User size={14} /> {post.readTime}</span>
               </div>
               
-              <h1 className="text-4xl lg:text-6xl font-display font-bold text-primary leading-tight mb-8">
+              <h1 className="text-app-3xl lg:text-6xl font-display font-bold text-primary leading-tight mb-8">
                 {post.title}
               </h1>
               
@@ -57,7 +57,7 @@ export function BlogPost() {
                 </div>
                 <div>
                   <p className="font-bold text-primary">{post.author}</p>
-                  <p className="text-sm text-neutral-dark/60">Auteur</p>
+                  <p className="text-app-sm text-neutral-dark/60">Auteur</p>
                 </div>
               </div>
             </header>
@@ -82,8 +82,8 @@ export function BlogPost() {
             <div className="mt-16 pt-8 border-t border-black/5 flex justify-between items-center">
               <p className="font-bold text-primary">Partager cet article :</p>
               <div className="flex gap-4">
-                <button className="p-3 bg-white hover:bg-slate-100 rounded-full shadow-sm transition-colors text-primary font-bold uppercase text-xs tracking-wider">Twitter / X</button>
-                <button className="p-3 bg-white hover:bg-slate-100 rounded-full shadow-sm transition-colors text-primary font-bold uppercase text-xs tracking-wider">LinkedIn</button>
+                <button className="p-3 bg-white hover:bg-slate-100 rounded-full shadow-sm transition-colors text-primary font-bold uppercase text-app-xs tracking-wider">Twitter / X</button>
+                <button className="p-3 bg-white hover:bg-slate-100 rounded-full shadow-sm transition-colors text-primary font-bold uppercase text-app-xs tracking-wider">LinkedIn</button>
               </div>
             </div>
           </article>

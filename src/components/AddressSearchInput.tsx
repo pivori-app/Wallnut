@@ -248,11 +248,10 @@ export function AddressSearchInput({ onAddressSelect, placeholder = "Saisissez l
           ) : (
               <button
               onClick={(e) => { e.preventDefault(); handleGeolocate(); }}
-              className="px-3 py-1.5 flex items-center gap-2 text-xs font-bold text-primary/60 hover:text-primary hover:bg-black/5 rounded-lg transition-colors group"
-              title="Me géolocaliser (Haute Précision & Consentement Unique)"
+              className="p-2 flex items-center justify-center text-primary/60 hover:text-white hover:bg-primary rounded-lg transition-all group"
+              title="Me géolocaliser"
             >
-              <LocateFixed size={18} className="group-hover:text-blue-500 transition-colors" />
-              <span className="hidden sm:inline">Géoloc. Précise (RTK/UWB)</span>
+              <LocateFixed size={18} className="transition-colors" />
             </button>
           )}
         </div>
@@ -288,15 +287,15 @@ export function AddressSearchInput({ onAddressSelect, placeholder = "Saisissez l
                   >
                     <MapPin size={18} className="text-primary/40 group-hover:text-primary mt-0.5 shrink-0" />
                     <div>
-                      <div className="font-bold text-primary text-sm flex items-center gap-2">
+                      <div className="font-bold text-primary text-app-sm flex items-center gap-2">
                          {place.street}
                       </div>
-                      <div className="text-xs font-medium text-neutral-dark/60 mt-0.5">{place.zipCode} {place.city}, {place.country}</div>
+                      <div className="text-app-xs font-medium text-neutral-dark/60 mt-0.5">{place.zipCode} {place.city}, {place.country}</div>
                     </div>
                   </button>
                 ))
               ) : (
-                <div className="p-6 text-center text-sm font-medium text-primary/60">
+                <div className="p-6 text-center text-app-sm font-medium text-primary/60">
                   Aucune adresse trouvée. Saisie manuelle requise.
                 </div>
               )}
@@ -307,7 +306,7 @@ export function AddressSearchInput({ onAddressSelect, placeholder = "Saisissez l
 
       {/* Validation BAN Badge */}
       {selectedLocation && selectedLocation.banSource && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs font-bold text-success pl-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-app-xs font-bold text-success pl-2">
           <ShieldCheck size={14} /> Vérifié via Base Adresse Nationale (Proxy)
         </motion.div>
       )}
@@ -338,7 +337,7 @@ export function AddressSearchInput({ onAddressSelect, placeholder = "Saisissez l
       <div className="mt-8">
         <button 
           onClick={(e) => { e.preventDefault(); setShowDebug(!showDebug); }}
-          className="text-xs font-bold text-primary/40 hover:text-primary flex items-center gap-2 transition-colors"
+          className="text-app-xs font-bold text-primary/40 hover:text-primary flex items-center gap-2 transition-colors"
         >
           <Bug size={14} /> {showDebug ? "Masquer Debug" : "Afficher Console Debug (Proxy/Sec)"}
         </button>

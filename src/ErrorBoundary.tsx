@@ -1,26 +1,38 @@
-import React from 'react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
 
-export class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
-  constructor(props: {children: React.ReactNode}) {
-    super(props);
-    this.state = { hasError: false, error: null };
+interface Props {
+  children?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
+}
+
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+    error: null,
+    errorInfo: null
+  };
+
+  public static getDerivedStateFromError(_: Error): State {
+    return { hasError: true, error: _, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+    this.setState({ error, errorInfo });
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
-  }
-
-  render() {
+  public render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '20px', background: '#ffebee', color: '#c62828' }}>
+        <div style={{ padding: "20px", background: "#fee", color: "#900", whiteSpace: "pre-wrap" }}>
           <h1>Something went wrong.</h1>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{this.state.error?.message}</pre>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{this.state.error?.stack}</pre>
+          <p>{this.state.error?.toString()}</p>
+          <pre>{this.state.errorInfo?.componentStack}</pre>
         </div>
       );
     }

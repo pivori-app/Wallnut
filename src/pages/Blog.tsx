@@ -14,10 +14,10 @@ export function Blog() {
       <main className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <header className="mb-16 text-center max-w-2xl mx-auto space-y-6">
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-xs font-bold uppercase tracking-widest">
+             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-app-xs font-bold uppercase tracking-widest">
                <BookOpen size={14} /> Le Blog Wallnut
              </div>
-             <h1 className="text-4xl lg:text-6xl font-display font-bold text-primary">Réflexions sur la <span className="text-secondary"> liquidité</span></h1>
+             <h1 className="text-app-3xl lg:text-6xl font-display font-bold text-primary">Réflexions sur la <span className="text-secondary"> liquidité</span></h1>
              <p className="text-neutral-dark/60 leading-relaxed">
                Expertises, guides et actualités pour comprendre le portage immobilier et optimiser la gestion de vos actifs.
              </p>
@@ -54,15 +54,15 @@ export function Blog() {
                     <span className="flex items-center gap-1"><User size={12} /> {post.readTime}</span>
                   </div>
                   
-                  <h2 className="text-xl font-display font-bold text-primary mb-4 group-hover:text-secondary transition-colors line-clamp-2 leading-tight">
+                  <h2 className="text-app-lg font-display font-bold text-primary mb-4 group-hover:text-secondary transition-colors line-clamp-2 leading-tight">
                     {post.title}
                   </h2>
                   
-                  <p className="text-sm text-neutral-dark/60 line-clamp-3 mb-8 leading-relaxed">
+                  <p className="text-app-sm text-neutral-dark/60 line-clamp-3 mb-8 leading-relaxed">
                     {post.excerpt}
                   </p>
                   
-                  <Link to={`/blog/${post.slug || post.id}`} className="mt-auto inline-flex items-center w-full justify-between gap-2 px-6 py-4 bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-2xl font-bold text-sm transition-all duration-300">
+                  <Link to={`/blog/${post.slug || post.id}`} className="mt-auto inline-flex items-center w-full justify-between gap-2 px-6 py-4 bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-2xl font-bold text-app-sm transition-all duration-300">
                     <span>Lire l'article</span>
                     <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                   </Link>
