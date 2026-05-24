@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Smartphone, MonitorPlay, Camera, X, Loader2, CheckCircle2 } from 'lucide-react';
+import { Smartphone, MonitorPlay, Camera, X, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
 interface ScannerHandoffModalProps {

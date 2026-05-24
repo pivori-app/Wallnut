@@ -78,8 +78,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!confirmGoogle) return;
 
     try {
-      // Use explicit AI Studio URL to prevent localhost connection refused errors
-      const redirectUrl = 'https://ais-dev-ut4b4edgylg67x7ixasbgk-320445271791.europe-west2.run.app/dashboard';
+      // Automatically detect current origin for redirect URL
+      const redirectUrl = `${window.location.origin}/dashboard`;
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

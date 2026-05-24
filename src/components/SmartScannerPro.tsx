@@ -1,15 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Camera, FileText, Plus, Check, X, Smartphone, AlertTriangle, Loader2, UploadCloud, RefreshCw, Layers, Zap, ZapOff } from 'lucide-react';
+import { Camera, FileText, Plus, Check, X, Smartphone, AlertTriangle, Loader2, UploadCloud, RefreshCw, Layers, Zap, ZapOff, ShieldCheck } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useCamera } from '../hooks/useCamera';
 
 // Types and Mocks
 type DocType = 'Identité (CNI/Passeport)' | 'Justificatif de domicile (Facture)' | 'Avis d’impôt' | 'Kbis';
 
+interface AiAnalysisResult {
+  docType: string;
+  readability: string;
+  names: string[];
+  address: string;
+  amount?: string;
+  isMatchingProfile: boolean;
+}
+
 interface ScannedPage {
   id: string;
   url: string; // Blob URL in real life
+  aiData?: AiAnalysisResult;
 }
 
 interface SmartScannerProProps {
@@ -24,6 +34,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
   const [isCapturing, setIsCapturing] = useState(false);
   const [validationStatus, setValidationStatus] = useState<'idle' | 'checking' | 'rejected' | 'accepted'>('idle');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [scanReview, setScanReview] = useState<{url: string, aiData: AiAnalysisResult} | null>(null);
   
   // Nouveaux états de simulation Pro SDK
   const [guidanceMsg, setGuidanceMsg] = useState("Recherche de document...");
@@ -148,14 +159,25 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
       }
       */
 
-      // Success
-      const newPage = { 
-        id: Math.random().toString(), 
-        url: imageFrame || 'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80&w=200&h=300' 
+      // Mock AI Data extraction
+      let amount = undefined;
+      if (expectedDocType.includes('impôt')) amount = '4 320,00 €';
+      else if (expectedDocType.includes('Facture')) amount = '124,50 €';
+
+      const extractedAiData: AiAnalysisResult = {
+        docType: expectedDocType,
+        readability: 'Excellente (100% net, 0% flou)',
+        names: ['JEAN DUPONT', 'MARIE DUPONT'],
+        address: '12 RUE DE LA PAIX, 75000 PARIS',
+        amount: amount,
+        isMatchingProfile: true
       };
-      setPages(prev => [...prev, newPage]);
+
+      setScanReview({
+        url: imageFrame || 'https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&q=80&w=200&h=300',
+        aiData: extractedAiData
+      });
       setValidationStatus('accepted');
-      setTimeout(() => setValidationStatus('idle'), 1500);
 
     } catch (error: any) {
       setValidationStatus('rejected');
@@ -169,6 +191,18 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
          setAlertMessage("Une erreur est survenue lors de l'analyse.");
       }
     }
+  };
+
+  const confirmScanReview = () => {
+    if (!scanReview) return;
+    setPages(prev => [...prev, { id: Math.random().toString(), url: scanReview.url, aiData: scanReview.aiData }]);
+    setScanReview(null);
+    setValidationStatus('idle');
+  };
+
+  const cancelScanReview = () => {
+    setScanReview(null);
+    setValidationStatus('idle');
   };
 
   const handleFinalize = async () => {
@@ -197,8 +231,8 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="relative w-full max-w-lg h-[85vh] bg-[#111] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-white/10">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black md:bg-black/80 md:backdrop-blur-md p-0 md:p-4">
+      <div className="relative w-full h-[100dvh] md:max-w-[450px] md:h-[85vh] bg-black md:bg-[#111] md:rounded-3xl overflow-hidden md:shadow-2xl flex flex-col md:border border-white/10">
         
         {/* Header */}
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent">
@@ -337,6 +371,65 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                     <RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
                     Reprendre la photo
                   </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* AI Scan Review Overlay */}
+        <AnimatePresence>
+          {validationStatus === 'accepted' && scanReview && (
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className="absolute inset-0 z-40 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+            >
+              <div className="w-full max-w-sm bg-[#0F172A] border border-blue-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+                <div className="h-32 overflow-hidden relative border-b border-blue-500/20">
+                  <img src={scanReview.url} alt="Scan preview" className="w-full h-full object-cover opacity-50" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] to-transparent via-[#0F172A]/80" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
+                     <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                       <FileText className="text-blue-400" size={20} />
+                     </div>
+                     <div>
+                       <h3 className="text-white font-bold text-lg leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Audit IA Expert</h3>
+                       <p className="text-blue-300/60 text-xs font-medium uppercase tracking-widest">Contrôle de conformité</p>
+                     </div>
+                  </div>
+                </div>
+                
+                <div className="p-5 flex flex-col gap-3 overflow-y-auto custom-scrollbar max-h-[60vh]">
+                  <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
+                    <span className="text-slate-400">Nature Reconnue</span>
+                    <span className="text-white font-semibold text-right max-w-[60%] truncate">{scanReview.aiData.docType}</span>
+                  </div>
+                  <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
+                    <span className="text-slate-400">Intégrité & Netteté</span>
+                    <span className="text-green-400 font-semibold">{scanReview.aiData.readability}</span>
+                  </div>
+                  {scanReview.aiData.amount && (
+                    <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
+                      <span className="text-slate-400">Montant Certifié</span>
+                      <span className="text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">{scanReview.aiData.amount}</span>
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-1.5 pb-3 border-b border-white/5 text-sm mt-1">
+                    <span className="text-slate-400 mb-1">Entité / Titulaires et Adresse Postale</span>
+                    <span className="text-white font-medium bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.names.join(' • ')}</span>
+                    <span className="text-white/60 text-xs bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.address}</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs font-semibold text-green-400 bg-green-500/10 px-3 py-2.5 rounded-xl border border-green-500/20 shadow-inner mt-1">
+                    <ShieldCheck size={16} className="shrink-0 mt-0.5" /> 
+                    <span className="leading-tight">Cohérence d'identité validée : Les données correspondent exactement au profil du dossier encours.</span>
+                  </div>
+
+                  <div className="flex gap-3 mt-4">
+                     <button onClick={cancelScanReview} className="flex-1 py-3 rounded-xl bg-white/5 text-white font-bold text-sm hover:bg-white/10 transition-colors border border-white/10">Rejeter</button>
+                     <button onClick={confirmScanReview} className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-500 transition-colors shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-500/50">Certifier & Joindre</button>
+                  </div>
                 </div>
               </div>
             </motion.div>

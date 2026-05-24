@@ -6,10 +6,44 @@ import dotenv from "dotenv";
 
 import { GoogleGenAI } from "@google/genai";
 
+import { createClient } from "@supabase/supabase-js";
+
 dotenv.config({ override: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Initialize Supabase Client for auth verification
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseClient = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+// Auth verification middleware
+async function requireAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!supabaseClient) {
+    console.error("[SECURITY CRITICAL] Supabase Client is not initialized. Stopping request.");
+    res.status(500).json({ error: "Internal Server Error: Missing Auth Configuration" });
+    return;
+  }
+  
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    res.status(401).json({ error: "Unauthorized: Missing authorization header (Token manquant)" });
+    return;
+  }
+  
+  const token = authHeader.replace(/^Bearer\s+/, "");
+  const { data: { user }, error } = await supabaseClient.auth.getUser(token);
+  
+  if (error || !user) {
+    console.error("[SECURITY ALERT] Token verification failed or forged token:", error?.message);
+    res.status(401).json({ error: "Unauthorized: Invalid or expired token" });
+    return;
+  }
+  
+  (req as any).user = user;
+  next();
+}
 
 // Initialize Gemini on the server
 function getGenAI() {
@@ -25,6 +59,14 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Global Security Headers (Basic)
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+  });
+
   app.use(express.json({ limit: '10mb' }));
 
   // API Routes
@@ -33,9 +75,18 @@ async function startServer() {
   });
 
   // Gemini Proxy: Analyze Document
-  app.post("/api/ai/analyze-document", async (req, res) => {
+  app.post("/api/ai/analyze-document", requireAuth, async (req, res) => {
     try {
       const { base64Data, mimeType } = req.body;
+      
+      // Input Validation
+      if (!base64Data || typeof base64Data !== 'string') {
+        return res.status(400).json({ error: "Invalid base64Data" });
+      }
+      if (!mimeType || typeof mimeType !== 'string' || !mimeType.startsWith('image/') && mimeType !== 'application/pdf') {
+        return res.status(400).json({ error: "Invalid or unsupported mimeType" });
+      }
+
       const ai = getGenAI();
       
       const prompt = `
@@ -79,9 +130,14 @@ async function startServer() {
   });
 
   // Gemini Proxy: Chat Assistant
-  app.post("/api/ai/chat", async (req, res) => {
+  app.post("/api/ai/chat", requireAuth, async (req, res) => {
     try {
       const { messages } = req.body;
+      
+      if (!messages || !Array.isArray(messages)) {
+        return res.status(400).json({ error: "Messages array is required" });
+      }
+      
       const ai = getGenAI();
       
       // format for gemini API
@@ -140,8 +196,17 @@ DIRECTIVES DE NAVIGATION ET D'ACCOMPAGNEMENT :
   });
 
   // Example simulation endpoint
-  app.post("/api/simulate", (req, res) => {
+  app.post("/api/simulate", requireAuth, (req, res) => {
     const { propertyValue, need } = req.body;
+    
+    // Type and range validation
+    if (typeof propertyValue !== 'number' || propertyValue <= 0 || propertyValue > 100000000) {
+       return res.status(400).json({ error: "Invalid propertyValue. Must be a positive number." });
+    }
+    if (typeof need !== 'number' || need < 0 || need > propertyValue) {
+       return res.status(400).json({ error: "Invalid need amount." });
+    }
+
     // Basic logic for the three offers
     const offers = {
       premium: { ratio: 0.8, amount: propertyValue * 0.8 },

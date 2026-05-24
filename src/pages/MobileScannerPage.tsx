@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SmartScanner } from '../components/SmartScanner';
+import { SmartScannerPro } from '../components/SmartScannerPro';
 import { motion } from 'motion/react';
 import { Camera, ShieldCheck, FileCheck, CheckCircle2, Cloud } from 'lucide-react';
 
@@ -65,22 +65,8 @@ export function MobileScannerPage() {
       )}
 
       {mode === 'scanning' && (
-        <SmartScanner
-          document={{
-            id: docName || 'doc',
-            name: docName || 'Document',
-            description: '',
-            category: 'Upload Mobile',
-            required: true,
-            status: 'scanning',
-            icon: '📱',
-            pages: []
-          }}
-          allDocuments={[]}
-          currentIndex={0}
-          totalCount={1}
-          isMobileSession={true}
-          onPagesCapture={() => {}}
+        <SmartScannerPro
+          expectedDocType={docName ? docName as any : "Document" as any}
           onComplete={() => {
             setMode('success');
             // Mock API call to send file back to session via WebSocket/Firebase
@@ -90,10 +76,7 @@ export function MobileScannerPage() {
                 localStorage.removeItem('mobile_scan_status');
             }, 1000);
           }}
-          onSkip={() => {}}
           onCancel={() => setMode('welcome')}
-          onSwitchToMobile={() => {}}
-          onNavigate={() => {}}
         />
       )}
 
