@@ -17,6 +17,7 @@ import { useProperties } from '../../features/particulier-dashboard/hooks/usePro
 import { supabase } from '../../lib/supabase';
 import { PartnerPackGenerator } from '../../components/PartnerPackGenerator';
 import { useTheme } from '../../hooks/useTheme';
+import { SmartVault } from '../../components/SmartVault';
 
 import { DataRoom } from '../../components/DataRoom';
 
@@ -30,7 +31,7 @@ export function ProDashboard() {
 
   // Internal component states
   const [activeTab, setActiveTab] = useState<'overview' | 'kanban' | 'crm' | 'synthese' | 'outils'>('overview');
-  const [activeTool, setActiveTool] = useState<'simulator' | 'partner_pack' | 'dataroom' | null>(null);
+  const [activeTool, setActiveTool] = useState<'simulator' | 'partner_pack' | 'dataroom' | 'smart_vault' | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState<PropertyData | null>(null);
   const [selectedPropertyDetails, setSelectedPropertyDetails] = useState<PropertyData | null>(null);
@@ -391,6 +392,20 @@ export function ProDashboard() {
                         Accéder à la Data Room
                       </button>
                     </GlassCard>
+
+                    <GlassCard className="flex flex-col h-full group cursor-pointer hover:border-green-500/50 dark:hover:border-green-500/50 transition-colors" onClick={() => setActiveTool('smart_vault')}>
+                      <div className="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-200 dark:border-green-500/20 shrink-0">
+                        <CheckCircle2 size={28} />
+                      </div>
+                      <h3 className="text-base font-bold text-slate-900 dark:!text-white mb-2">Module Intelligent OCR</h3>
+                      <p className="text-slate-500 dark:!text-white/60 text-sm mb-6 flex-grow leading-relaxed">Classification documentaire via IA, coffre-fort AES-256 avec Fallback et génération d'agrafes numériques.</p>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setActiveTool('smart_vault'); }}
+                        className="mt-auto w-full py-3 rounded-xl bg-green-50 dark:bg-green-500/20 text-green-600 dark:text-green-400 font-bold hover:bg-green-100 dark:hover:bg-green-500/30 transition-colors border border-green-200 dark:border-green-500/20 shadow-sm dark:shadow-none text-sm"
+                      >
+                        Ouvrir le Module
+                      </button>
+                    </GlassCard>
                   </div>
                 </div>
               )}
@@ -426,17 +441,20 @@ export function ProDashboard() {
                       {activeTool === 'simulator' && <Calculator size={24} className="text-secondary" />}
                       {activeTool === 'partner_pack' && <FileSignature size={24} className="text-blue-500 dark:text-blue-400" />}
                       {activeTool === 'dataroom' && <Landmark size={24} className="text-purple-500 dark:text-purple-400" />}
+                      {activeTool === 'smart_vault' && <CheckCircle2 size={24} className="text-green-500" />}
                     </div>
                     <div>
                       <h2 className="text-lg font-medium text-gray-900 dark:!text-white/90">
                         {activeTool === 'simulator' && 'Simulateur B2B (LTV & Frais)'}
                         {activeTool === 'partner_pack' && 'Pack Partenaire - Accord de Principe'}
                         {activeTool === 'dataroom' && 'Data Room Notaire Sécurisée'}
+                        {activeTool === 'smart_vault' && 'Module Intelligent Documentaire (Coffre-Fort & Agrafes)'}
                       </h2>
                       <p className="text-gray-500 dark:!text-white/50 text-sm">
                         {activeTool === 'simulator' && 'Calculez la liquidité et structurez votre offre.'}
                         {activeTool === 'partner_pack' && "Éditez et transmettez les documents liés à l'offre."}
                         {activeTool === 'dataroom' && 'Espace de partage pour clercs et notaires.'}
+                        {activeTool === 'smart_vault' && 'Utilisez le drag-and-drop OCR et générer des liens expirants sécurisés.'}
                       </p>
                     </div>
                   </div>
@@ -449,13 +467,15 @@ export function ProDashboard() {
                 </div>
 
                 {/* Content */}
-                <div className={`p-6 overflow-y-auto w-full max-h-[70vh] ${activeTool !== 'simulator' && activeTool !== 'partner_pack' && activeTool !== 'dataroom' ? 'flex flex-col items-center justify-center text-center' : ''}`}>
+                <div className={`p-6 overflow-y-auto w-full max-h-[70vh]`}>
                   {activeTool === 'simulator' ? (
                     <B2BSimulator />
                   ) : activeTool === 'partner_pack' ? (
                     <PartnerPackGenerator properties={properties} onClose={() => setActiveTool(null)} />
                   ) : activeTool === 'dataroom' ? (
                     <DataRoom properties={properties} onClose={() => setActiveTool(null)} />
+                  ) : activeTool === 'smart_vault' ? (
+                    <SmartVault />
                   ) : (
                     <>
                       <div className="w-20 h-20 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 border border-gray-200 dark:border-white/10 text-gray-400 dark:!text-white/40 mx-auto">

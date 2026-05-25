@@ -167,6 +167,44 @@ export function Home() {
           </motion.div>
         </div>
         
+        {/* Modern Immersive Video 2026 Trend */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8, type: "spring" }}
+          className="mt-16 sm:mt-24 w-full max-w-6xl mx-auto px-4 lg:px-8 relative z-20"
+        >
+          <div className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(8,_112,_184,_0.2)] group aspect-video">
+            <div className="absolute inset-0 bg-slate-900">
+              {/* Professional real estate background video */}
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
+                src="https://cdn.pixabay.com/video/2020/04/17/36384-411478546_large.mp4"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent" />
+            </div>
+            
+            {/* Play Button Overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-500 shadow-2xl relative">
+                <div className="absolute inset-0 rounded-full border border-white/30 animate-[spin_4s_linear_infinite]" />
+                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2 shadow-sm" />
+              </div>
+            </div>
+
+            {/* Clean Title Overlay */}
+            <div className="absolute bottom-6 left-6 right-6 sm:bottom-12 sm:left-12 sm:right-12 flex justify-center text-center">
+              <h3 className="text-white font-display font-black text-3xl sm:text-5xl drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] max-w-3xl leading-tight">
+                L'intelligence artificielle au service de votre patrimoine.
+              </h3>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Background Decorative Rings */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl aspect-square pointer-events-none -z-0">
           <div className="absolute inset-0 border border-primary/5 rounded-full rotate-45 scale-125"></div>

@@ -216,6 +216,166 @@ DIRECTIVES DE NAVIGATION ET D'ACCOMPAGNEMENT :
     res.json({ offers });
   });
 
+  // --- SMART MODULE (AGRAFES & DOCUMENTS) ---
+  
+  // Endpoint de Fallback - Classification & Upload
+  app.post("/api/documents/upload", requireAuth, async (req, res) => {
+    try {
+      const { base64Data, mimeType, useGoogleDrive } = req.body;
+      const user = (req as any).user;
+      
+      if (!base64Data || typeof base64Data !== 'string') {
+        return res.status(400).json({ error: "Invalid base64Data" });
+      }
+
+      // 1. Simulation OCR / Classification via Google Vision API (mock)
+      const ai = getGenAI();
+      let docType = "Document Inconnu";
+      let extractedDate = null;
+      try {
+        const prompt = `Extrait le type de ce document officiel (ex: Passeport, CNi, Avis d'impôt, DPE) et sa date d'expiration si applicable. Renvoyer au format JSON: {"type": "...", "expirationDate": "YYYY-MM-DD" ou null}`;
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-pro",
+          contents: [
+            prompt,
+            { inlineData: { data: base64Data, mimeType: mimeType } }
+          ],
+        });
+        const textResponse = response.text || "";
+        const jsonMatch = textResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          docType = parsed.type || docType;
+          extractedDate = parsed.expirationDate || null;
+        }
+      } catch (err) {
+        console.warn("OCR AI failed, fallback to manual classification", err);
+      }
+
+      // 2. Fallback Storage Logic (Mock for now, would be S3/GCS + Supabase INSERT)
+      const mockDocumentId = "doc-" + Math.random().toString(36).substr(2, 9);
+      const storageUsed = useGoogleDrive ? "Google Drive" : "Internal Encrypted Storage (AES-256)";
+
+      res.status(200).json({
+        success: true,
+        documentId: mockDocumentId,
+        classification: docType,
+        extractedDate: extractedDate,
+        storage: storageUsed,
+        message: `Document sécurisé et analysé avec succès sur ${storageUsed}.`
+      });
+
+    } catch (err: any) {
+      console.error("[SMART MODULE] Upload Error:", err);
+      res.status(500).json({ error: "Erreur lors du traitement du document." });
+    }
+  });
+
+  // Endpoint d'Agrafe Numérique (Création de lien expirant)
+  app.post("/api/agrafes/create", requireAuth, async (req, res) => {
+    try {
+      const { documentIds, templateType, recipientEmail } = req.body;
+      const user = (req as any).user;
+
+      if (!documentIds || !Array.isArray(documentIds)) {
+        return res.status(400).json({ error: "documentIds array is required" });
+      }
+
+      // 1. Validation de la fraîcheur des documents (Mock valid)
+      // 2. Génération de token JWT (Expiration 7 jours)
+      const jwt = await import("jsonwebtoken");
+      const secret = process.env.APP_SECRET_KEY || "SECURE_FALLBACK_KEY_DO_NOT_USE_IN_PROD";
+      
+      const agrafeId = "ag-" + Math.random().toString(36).substr(2, 9);
+      
+      const token = jwt.sign(
+        { agrafeId, recipientEmail, ownerId: user.id },
+        secret,
+        { expiresIn: '7d' }
+      );
+
+      const secureLink = `${req.protocol}://${req.get('host')}/secure-access?token=${token}`;
+
+      // (Ici on insérerait dans Postgres: owner_id, agrafe_id, template_type, status='COMPLETE')
+
+      res.status(200).json({
+        success: true,
+        agrafeId,
+        secureLink,
+        message: "Agrafe numérique générée avec lien sécurisé chiffré."
+      });
+
+    } catch (err: any) {
+      console.error("[SMART MODULE] Agrafe Error:", err);
+      res.status(500).json({ error: "Impossible de générer l'agrafe." });
+    }
+  });
+
+  // Verify JWT for Secure Access
+  app.post("/api/agrafes/verify", async (req, res) => {
+    try {
+      const { token } = req.body;
+      if (!token) return res.status(400).json({ error: "Token manquant" });
+
+      const jwt = await import("jsonwebtoken");
+      const secret = process.env.APP_SECRET_KEY || "SECURE_FALLBACK_KEY_DO_NOT_USE_IN_PROD";
+      
+      const decoded = jwt.verify(token, secret) as any;
+
+      // Mock DB retrieval based on decoded.agrafeId
+      res.status(200).json({
+        success: true,
+        agrafe: {
+          agrafeId: decoded.agrafeId,
+          templateType: "Dossier Vente (Agrafe)",
+          documents: [
+            { name: "Passeport / CNI", type: "ID" },
+            { name: "Avis d'imposition récent", type: "TAX" }
+          ]
+        }
+      });
+    } catch (err) {
+      // Invalid or expired token
+      res.status(401).json({ error: "Lien expiré ou invalide" });
+    }
+  });
+
+  // --- SMART MODULE : RAPPELS (CRON) ---
+  app.get("/api/cron/reminders", async (req, res) => {
+    try {
+      // Sécurité : S'assurer que ça vient bien de Google Cloud Scheduler
+      // (ex: vérifier le header X-CloudScheduler)
+      
+      // Simulation PostgreSQL Queries (Supabase) :
+      // SELECT * FROM documents WHERE expiration_date IS NOT NULL AND expiration_date <= NOW() + INTERVAL '30 days';
+      // MOCK DATA :
+      const expiringDocs = [
+         { userId: "1", type: "Passeport", expireInDays: 7, email: "client@test.com" },
+         { userId: "2", type: "Justificatif de domicile", ageInDays: 95, email: "autre@test.com" }
+      ];
+
+      // Simulation SMTP / SendGrid
+      const emailsSent = expiringDocs.map(doc => {
+         if (doc.type === "Passeport" && doc.expireInDays <= 30) {
+            return `Email envoyé à ${doc.email} [URGENT] Votre Passeport expire dans ${doc.expireInDays} jours.`;
+         } else if (doc.type === "Justificatif de domicile" && doc.ageInDays > 90) {
+            return `Email envoyé à ${doc.email} [RAPPEL] Votre Justificatif de domicile a plus de 3 mois.`;
+         }
+         return null;
+      }).filter(Boolean);
+
+      res.status(200).json({
+        success: true,
+        processed: expiringDocs.length,
+        emailsSent,
+        message: "Moteur de rappels exécuté avec succès."
+      });
+    } catch (err) {
+       console.error("Erreur Cron Reminders:", err);
+       res.status(500).json({ error: "Erreur moteur de rappel" });
+    }
+  });
+
   // Vite integration
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

@@ -9,6 +9,7 @@ import { PropertyCreationWizard } from '../../components/PropertyCreationWizard'
 import { SmartScannerPro } from '../../components/SmartScannerPro';
 import { ScannerHandoffModal } from '../../components/ScannerHandoffModal';
 import { PropertyDetailsView } from '../../components/PropertyDetailsView';
+import { SmartVault } from '../../components/SmartVault';
 import { motion, AnimatePresence } from 'motion/react';
 import { calculateAssetUnderwriting, AssetData } from '../../lib/underwritingEngine';
 import { cn } from '../../lib/utils';
@@ -22,6 +23,7 @@ export function ParticulierDashboard() {
   const [showNewForm, setShowNewForm] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [showScannerHandoff, setShowScannerHandoff] = useState(false);
+  const [showSmartVault, setShowSmartVault] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<PropertyData | null>(null);
 
   const handleStartScanner = () => {
@@ -74,8 +76,14 @@ export function ParticulierDashboard() {
           <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 dark:!text-white tracking-tight">Espace Particulier</h1>
           <p className="text-slate-500 dark:!text-white/60 font-medium mt-2">Pilotez la liquidité de votre patrimoine immobilier instantanément.</p>
         </div>
-        {!showNewForm && (
-          <div className="flex items-center gap-3 self-start sm:self-center">
+        {!showNewForm && !showSmartVault && (
+          <div className="flex items-center flex-wrap gap-3 self-start sm:self-center">
+            <button 
+              onClick={() => setShowSmartVault(true)}
+              className="px-6 py-3 rounded-2xl bg-white dark:bg-white/5 text-slate-900 dark:!text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
+            >
+              <ShieldAlert size={18} /> <span className="hidden sm:inline">Coffre-fort IA</span>
+            </button>
             <button 
               onClick={handleStartScanner}
               className="px-6 py-3 rounded-2xl bg-white dark:bg-white/5 text-slate-900 dark:!text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
@@ -93,7 +101,20 @@ export function ParticulierDashboard() {
       </header>
 
       <AnimatePresence mode="wait">
-        {showNewForm ? (
+        {showSmartVault ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            className="relative z-10 w-full"
+          >
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-display font-bold text-slate-900 dark:!text-white">Coffre-fort IA & Agrafes</h2>
+              <button onClick={() => setShowSmartVault(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-slate-900 dark:!text-white rounded-xl transition-colors font-medium">Fermer</button>
+            </div>
+            <SmartVault />
+          </motion.div>
+        ) : showNewForm ? (
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

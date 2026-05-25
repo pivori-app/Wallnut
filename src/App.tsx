@@ -39,6 +39,7 @@ import { About } from './pages/About';
 
 import { ParticulierDashboard } from './pages/dashboard/ParticulierDashboard';
 import { ProDashboard } from './pages/dashboard/ProDashboard';
+import { SecureAccess } from './pages/SecureAccess';
 
 import { Settings } from './pages/dashboard/Settings';
 import { Calendar } from './pages/dashboard/Calendar';
@@ -125,6 +126,7 @@ export default function App() {
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/mobile-scanner" element={<MobileScannerPage />} />
           <Route path="/doc-scan" element={<DocScanPage />} />
+          <Route path="/secure-access" element={<SecureAccess />} />
 
           {/* Protected Routes */}
           <Route
