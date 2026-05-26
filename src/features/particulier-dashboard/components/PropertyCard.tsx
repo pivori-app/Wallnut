@@ -64,7 +64,7 @@ export const PropertyCard = React.memo(function PropertyCard({ property, onClick
             <Building2 className="h-5 w-5 text-blue-600" aria-hidden="true" />
             <span className="truncate">{property.type}</span>
           </h3>
-          <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+          <p className="mt-1 flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-300">
             <MapPin className="h-4 w-4" aria-hidden="true" />
             <span className="truncate">{resolveAddress(property.address)}, {property.city}</span>
           </p>
@@ -101,7 +101,7 @@ export const PropertyCard = React.memo(function PropertyCard({ property, onClick
           Légalité {results.legalLight}
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-500">Score: {results.legalQualityScore}/100</span>
+          <span className="text-xs text-neutral-600 dark:text-neutral-300">Score: {results.legalQualityScore}/100</span>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
             <ChevronRight className="h-4 w-4" />
           </div>
@@ -122,7 +122,7 @@ interface MetricRowProps {
 function MetricRow({ label, value, accent, badge, icon }: MetricRowProps) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-500">{label}</span>
+      <span className="text-sm text-neutral-600 dark:text-neutral-300">{label}</span>
       <div className="flex items-center gap-1.5">
         {icon}
         {badge ? (

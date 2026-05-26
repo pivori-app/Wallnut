@@ -51,12 +51,12 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
       <div className="flex items-center gap-4">
         <button 
           onClick={onBack}
-          className="p-2 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-white dark:bg-white/5 transition-all shadow-sm"
+          className="p-2 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:bg-white dark:bg-white/10 transition-all shadow-sm"
         >
           <ChevronLeft size={24} />
         </button>
         <div>
-          <h1 className="text-app-2xl font-display font-bold text-slate-900 dark:!text-white">{property.type || property.propertyType || "Propriété"} à {property.city}</h1>
+          <h1 className="text-app-2xl font-display font-bold text-neutral-900 dark:text-white">{property.type || property.propertyType || "Propriété"} à {property.city}</h1>
           <p className="text-neutral-dark/60">ID Dossier: #PRP-{property.id.substring(0, 8)}</p>
         </div>
       </div>
@@ -71,7 +71,7 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
               "flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all",
               activeTab === tab.id 
                 ? "bg-primary text-white shadow-lg" 
-                : "text-slate-500 dark:!text-white/60 hover:bg-white/40 hover:text-slate-900 dark:!text-white"
+                : "text-neutral-600 dark:text-neutral-300 hover:bg-white/40 hover:text-neutral-900 dark:text-white"
             )}
           >
             <tab.icon size={18} />
@@ -101,7 +101,7 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
                     <span className="text-app-xs font-bold uppercase tracking-wider opacity-40 block mb-3">Équipements</span>
                     <div className="flex flex-wrap gap-2">
                       {propertyFullData.features.map(f => (
-                        <span key={f} className="px-3 py-1.5 bg-primary/5 dark:bg-white/5 text-slate-900 dark:!text-white rounded-lg text-app-sm font-bold border border-gray-200 dark:border-white/10">
+                        <span key={f} className="px-3 py-1.5 bg-primary/5 dark:bg-white/10 text-neutral-900 dark:text-white rounded-lg text-app-sm font-bold border border-gray-200 dark:border-white/10">
                           {f}
                         </span>
                       ))}
@@ -157,14 +157,14 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
                     const formatEur = (val: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
                     return (
                       <>
-                        <div className="p-4 bg-primary/5 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10">
+                        <div className="p-4 bg-primary/5 dark:bg-white/10 rounded-2xl border border-gray-200 dark:border-white/10">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-app-sm font-bold opacity-70">Valeur de référence retenue</span>
                             <span className="font-bold">{formatEur(underwritingResult.referenceValue)}</span>
                           </div>
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-app-sm font-bold opacity-70">Base de financement ({underwritingResult.offerTarget})</span>
-                            <span className="font-bold text-slate-900 dark:!text-white">{formatEur(underwritingResult.baseIntervention)}</span>
+                            <span className="font-bold text-neutral-900 dark:text-white">{formatEur(underwritingResult.baseIntervention)}</span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-app-sm font-bold opacity-70">Net Immédiat au Client</span>
@@ -186,11 +186,11 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
                         </div>
                         
                         {underwritingResult.expertInsights && underwritingResult.expertInsights.length > 0 && (
-                          <div className="mt-6 p-5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl relative">
+                          <div className="mt-6 p-5 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 rounded-2xl relative">
                              <div className="absolute -top-3 -right-2 px-3 py-1 bg-[#101010] text-[#f2f2f2] text-[10px] uppercase tracking-widest font-black shadow-xl shadow-black/20" style={{ transform: 'perspective(500px) rotateY(-15deg)' }}>
                                Contre-Expert Senior (20+ ans)
                              </div>
-                             <h4 className="font-bold text-app-sm mb-3 text-slate-900 dark:!text-white">Avis Institutionnel (Comité d'Investissement)</h4>
+                             <h4 className="font-bold text-app-sm mb-3 text-neutral-900 dark:text-white">Avis Institutionnel (Comité d'Investissement)</h4>
                              <ul className="space-y-3">
                                {underwritingResult.expertInsights.map((insight, idx) => (
                                  <li key={idx} className="text-app-sm font-medium leading-relaxed text-black/80 dark:text-white/80 border-b border-gray-200 dark:border-white/10 dark:border-white/5 pb-2 last:border-0 last:pb-0">
@@ -208,8 +208,8 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
             </div>
 
             <div className="space-y-6">
-              <div className="glass p-8 rounded-[2.5rem] border border-primary/20 bg-primary/5 dark:bg-white/5">
-                <h3 className="text-app-lg font-bold text-slate-900 dark:!text-white mb-4">Statut Administratif</h3>
+              <div className="glass p-8 rounded-[2.5rem] border border-primary/20 bg-primary/5 dark:bg-white/10">
+                <h3 className="text-app-lg font-bold text-neutral-900 dark:text-white mb-4">Statut Administratif</h3>
                 <div className="space-y-4">
                    <StatusItem label="Identité" status="valid" />
                    <StatusItem label="Titre de propriété" status="valid" />
@@ -335,12 +335,12 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
               </div>
               <div className="md:col-span-2 space-y-4">
                 <h4 className="font-bold border-b border-gray-200 dark:border-white/10 pb-2">Prochains évènements</h4>
-                <div className="p-4 bg-primary/5 dark:bg-white/5 border border-primary/20 rounded-2xl">
-                  <div className="text-app-xs font-bold text-slate-900 dark:!text-white opacity-60 uppercase mb-1">Demain - 14:30</div>
+                <div className="p-4 bg-primary/5 dark:bg-white/10 border border-primary/20 rounded-2xl">
+                  <div className="text-app-xs font-bold text-neutral-900 dark:text-white opacity-60 uppercase mb-1">Demain - 14:30</div>
                   <div className="font-bold">Visite Expert Technique</div>
                   <div className="text-app-xs opacity-70">Expertise structure et DPE</div>
                 </div>
-                <div className="p-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl">
+                <div className="p-4 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-2xl">
                   <div className="text-app-xs font-bold opacity-60 uppercase mb-1">Le 03/05 - 10:00</div>
                   <div className="font-bold">Signature Mandat Notaire</div>
                   <div className="text-app-xs opacity-70">RDV Physique Lyon 6</div>
@@ -361,7 +361,7 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
             <div className="lg:col-span-2 glass p-8 rounded-[2.5rem] border border-gray-200 dark:border-white/10">
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-app-xl font-bold">Conversations</h3>
-                <button className="text-app-sm font-bold text-slate-900 dark:!text-white hover:underline flex items-center gap-2">
+                <button className="text-app-sm font-bold text-neutral-900 dark:text-white hover:underline flex items-center gap-2">
                   <Share2 size={16} /> Nouveau fil de discussion
                 </button>
               </div>
@@ -380,7 +380,7 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
               </div>
             </div>
 
-            <div className="glass p-8 rounded-[2.5rem] border border-primary/20 bg-primary/5 dark:bg-white/5 self-start">
+            <div className="glass p-8 rounded-[2.5rem] border border-primary/20 bg-primary/5 dark:bg-white/10 self-start">
               <h3 className="text-app-lg font-bold mb-4">Smart Share Status</h3>
               <p className="text-app-sm opacity-70 mb-6">Suivez qui a consulté votre Bundle d'Agrafe (ID: #BNDL-89XJ)</p>
               <div className="space-y-4">
@@ -404,7 +404,7 @@ export function PropertyDetailsView({ property, onBack }: PropertyDetailsViewPro
 function DetailItem({ label, value, icon: Icon }: any) {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-12 h-12 bg-primary/5 dark:bg-white/5 rounded-xl flex items-center justify-center text-slate-900 dark:!text-white shrink-0">
+      <div className="w-12 h-12 bg-primary/5 dark:bg-white/10 rounded-xl flex items-center justify-center text-neutral-900 dark:text-white shrink-0">
         <Icon size={20} />
       </div>
       <div>
@@ -427,7 +427,7 @@ function StatusItem({ label, status }: { label: string, status: 'valid' | 'pendi
     missing: <AlertCircle size={16} />
   };
   return (
-    <div className="flex items-center justify-between p-3 bg-white dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+    <div className="flex items-center justify-between p-3 bg-white dark:bg-white/10 rounded-xl border border-gray-200 dark:border-white/10">
       <span className="text-app-sm font-bold opacity-70">{label}</span>
       <div className={cn("px-2 py-1 rounded-lg flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-tight", styles[status])}>
         {icons[status]}
@@ -439,9 +439,9 @@ function StatusItem({ label, status }: { label: string, status: 'valid' | 'pendi
 
 function ExportButton({ label }: { label: string }) {
   return (
-    <button className="w-full flex items-center justify-between p-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl hover:bg-white dark:bg-white/5 hover:border-primary/30 transition-all group">
+    <button className="w-full flex items-center justify-between p-4 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-2xl hover:bg-white dark:bg-white/10 hover:border-primary/30 transition-all group">
       <div className="flex items-center gap-3">
-        <Download size={18} className="opacity-40 group-hover:text-slate-900 dark:!text-white transition-colors" />
+        <Download size={18} className="opacity-40 group-hover:text-neutral-900 dark:text-white transition-colors" />
         <span className="text-app-sm font-bold opacity-70">{label}</span>
       </div>
       <ExternalLink size={14} className="opacity-20 group-hover:opacity-100 transition-opacity" />
@@ -453,11 +453,11 @@ function MessageItem({ name, lastMsg, time, unread }: any) {
   return (
     <div className={cn(
       "p-5 rounded-2xl border transition-all cursor-pointer relative",
-      unread ? "bg-primary/5 dark:bg-white/5 border-primary/20 shadow-sm" : "bg-white/40 border-gray-200 dark:border-white/10 opacity-80 hover:opacity-100"
+      unread ? "bg-primary/5 dark:bg-white/10 border-primary/20 shadow-sm" : "bg-white/40 border-gray-200 dark:border-white/10 opacity-80 hover:opacity-100"
     )}>
       {unread && <div className="absolute top-4 right-4 w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]" />}
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-bold text-slate-900 dark:!text-white">{name}</h4>
+        <h4 className="font-bold text-neutral-900 dark:text-white">{name}</h4>
         <span className="text-[10px] font-bold opacity-40 uppercase">{time}</span>
       </div>
       <p className="text-app-sm opacity-70 line-clamp-1">{lastMsg}</p>

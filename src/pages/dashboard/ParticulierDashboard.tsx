@@ -73,20 +73,20 @@ export function ParticulierDashboard() {
 
       <header className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-gray-200 dark:border-white/10">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 dark:!text-white tracking-tight">Espace Particulier</h1>
-          <p className="text-slate-500 dark:!text-white/60 font-medium mt-2">Pilotez la liquidité de votre patrimoine immobilier instantanément.</p>
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-neutral-900 dark:text-white tracking-tight">Espace Particulier</h1>
+          <p className="text-neutral-600 dark:text-neutral-300 font-medium mt-2">Pilotez la liquidité de votre patrimoine immobilier instantanément.</p>
         </div>
         {!showNewForm && !showSmartVault && (
           <div className="flex items-center flex-wrap gap-3 self-start sm:self-center">
             <button 
               onClick={() => setShowSmartVault(true)}
-              className="px-6 py-3 rounded-2xl bg-white dark:bg-white/5 text-slate-900 dark:!text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
+              className="px-6 py-3 rounded-2xl bg-white dark:bg-white/10 text-neutral-900 dark:text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
             >
               <ShieldAlert size={18} /> <span className="hidden sm:inline">Coffre-fort IA</span>
             </button>
             <button 
               onClick={handleStartScanner}
-              className="px-6 py-3 rounded-2xl bg-white dark:bg-white/5 text-slate-900 dark:!text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
+              className="px-6 py-3 rounded-2xl bg-white dark:bg-white/10 text-neutral-900 dark:text-white font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm border border-gray-200 dark:border-white/10"
             >
               <Camera size={18} /> <span className="hidden sm:inline">Smart Scanner</span>
             </button>
@@ -109,8 +109,8 @@ export function ParticulierDashboard() {
             className="relative z-10 w-full"
           >
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 dark:!text-white">Coffre-fort IA & Agrafes</h2>
-              <button onClick={() => setShowSmartVault(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-slate-900 dark:!text-white rounded-xl transition-colors font-medium">Fermer</button>
+              <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Coffre-fort IA & Agrafes</h2>
+              <button onClick={() => setShowSmartVault(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-neutral-900 dark:text-white rounded-xl transition-colors font-medium">Fermer</button>
             </div>
             <SmartVault />
           </motion.div>
@@ -119,11 +119,11 @@ export function ParticulierDashboard() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
-            className="relative z-10 w-full max-w-4xl mx-auto bg-white/80 dark:bg-white/5 backdrop-blur-3xl border border-white/20 p-8 rounded-[2rem] shadow-2xl"
+            className="relative z-10 w-full max-w-4xl mx-auto bg-white/80 dark:bg-white/10 backdrop-blur-3xl border border-white/20 p-8 rounded-[2rem] shadow-2xl"
           >
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-display font-bold text-slate-900 dark:!text-white">Nouveau Bien</h2>
-              <button onClick={() => setShowNewForm(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-slate-900 dark:!text-white rounded-xl transition-colors font-medium">Annuler</button>
+              <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Nouveau Bien</h2>
+              <button onClick={() => setShowNewForm(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-neutral-900 dark:text-white rounded-xl transition-colors font-medium">Annuler</button>
             </div>
             <PropertyCreationWizard 
               onComplete={handleCreateProperty} 
@@ -134,22 +134,22 @@ export function ParticulierDashboard() {
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
-            className="relative z-10 flex flex-col items-center justify-center p-20 bg-white/50 dark:bg-white/5 backdrop-blur-2xl rounded-[2.5rem] border border-white/20 shadow-xl"
+            className="relative z-10 flex flex-col items-center justify-center p-20 bg-white/50 dark:bg-white/10 backdrop-blur-2xl rounded-[2.5rem] border border-white/20 shadow-xl"
           >
             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-6" />
-            <span className="text-slate-500 dark:!text-white/60 font-bold text-lg">Synchronisation de vos actifs institutionnels...</span>
+            <span className="text-neutral-600 dark:text-neutral-300 font-bold text-lg">Synchronisation de vos actifs institutionnels...</span>
           </motion.div>
         ) : properties.length === 0 ? (
           <motion.div 
              initial={{ opacity: 0 }} 
              animate={{ opacity: 1 }} 
-             className="relative z-10 bg-white/80 dark:bg-white/5 backdrop-blur-2xl rounded-[2.5rem] p-16 flex flex-col items-center text-center border border-white/20 shadow-xl"
+             className="relative z-10 bg-white/80 dark:bg-white/10 backdrop-blur-2xl rounded-[2.5rem] p-16 flex flex-col items-center text-center border border-white/20 shadow-xl"
           >
             <div className="w-24 h-24 bg-primary/10 dark:bg-white/10 rounded-3xl flex items-center justify-center mb-8 shadow-inner">
               <Building2 size={48} className="text-primary dark:text-white/50" />
             </div>
-            <h2 className="text-3xl font-display font-bold text-slate-900 dark:!text-white mb-4">Aucun actif détecté</h2>
-            <p className="text-slate-500 dark:!text-white/60 max-w-md mx-auto mb-10 text-lg leading-relaxed">
+            <h2 className="text-3xl font-display font-bold text-neutral-900 dark:text-white mb-4">Aucun actif détecté</h2>
+            <p className="text-neutral-600 dark:text-neutral-300 max-w-md mx-auto mb-10 text-lg leading-relaxed">
               Ajoutez votre premier bien immobilier pour déclencher notre moteur de structuration institutionnel et analyser sa liquidité.
             </p>
             <button 
@@ -261,7 +261,7 @@ function DashboardPropertyBasiqueCard({ property, onClick }: { property: Propert
       style={{ perspective: 1000 }}
       onClick={onClick}
       className={cn(
-        "bg-white/80 dark:bg-white/5 backdrop-blur-2xl p-8 rounded-[2rem] border transition-all cursor-pointer group flex flex-col h-full shadow-xl hover:shadow-2xl",
+        "bg-white/80 dark:bg-white/10 backdrop-blur-2xl p-8 rounded-[2rem] border transition-all cursor-pointer group flex flex-col h-full shadow-xl hover:shadow-2xl",
         results.dossierLight === 'Vert' ? 'border-emerald-200 hover:border-emerald-400 dark:border-emerald-500/20 dark:hover:border-emerald-500/40 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.3)]' : 
         results.dossierLight === 'Orange' ? 'border-amber-200 hover:border-amber-400 dark:border-amber-500/20 dark:hover:border-amber-500/40 hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.3)]' : 
         'border-red-200 hover:border-red-400 dark:border-red-500/20 dark:hover:border-red-500/40 hover:shadow-[0_20px_40px_-15px_rgba(239,68,68,0.3)]'
@@ -269,13 +269,13 @@ function DashboardPropertyBasiqueCard({ property, onClick }: { property: Propert
     >
       <div className="flex justify-between items-start mb-8 border-b border-gray-200 dark:border-white/10 pb-6 gap-4">
         <div>
-          <h3 className="font-bold text-2xl text-slate-900 dark:!text-white flex items-center gap-3">
+          <h3 className="font-bold text-2xl text-neutral-900 dark:text-white flex items-center gap-3">
             <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl">
                <Building2 size={24} className="text-blue-600 dark:text-blue-400" />
             </div>
             {property.type}
           </h3>
-          <p className="text-slate-500 dark:!text-white/60 flex items-center gap-2 mt-3 font-medium">
+          <p className="text-neutral-600 dark:text-neutral-300 flex items-center gap-2 mt-3 font-medium">
             <MapPin size={16} /> {typeof property.address === 'string' ? property.address : (property.address as any)?.fullAddress || 'Adresse non spécifiée'}, {property.city}
           </p>
         </div>
@@ -287,19 +287,19 @@ function DashboardPropertyBasiqueCard({ property, onClick }: { property: Propert
 
       <div className="flex-1 grid sm:grid-cols-2 gap-x-10 gap-y-8 mb-8">
         <div className="space-y-5">
-          <div className="flex justify-between items-center bg-gray-50/50 dark:bg-white/5 p-3 rounded-xl border border-gray-100 dark:border-white/5">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Score Global</span>
+          <div className="flex justify-between items-center bg-gray-50/50 dark:bg-white/10 p-3 rounded-xl border border-gray-100 dark:border-white/5">
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Score Global</span>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-lg text-slate-900 dark:!text-white">{results.fundScore}/100</span>
+              <span className="font-bold text-lg text-neutral-900 dark:text-white">{results.fundScore}/100</span>
               <Activity size={18} className={results.fundScore >= 70 ? 'text-emerald-500' : 'text-amber-500'} />
             </div>
           </div>
           <div className="flex justify-between items-center px-2">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Avis Expert</span>
-            <span className="font-bold text-sm text-right text-slate-900 dark:!text-white">{results.expertOpinion}</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Avis Expert</span>
+            <span className="font-bold text-sm text-right text-neutral-900 dark:text-white">{results.expertOpinion}</span>
           </div>
           <div className="flex justify-between items-center px-2">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Décision Rapide</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Décision Rapide</span>
             <span className={cn("px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider",
                results.reco === 'Go' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 
                results.reco === 'À revoir' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400'
@@ -319,19 +319,19 @@ function DashboardPropertyBasiqueCard({ property, onClick }: { property: Propert
 
         <div className="space-y-5">
           <div className="flex justify-between items-center px-2">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Valeur de référence</span>
-            <span className="font-bold text-slate-900 dark:!text-white text-lg">{formatEur(results.referenceValue)}</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Valeur de référence</span>
+            <span className="font-bold text-neutral-900 dark:text-white text-lg">{formatEur(results.referenceValue)}</span>
           </div>
           <div className="flex justify-between items-center px-2">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">LTV Cible</span>
-            <span className="font-bold text-slate-900 dark:!text-white text-lg">{(results.baseIntervention / results.referenceValue * 100).toFixed(0)}%</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">LTV Cible</span>
+            <span className="font-bold text-neutral-900 dark:text-white text-lg">{(results.baseIntervention / results.referenceValue * 100).toFixed(0)}%</span>
           </div>
           <div className="flex justify-between items-center px-2">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Marge de Sécurité</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Marge de Sécurité</span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400 text-lg">{(results.securityMargin * 100).toFixed(0)}%</span>
           </div>
           <div className="flex justify-between items-center px-2 pt-2 border-t border-gray-100 dark:border-white/10">
-            <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Sortie Réaliste</span>
+            <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Sortie Réaliste</span>
             <span className="font-bold text-sm text-right text-blue-600 dark:text-blue-400">{exitStrategy}</span>
           </div>
         </div>
@@ -348,17 +348,17 @@ function DashboardPropertyBasiqueCard({ property, onClick }: { property: Propert
          </div>
       </div>
 
-      <div className="mt-auto px-5 py-4 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center justify-between border border-gray-200 dark:border-white/10 transition-colors group-hover:bg-blue-50/50 dark:group-hover:bg-blue-500/5 group-hover:border-blue-200 dark:group-hover:border-blue-500/20">
+      <div className="mt-auto px-5 py-4 bg-gray-50 dark:bg-white/10 rounded-2xl flex items-center justify-between border border-gray-200 dark:border-white/10 transition-colors group-hover:bg-blue-50/50 dark:group-hover:bg-blue-500/5 group-hover:border-blue-200 dark:group-hover:border-blue-500/20">
         <div className="flex items-center gap-3">
           <div className={cn("px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1.5 uppercase tracking-wider", legalColors)}>
              Feu {results.legalLight}
           </div>
-          <span className="text-sm font-medium text-slate-500 dark:!text-white/60">Sécurité relative</span>
+          <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Sécurité relative</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
-             <span className="block text-[10px] font-bold text-slate-400 dark:!text-white/40 uppercase tracking-wider">Score Pièces</span>
-             <span className="text-sm font-bold text-slate-900 dark:!text-white">{results.legalQualityScore}/100</span>
+             <span className="block text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Score Pièces</span>
+             <span className="text-sm font-bold text-neutral-900 dark:text-white">{results.legalQualityScore}/100</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/10 flex items-center justify-center text-blue-600 dark:text-white/70 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm border border-gray-200 dark:border-white/10 group-hover:border-transparent group-hover:scale-110">
             <ChevronRight size={20} />

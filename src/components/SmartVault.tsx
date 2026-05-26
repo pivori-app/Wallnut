@@ -57,7 +57,7 @@ export function SmartVault() {
       <div className="flex items-center justify-between p-6 bg-slate-900 rounded-[2rem] border border-white/10 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
         <div className="relative z-10 flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary backdrop-blur-md">
+          <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-primary backdrop-blur-xl">
             <Lock size={28} className="drop-shadow-lg" />
           </div>
           <div>
@@ -73,8 +73,8 @@ export function SmartVault() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ZON D'UPLOAD & OCR */}
-        <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-[2rem] shadow-xl relative">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-[2rem] shadow-xl relative">
+          <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
             <BrainCircuit size={20} className="text-secondary" /> Moteur d'Analyse OCR
           </h3>
           
@@ -92,14 +92,14 @@ export function SmartVault() {
              }} />
              {!file ? (
                <>
-                 <UploadCloud size={48} className="text-slate-400 dark:text-white/40 mb-4" />
-                 <p className="font-bold text-slate-800 dark:text-white text-center">Déposez un document sensible</p>
-                 <p className="text-sm text-slate-500 dark:text-white/50 text-center mt-2">Passeport, DPE, Avis d'impôt (Max 10Mo)</p>
+                 <UploadCloud size={48} className="text-neutral-500 dark:text-neutral-400 mb-4" />
+                 <p className="font-bold text-neutral-800 dark:text-white text-center">Déposez un document sensible</p>
+                 <p className="text-sm text-neutral-600 dark:text-neutral-300 dark:text-white/50 text-center mt-2">Passeport, DPE, Avis d'impôt (Max 10Mo)</p>
                </>
              ) : (
                <>
                  <FileCheck size={48} className="text-green-500 mb-4" />
-                 <p className="font-bold text-slate-800 dark:text-white">{file.name}</p>
+                 <p className="font-bold text-neutral-800 dark:text-white">{file.name}</p>
                  <p className="text-sm text-green-600 dark:text-green-400 mt-2 font-medium">{(file.size / 1024 / 1024).toFixed(2)} MB • Prêt pour le scan</p>
                </>
              )}
@@ -122,14 +122,14 @@ export function SmartVault() {
         </div>
 
         {/* FEEDBACK & AGRAFE */}
-        <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-[2rem] shadow-xl relative min-h-[400px]">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+        <div className="bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-[2rem] shadow-xl relative min-h-[400px]">
+          <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
             <ShieldCheck size={20} className="text-green-500" /> Validation & Agrafe Sécurisée
           </h3>
 
           {!uploadResult && !errorMsg && (
              <div className="h-full min-h-[250px] flex flex-col items-center justify-center opacity-40">
-               <ShieldCheck size={64} className="mb-4 text-slate-400 dark:text-white/50" />
+               <ShieldCheck size={64} className="mb-4 text-neutral-500 dark:text-neutral-400 dark:text-white/50" />
                <p className="font-medium text-center">Aucun document classifié.</p>
              </div>
           )}
@@ -150,7 +150,7 @@ export function SmartVault() {
                   <div className="relative z-10 space-y-4">
                      <div>
                        <p className="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-wider mb-1">OCR Type Info</p>
-                       <p className="font-display font-bold text-slate-900 dark:text-white text-xl">{uploadResult.classification}</p>
+                       <p className="font-display font-bold text-neutral-900 dark:text-white text-xl">{uploadResult.classification}</p>
                      </div>
                      <div className="flex items-center gap-4 text-sm font-medium text-slate-600 dark:text-green-100">
                         <div className="flex items-center gap-1.5 bg-white/50 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-green-500/20">
@@ -164,16 +164,16 @@ export function SmartVault() {
                </div>
 
                <div className="pt-4 border-t border-gray-200 dark:border-white/10">
-                  <h4 className="font-bold text-sm text-slate-800 dark:text-white mb-4">Générer Agrafe Numérique (Token 7J)</h4>
+                  <h4 className="font-bold text-sm text-neutral-800 dark:text-white mb-4">Générer Agrafe Numérique (Token 7J)</h4>
                   <div className="flex items-center gap-3">
                      <div className="relative flex-1">
-                       <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                       <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400" />
                        <input 
                          type="email" 
                          value={recipient} 
                          onChange={e => setRecipient(e.target.value)} 
                          placeholder="Email du notaire / partenaire" 
-                         className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/20 focus:border-secondary outline-none text-sm text-slate-900 dark:text-white font-medium"
+                         className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/20 focus:border-secondary outline-none text-sm text-neutral-900 dark:text-white font-medium"
                        />
                      </div>
                      <button

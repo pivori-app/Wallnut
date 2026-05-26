@@ -108,30 +108,30 @@ export function ProDashboard() {
             <div className="flex items-center gap-3 mb-2">
               <button 
                 onClick={() => window.history.back()}
-                className="w-8 h-8 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/20 flex items-center justify-center text-slate-900 dark:!text-white hover:bg-gray-50 dark:hover:bg-white/20 transition-all shadow-sm shrink-0"
+                className="w-8 h-8 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/20 flex items-center justify-center text-neutral-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/20 transition-all shadow-sm shrink-0"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <span className="px-3 py-1 bg-secondary/10 dark:bg-secondary/20 text-secondary-dark dark:text-secondary rounded-lg text-xs font-bold uppercase tracking-wider border border-secondary/20 dark:border-secondary/30 shrink-0">
                 {profile?.professionalData?.subRole || 'Agent Immobilier / Partenaire'}
               </span>
-              <span className="px-3 py-1 bg-gray-200 dark:bg-white/10 text-gray-700 dark:!text-white rounded-lg text-xs font-bold uppercase tracking-wider border border-gray-300 dark:border-white/20 shrink-0 hidden sm:inline-flex">
+              <span className="px-3 py-1 bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white rounded-lg text-xs font-bold uppercase tracking-wider border border-gray-300 dark:border-white/20 shrink-0 hidden sm:inline-flex">
                 ID: {profile?.id?.substring(0, 8) || 'PRO-' + Math.floor(Math.random() * 9000 + 1000)}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 dark:!text-white tracking-tight">Espace Professionnel</h1>
-            <p className="text-slate-500 dark:!text-white/60 font-medium mt-1 text-sm">Centralisez vos mandats, pilotez vos commissions et structurez la liquidité de vos clients.</p>
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-neutral-900 dark:text-white tracking-tight">Espace Professionnel</h1>
+            <p className="text-neutral-600 dark:text-neutral-300 font-medium mt-1 text-sm">Centralisez vos mandats, pilotez vos commissions et structurez la liquidité de vos clients.</p>
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="flex bg-gray-200 dark:bg-white/5 p-0.5 rounded-xl border border-gray-300 dark:border-white/10">
-              <button onClick={() => setTheme('light')} className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-white shadow-sm text-yellow-500' : 'text-gray-500 dark:!text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
+            <div className="flex bg-gray-200 dark:bg-white/10 p-0.5 rounded-xl border border-gray-300 dark:border-white/10">
+              <button onClick={() => setTheme('light')} className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-white shadow-sm text-yellow-500' : 'text-neutral-600 dark:text-neutral-300 dark:text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
                 <Sun size={14} />
               </button>
-              <button onClick={() => setTheme('dark')} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-[#1a1f2e] text-blue-400 border border-white/10' : 'text-gray-500 dark:!text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
+              <button onClick={() => setTheme('dark')} className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-[#1a1f2e] text-blue-400 border border-white/10' : 'text-neutral-600 dark:text-neutral-300 dark:text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
                 <Moon size={14} />
               </button>
-              <button onClick={() => setTheme('auto')} className={`p-1.5 rounded-lg transition-all ${theme === 'auto' ? 'bg-white dark:bg-white/10 text-slate-900 dark:!text-white shadow-sm' : 'text-gray-500 dark:!text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
+              <button onClick={() => setTheme('auto')} className={`p-1.5 rounded-lg transition-all ${theme === 'auto' ? 'bg-white dark:bg-white/10 text-neutral-900 dark:text-white shadow-sm' : 'text-neutral-600 dark:text-neutral-300 dark:text-white/40 hover:text-gray-900 dark:hover:text-white'}`}>
                 <Laptop size={14} />
               </button>
             </div>
@@ -146,7 +146,7 @@ export function ProDashboard() {
 
         {/* Navigation */}
         {!showNewForm && (
-          <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl w-full lg:w-fit overflow-x-auto no-scrollbar shadow-sm dark:shadow-none">
+          <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-white/10 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl w-full lg:w-fit overflow-x-auto no-scrollbar shadow-sm dark:shadow-none">
             <TabButton active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} icon={LayoutDashboard} label="Vue d'ensemble" />
             <TabButton active={activeTab === 'outils'} onClick={() => setActiveTab('outils')} icon={Briefcase} label="Outils de l'Expert" />
             <TabButton active={activeTab === 'kanban'} onClick={() => setActiveTab('kanban')} icon={BarChart3} label="Pipeline Opérationnel" />
@@ -162,12 +162,12 @@ export function ProDashboard() {
                initial={{ opacity: 0, y: 30 }}
                animate={{ opacity: 1, y: 0 }}
                exit={{ opacity: 0, y: -30 }}
-               className="bg-white dark:bg-white/5 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-8 rounded-[2rem] shadow-2xl"
+               className="bg-white dark:bg-white/10 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-8 rounded-[2rem] shadow-2xl"
                style={{ perspective: 1000 }}
              >
                <div className="flex items-center justify-between mb-8">
-                 <h2 className="text-2xl font-display font-bold text-slate-900 dark:!text-white">Nouveau Dossier</h2>
-                 <button onClick={() => setShowNewForm(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-slate-900 dark:!text-white rounded-xl transition-colors font-medium">Annuler</button>
+                 <h2 className="text-2xl font-display font-bold text-neutral-900 dark:text-white">Nouveau Dossier</h2>
+                 <button onClick={() => setShowNewForm(false)} className="px-4 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-neutral-900 dark:text-white rounded-xl transition-colors font-medium">Annuler</button>
                </div>
                {/* Note: In a real implementation we would adjust PropertyCreationWizard strictly to dark theme, but we render it here */}
                <div className="w-full">
@@ -175,7 +175,7 @@ export function ProDashboard() {
                </div>
              </motion.div>
           ) : isLoading ? (
-             <div className="flex justify-center py-20 text-slate-500 dark:text-white/50 font-bold text-lg animate-pulse">Chargement des données...</div>
+             <div className="flex justify-center py-20 text-neutral-600 dark:text-neutral-300 dark:text-white/50 font-bold text-lg animate-pulse">Chargement des données...</div>
           ) : (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -192,10 +192,10 @@ export function ProDashboard() {
                         <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-500/30 group-hover:scale-110 transition-transform">
                           <Landmark size={24} />
                         </div>
-                        <span className="text-2xl font-display font-bold text-slate-900 dark:!text-white">{properties.length}</span>
+                        <span className="text-2xl font-display font-bold text-neutral-900 dark:text-white">{properties.length}</span>
                       </div>
-                      <h3 className="text-slate-900 dark:!text-white font-bold text-sm mb-1">Dossiers Actifs</h3>
-                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-slate-900 dark:!text-white">Volume global en cours</p>
+                      <h3 className="text-neutral-900 dark:text-white font-bold text-sm mb-1">Dossiers Actifs</h3>
+                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-neutral-900 dark:text-white">Volume global en cours</p>
                     </GlassCard>
 
                     <GlassCard className="group">
@@ -203,10 +203,10 @@ export function ProDashboard() {
                         <div className="w-12 h-12 rounded-2xl bg-secondary/20 text-secondary-dark dark:text-secondary flex items-center justify-center border border-secondary/30 group-hover:scale-110 transition-transform">
                           <Calculator size={24} />
                         </div>
-                        <span className="text-2xl font-display font-bold text-slate-900 dark:!text-white">42k€</span>
+                        <span className="text-2xl font-display font-bold text-neutral-900 dark:text-white">42k€</span>
                       </div>
-                      <h3 className="text-slate-900 dark:!text-white font-bold text-sm mb-1">Commissions (Est.)</h3>
-                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-slate-900 dark:!text-white">Honoraires prévisionnels</p>
+                      <h3 className="text-neutral-900 dark:text-white font-bold text-sm mb-1">Commissions (Est.)</h3>
+                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-neutral-900 dark:text-white">Honoraires prévisionnels</p>
                     </GlassCard>
 
                     <GlassCard className="group">
@@ -214,10 +214,10 @@ export function ProDashboard() {
                         <div className="w-12 h-12 rounded-2xl bg-yellow-500/20 text-yellow-600 dark:text-yellow-500 flex items-center justify-center border border-yellow-500/30 group-hover:scale-110 transition-transform">
                           <AlertTriangle size={24} />
                         </div>
-                        <span className="text-2xl font-display font-bold text-slate-900 dark:!text-white">{dossierAVerifier}</span>
+                        <span className="text-2xl font-display font-bold text-neutral-900 dark:text-white">{dossierAVerifier}</span>
                       </div>
-                      <h3 className="text-slate-900 dark:!text-white font-bold text-sm mb-1">À Compléter</h3>
-                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-slate-900 dark:!text-white">Pièces manquantes</p>
+                      <h3 className="text-neutral-900 dark:text-white font-bold text-sm mb-1">À Compléter</h3>
+                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-neutral-900 dark:text-white">Pièces manquantes</p>
                     </GlassCard>
 
                     <GlassCard className="group">
@@ -225,29 +225,29 @@ export function ProDashboard() {
                         <div className="w-12 h-12 rounded-2xl bg-green-500/20 text-green-600 dark:text-green-400 flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition-transform">
                           <FileCheck size={24} />
                         </div>
-                        <span className="text-2xl font-display font-bold text-slate-900 dark:!text-white">{signaturesPending}</span>
+                        <span className="text-2xl font-display font-bold text-neutral-900 dark:text-white">{signaturesPending}</span>
                       </div>
-                      <h3 className="text-slate-900 dark:!text-white font-bold text-sm mb-1">Prêts Notaire</h3>
-                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-slate-900 dark:!text-white">Signatures en attente</p>
+                      <h3 className="text-neutral-900 dark:text-white font-bold text-sm mb-1">Prêts Notaire</h3>
+                      <p className="opacity-60 text-[10px] uppercase tracking-wider font-medium text-neutral-900 dark:text-white">Signatures en attente</p>
                     </GlassCard>
                   </div>
 
                   {/* Recent Activity Mini-CRM */}
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                      <h3 className="text-lg font-display font-bold text-slate-900 dark:!text-white tracking-tight">Clients nécessitant une action</h3>
+                      <h3 className="text-lg font-display font-bold text-neutral-900 dark:text-white tracking-tight">Clients nécessitant une action</h3>
                       <button onClick={() => setActiveTab('crm')} className="text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors self-start sm:self-auto">Voir tout le CRM →</button>
                     </div>
                     <div className="space-y-3">
                       {properties.filter(p => !p.isComplete).slice(0, 3).map(prop => (
                         <GlassCard key={prop.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-4" hoverEffect={false}>
                            <div className="flex items-center gap-4">
-                             <div className="w-10 h-10 rounded-full bg-primary/5 dark:bg-white/10 flex items-center justify-center text-slate-900 dark:!text-white/70 font-bold border border-primary/10 dark:border-white/5 shrink-0">
+                             <div className="w-10 h-10 rounded-full bg-primary/5 dark:bg-white/10 flex items-center justify-center text-neutral-900 dark:text-white/70 font-bold border border-primary/10 dark:border-white/5 shrink-0">
                                {prop.clientName?.charAt(0) || 'C'}
                              </div>
                              <div>
-                               <div className="text-slate-900 dark:!text-white font-bold text-sm">{prop.clientName || 'Client inconnu'}</div>
-                               <div className="text-slate-400 dark:!text-white/40 text-[11px] sm:text-xs font-medium">Dossier: {prop.referenceNumber} • Complété à {prop.completeness}%</div>
+                               <div className="text-neutral-900 dark:text-white font-bold text-sm">{prop.clientName || 'Client inconnu'}</div>
+                               <div className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-xs font-medium">Dossier: {prop.referenceNumber} • Complété à {prop.completeness}%</div>
                              </div>
                            </div>
                            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto">
@@ -277,7 +277,7 @@ export function ProDashboard() {
 
               {activeTab === 'crm' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                   <h2 className="text-lg font-display font-bold text-slate-900 dark:!text-white tracking-tight mb-6">Mini-CRM & Relances</h2>
+                   <h2 className="text-lg font-display font-bold text-neutral-900 dark:text-white tracking-tight mb-6">Mini-CRM & Relances</h2>
                    <div className="grid gap-4">
                      {properties.map(prop => {
                        const daysSinceContact = prop.lastContacted ? Math.floor((Date.now() - new Date(prop.lastContacted).getTime()) / (1000 * 3600 * 24)) : 0;
@@ -286,28 +286,28 @@ export function ProDashboard() {
                        return (
                        <GlassCard key={prop.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 gap-6">
                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-full bg-primary/5 dark:bg-white/10 flex items-center justify-center text-slate-900 dark:!text-white font-bold text-lg border border-primary/10 dark:border-white/5 shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-primary/5 dark:bg-white/10 flex items-center justify-center text-neutral-900 dark:text-white font-bold text-lg border border-primary/10 dark:border-white/5 shrink-0">
                                {prop.clientName?.charAt(0) || 'C'}
                             </div>
                             <div className="space-y-1">
-                              <h3 className="text-base font-bold text-slate-900 dark:!text-white flex flex-wrap items-center gap-2 sm:gap-3">
+                              <h3 className="text-base font-bold text-neutral-900 dark:text-white flex flex-wrap items-center gap-2 sm:gap-3">
                                 <span className="truncate max-w-[200px]">{prop.clientName || 'Client inconnu'}</span>
                                 <span className={cn("px-2 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-wider", statusColor)}>
                                   {prop.isComplete ? 'Complet' : daysSinceContact > 5 ? 'Urgent' : 'En attente'}
                                 </span>
                               </h3>
-                              <p className="text-primary/60 dark:!text-white/50 text-sm">Réf: {prop.referenceNumber} • {prop.type} à {prop.city}</p>
-                              {prop.clientPhone && <p className="text-slate-400 dark:!text-white/40 text-xs flex items-center gap-1 mt-2 font-medium"><Phone size={10} /> {prop.clientPhone}</p>}
+                              <p className="text-primary/60 dark:text-white/50 text-sm">Réf: {prop.referenceNumber} • {prop.type} à {prop.city}</p>
+                              {prop.clientPhone && <p className="text-neutral-500 dark:text-neutral-400 text-xs flex items-center gap-1 mt-2 font-medium"><Phone size={10} /> {prop.clientPhone}</p>}
                             </div>
                          </div>
                          
                          <div className="flex flex-col sm:items-end justify-center gap-3 w-full sm:w-auto">
-                            <div className="text-slate-400 dark:!text-white/40 text-[11px] uppercase tracking-wider font-bold">
+                            <div className="text-neutral-500 dark:text-neutral-400 text-[11px] uppercase tracking-wider font-bold">
                                Dernier contact : {daysSinceContact === 0 ? "Aujourd'hui" : `Il y a ${daysSinceContact} jours`}
                             </div>
                             {!prop.isComplete && (
                               <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto">
-                                <button onClick={() => relancerClient(prop.id, 'SMS')} className="flex-1 sm:flex-none px-3 py-1.5 bg-gray-100/50 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-slate-900 dark:!text-white rounded-lg text-xs font-bold border border-gray-200 dark:border-white/10 transition-colors flex items-center justify-center gap-1.5">
+                                <button onClick={() => relancerClient(prop.id, 'SMS')} className="flex-1 sm:flex-none px-3 py-1.5 bg-gray-100/50 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-neutral-900 dark:text-white rounded-lg text-xs font-bold border border-gray-200 dark:border-white/10 transition-colors flex items-center justify-center gap-1.5">
                                   <Phone size={12} /> SMS
                                 </button>
                                 <button onClick={() => relancerClient(prop.id, 'Email')} className="flex-1 sm:flex-none px-3 py-1.5 bg-blue-600/90 hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-[0_0_15px_rgba(37,99,235,0.2)] transition-colors flex items-center justify-center gap-1.5 border border-blue-500/30">
@@ -331,7 +331,7 @@ export function ProDashboard() {
 
               {activeTab === 'kanban' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                   <h2 className="text-lg font-display font-bold text-slate-900 dark:!text-white tracking-tight mb-6">Pipeline des mandats</h2>
+                   <h2 className="text-lg font-display font-bold text-neutral-900 dark:text-white tracking-tight mb-6">Pipeline des mandats</h2>
                    <div className="relative">
                      {/* Overlay dark adjustments for BoardKanban if needed */}
                      <BoardKanban 
@@ -346,7 +346,7 @@ export function ProDashboard() {
 
               {activeTab === 'outils' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <h2 className="text-lg font-display font-bold text-slate-900 dark:!text-white tracking-tight mb-6 flex items-center gap-2 lg:text-xl">
+                  <h2 className="text-lg font-display font-bold text-neutral-900 dark:text-white tracking-tight mb-6 flex items-center gap-2 lg:text-xl">
                     <Briefcase className="w-6 h-6 text-primary dark:text-secondary" />
                     Outils & Services Back-Office
                   </h2>
@@ -355,11 +355,11 @@ export function ProDashboard() {
                       <div className="w-14 h-14 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-secondary/20 shrink-0">
                         <Calculator size={28} />
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:!text-white mb-2">Simulateur B2B</h3>
-                      <p className="text-slate-500 dark:!text-white/60 text-sm mb-6 flex-grow leading-relaxed">Calculez instantanément la liquidité maximale (LTV), les frais intégrés et vos honoraires pour structurer une offre percutante.</p>
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-2">Simulateur B2B</h3>
+                      <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-6 flex-grow leading-relaxed">Calculez instantanément la liquidité maximale (LTV), les frais intégrés et vos honoraires pour structurer une offre percutante.</p>
                       <button 
                         onClick={(e) => { e.stopPropagation(); setActiveTool('simulator'); }}
-                        className="mt-auto w-full py-3 rounded-xl bg-gray-100 dark:bg-white/5 text-slate-900 dark:!text-white font-bold hover:bg-gray-200 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none text-sm"
+                        className="mt-auto w-full py-3 rounded-xl bg-gray-100 dark:bg-white/10 text-neutral-900 dark:text-white font-bold hover:bg-gray-200 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none text-sm"
                       >
                         Lancer une simulation
                       </button>
@@ -369,8 +369,8 @@ export function ProDashboard() {
                       <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-blue-200 dark:border-blue-500/20 shrink-0">
                         <FileSignature size={28} />
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:!text-white mb-2">Gérer les documents</h3>
-                      <p className="text-slate-500 dark:!text-white/60 text-sm mb-6 flex-grow leading-relaxed">Générez l'accord de principe Hilios Capital, gérez vos documents de partenariat et pilotez le dossier.</p>
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-2">Gérer les documents</h3>
+                      <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-6 flex-grow leading-relaxed">Générez l'accord de principe Hilios Capital, gérez vos documents de partenariat et pilotez le dossier.</p>
                       <button 
                         onClick={(e) => { e.stopPropagation(); setActiveTool('partner_pack'); }}
                         className="mt-auto w-full py-3 rounded-xl bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 font-bold hover:bg-blue-100 dark:hover:bg-blue-600/30 transition-colors border border-blue-200 dark:border-blue-500/20 shadow-sm dark:shadow-none text-sm"
@@ -383,8 +383,8 @@ export function ProDashboard() {
                       <div className="w-14 h-14 rounded-2xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-purple-200 dark:border-purple-500/20 shrink-0">
                         <Landmark size={28} />
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:!text-white mb-2">Data Room Notaire</h3>
-                      <p className="text-slate-500 dark:!text-white/60 text-sm mb-6 flex-grow leading-relaxed">Partage sécurisé pour vos clercs : état daté, diagnostics, titres de propriété et projets d'actes authentiques.</p>
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-2">Data Room Notaire</h3>
+                      <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-6 flex-grow leading-relaxed">Partage sécurisé pour vos clercs : état daté, diagnostics, titres de propriété et projets d'actes authentiques.</p>
                       <button 
                         onClick={(e) => { e.stopPropagation(); setActiveTool('dataroom'); }}
                         className="mt-auto w-full py-3 rounded-xl bg-purple-50 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 font-bold hover:bg-purple-100 dark:hover:bg-purple-500/30 transition-colors border border-purple-200 dark:border-purple-500/20 shadow-sm dark:shadow-none text-sm"
@@ -397,8 +397,8 @@ export function ProDashboard() {
                       <div className="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border border-green-200 dark:border-green-500/20 shrink-0">
                         <CheckCircle2 size={28} />
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:!text-white mb-2">Module Intelligent OCR</h3>
-                      <p className="text-slate-500 dark:!text-white/60 text-sm mb-6 flex-grow leading-relaxed">Classification documentaire via IA, coffre-fort AES-256 avec Fallback et génération d'agrafes numériques.</p>
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-2">Module Intelligent OCR</h3>
+                      <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-6 flex-grow leading-relaxed">Classification documentaire via IA, coffre-fort AES-256 avec Fallback et génération d'agrafes numériques.</p>
                       <button 
                         onClick={(e) => { e.stopPropagation(); setActiveTool('smart_vault'); }}
                         className="mt-auto w-full py-3 rounded-xl bg-green-50 dark:bg-green-500/20 text-green-600 dark:text-green-400 font-bold hover:bg-green-100 dark:hover:bg-green-500/30 transition-colors border border-green-200 dark:border-green-500/20 shadow-sm dark:shadow-none text-sm"
@@ -435,22 +435,22 @@ export function ProDashboard() {
                 className="relative w-full max-w-4xl bg-white dark:bg-[#1a1f2e] border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
               >
                 {/* Header */}
-                <div className="p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-white/5">
+                <div className="p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-white/10">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-white dark:bg-white/5 flex items-center justify-center border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none">
+                    <div className="w-12 h-12 rounded-xl bg-white dark:bg-white/10 flex items-center justify-center border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none">
                       {activeTool === 'simulator' && <Calculator size={24} className="text-secondary" />}
                       {activeTool === 'partner_pack' && <FileSignature size={24} className="text-blue-500 dark:text-blue-400" />}
                       {activeTool === 'dataroom' && <Landmark size={24} className="text-purple-500 dark:text-purple-400" />}
                       {activeTool === 'smart_vault' && <CheckCircle2 size={24} className="text-green-500" />}
                     </div>
                     <div>
-                      <h2 className="text-lg font-medium text-gray-900 dark:!text-white/90">
+                      <h2 className="text-lg font-medium text-gray-900 dark:text-white/90">
                         {activeTool === 'simulator' && 'Simulateur B2B (LTV & Frais)'}
                         {activeTool === 'partner_pack' && 'Pack Partenaire - Accord de Principe'}
                         {activeTool === 'dataroom' && 'Data Room Notaire Sécurisée'}
                         {activeTool === 'smart_vault' && 'Module Intelligent Documentaire (Coffre-Fort & Agrafes)'}
                       </h2>
-                      <p className="text-gray-500 dark:!text-white/50 text-sm">
+                      <p className="text-neutral-600 dark:text-neutral-300 dark:text-white/50 text-sm">
                         {activeTool === 'simulator' && 'Calculez la liquidité et structurez votre offre.'}
                         {activeTool === 'partner_pack' && "Éditez et transmettez les documents liés à l'offre."}
                         {activeTool === 'dataroom' && 'Espace de partage pour clercs et notaires.'}
@@ -460,7 +460,7 @@ export function ProDashboard() {
                   </div>
                   <button 
                     onClick={() => setActiveTool(null)}
-                    className="p-2 text-gray-400 hover:text-gray-900 dark:!text-white/50 dark:hover:text-white bg-white dark:bg-white/5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none border border-gray-200 dark:border-transparent"
+                    className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-gray-900 dark:text-white/50 dark:hover:text-white bg-white dark:bg-white/10 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors shadow-sm dark:shadow-none border border-gray-200 dark:border-transparent"
                   >
                     <X size={24} />
                   </button>
@@ -478,17 +478,17 @@ export function ProDashboard() {
                     <SmartVault />
                   ) : (
                     <>
-                      <div className="w-20 h-20 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 border border-gray-200 dark:border-white/10 text-gray-400 dark:!text-white/40 mx-auto">
+                      <div className="w-20 h-20 bg-gray-100 dark:bg-white/10 rounded-full flex items-center justify-center mb-6 border border-gray-200 dark:border-white/10 text-neutral-500 dark:text-neutral-400 mx-auto">
                         <Clock size={32} />
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:!text-white/90 mb-2">Module en cours d'intégration</h3>
-                      <p className="text-gray-500 dark:!text-white/50 max-w-md mx-auto">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white/90 mb-2">Module en cours d'intégration</h3>
+                      <p className="text-neutral-600 dark:text-neutral-300 dark:text-white/50 max-w-md mx-auto">
                         Cet outil expert est actuellement en phase de développement. 
                         Il sera disponible dans la prochaine mise à jour de votre espace professionnel Wallnut.
                       </p>
                       <button 
                         onClick={() => setActiveTool(null)}
-                        className="mt-8 px-8 py-3 bg-gray-100 dark:bg-white/10 text-gray-900 dark:!text-white font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-white/20 transition-colors border border-gray-200 dark:border-white/10 mx-auto shadow-sm dark:shadow-none"
+                        className="mt-8 px-8 py-3 bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-white/20 transition-colors border border-gray-200 dark:border-white/10 mx-auto shadow-sm dark:shadow-none"
                       >
                         Retour aux outils
                       </button>
@@ -529,7 +529,7 @@ function TabButton({ active, onClick, icon: Icon, label }: { active: boolean, on
       onClick={onClick} 
       className={cn(
         "px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap",
-        active ? "bg-gray-900 text-white dark:bg-white dark:text-black shadow-lg" : "text-gray-500 dark:!text-white/60 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
+        active ? "bg-gray-900 text-white dark:bg-white dark:text-black shadow-lg" : "text-neutral-600 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10"
       )}
     >
       <Icon size={16} /> {label}
@@ -543,8 +543,8 @@ function GlassCard({ children, className, hoverEffect = true, onClick }: { child
       whileHover={hoverEffect ? { scale: 1.02, rotateX: 2, rotateY: -2 } : {}}
       style={hoverEffect ? { perspective: 1000 } : {}}
       className={cn(
-        "bg-white dark:bg-white/5 backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2rem] p-6 shadow-xl",
-        "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-black/5 dark:before:from-white/10 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity text-gray-900 dark:!text-white",
+        "bg-white dark:bg-white/10 backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2rem] p-6 shadow-xl",
+        "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-black/5 dark:before:from-white/10 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity text-gray-900 dark:text-white",
         className
       )}
       onClick={onClick}
@@ -599,20 +599,20 @@ function SynthesePortefeuilleView({ properties, onSelectProp }: { properties: Pr
           { label: 'Dossiers Actifs', value: summary.seizedAssetsCount.toString() },
         ].map((stat, i) => (
           <GlassCard key={i} className="p-5">
-             <div className="text-[10px] font-bold text-slate-400 dark:!text-white/40 uppercase tracking-widest">{stat.label}</div>
-             <div className="text-2xl font-black text-slate-900 dark:!text-white mt-1">{stat.value}</div>
+             <div className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">{stat.label}</div>
+             <div className="text-2xl font-black text-neutral-900 dark:text-white mt-1">{stat.value}</div>
           </GlassCard>
         ))}
       </div>
 
       <GlassCard className="overflow-hidden p-0 border-t-0 border-x-0 rounded-t-[2rem]">
         <div className="p-6 border-b border-gray-200 dark:border-white/10">
-          <h3 className="text-lg font-bold text-slate-900 dark:!text-white">Synthèse Financière</h3>
+          <h3 className="text-lg font-bold text-neutral-900 dark:text-white">Synthèse Financière</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr className="bg-gray-50/50 dark:bg-white/5 text-[10px] uppercase font-bold text-slate-400 dark:!text-white/40 tracking-wider">
+              <tr className="bg-gray-50/50 dark:bg-white/10 text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 tracking-wider">
                 <th className="py-4 px-6">Dossier</th>
                 <th className="py-4 px-6">Valeur Réf.</th>
                 <th className="py-4 px-6">Base Int.</th>
@@ -627,10 +627,10 @@ function SynthesePortefeuilleView({ properties, onSelectProp }: { properties: Pr
                 return (
                   <tr key={asset.id} className="border-b border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/10 cursor-pointer transition-colors" onClick={() => prop && onSelectProp(prop)}>
                     <td className="py-4 px-6">
-                      <div className="font-bold text-slate-900 dark:!text-white">{asset.city}</div>
-                      <div className="text-slate-400 dark:!text-white/40 text-xs">#{prop?.referenceNumber}</div>
+                      <div className="font-bold text-neutral-900 dark:text-white">{asset.city}</div>
+                      <div className="text-neutral-500 dark:text-neutral-400 text-xs">#{prop?.referenceNumber}</div>
                     </td>
-                    <td className="py-4 px-6 font-bold text-slate-700 dark:!text-white/80">{formatEur(asset.referenceValue)}</td>
+                    <td className="py-4 px-6 font-bold text-slate-700 dark:text-white/80">{formatEur(asset.referenceValue)}</td>
                     <td className="py-4 px-6 font-bold text-blue-600 dark:text-blue-400">{formatEur(asset.baseIntervention)}</td>
                     <td className="py-4 px-6">
                       <span className={cn("px-2 py-1 rounded-md text-[10px] font-bold border", asset.fundScore >= 70 ? 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : asset.fundScore >= 55 ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' : 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30')}>
@@ -640,11 +640,11 @@ function SynthesePortefeuilleView({ properties, onSelectProp }: { properties: Pr
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
                         <div className={cn("w-2 h-2 rounded-full", asset.dossierLight === 'Vert' ? 'bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.5)]' : asset.dossierLight === 'Orange' ? 'bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.5)]' : 'bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.5)]')} />
-                        <span className="font-bold text-slate-700 dark:!text-white/80 tracking-wide text-xs">{asset.dossierLight}</span>
+                        <span className="font-bold text-slate-700 dark:text-white/80 tracking-wide text-xs">{asset.dossierLight}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <div className="text-xs font-medium text-slate-500 dark:!text-white/60">{asset.expertOpinion}</div>
+                      <div className="text-xs font-medium text-neutral-600 dark:text-neutral-300">{asset.expertOpinion}</div>
                     </td>
                   </tr>
                 );

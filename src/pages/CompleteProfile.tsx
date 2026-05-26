@@ -118,7 +118,7 @@ export function CompleteProfile() {
           <h1 className="text-app-xl font-bold text-gray-800 text-center mb-2">
             Bienvenue sur Wallnut 🏡
           </h1>
-          <p className="text-gray-500 text-center mb-8">
+          <p className="text-neutral-600 dark:text-neutral-300 text-center mb-8">
             Pour finaliser votre inscription, dites-nous qui vous êtes :
           </p>
           <div className="grid grid-cols-1 gap-4">
@@ -132,7 +132,7 @@ export function CompleteProfile() {
               <h3 className="font-bold text-gray-800 group-hover:text-blue-700">
                 Particulier
               </h3>
-              <p className="text-app-sm text-gray-500 mt-1">
+              <p className="text-app-sm text-neutral-600 dark:text-neutral-300 mt-1">
                 Je cherche ou vends un bien immobilier
               </p>
             </button>
@@ -146,7 +146,7 @@ export function CompleteProfile() {
               <h3 className="font-bold text-gray-800 group-hover:text-green-700">
                 Professionnel
               </h3>
-              <p className="text-app-sm text-gray-500 mt-1">
+              <p className="text-app-sm text-neutral-600 dark:text-neutral-300 mt-1">
                 Je suis un professionnel de l'immobilier
               </p>
             </button>
@@ -162,7 +162,7 @@ export function CompleteProfile() {
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
         <button
           onClick={() => setProfileType(null)}
-          className="text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1 text-app-sm"
+          className="text-neutral-500 dark:text-neutral-400 hover:text-gray-600 mb-4 flex items-center gap-1 text-app-sm"
         >
           ← Retour
         </button>
@@ -322,7 +322,7 @@ export function CompleteProfile() {
                     {errors.siret.message}
                   </p>
                 )}
-                <p className="text-gray-400 text-app-xs mt-1">14 chiffres</p>
+                <p className="text-neutral-500 dark:text-neutral-400 text-app-xs mt-1">14 chiffres</p>
               </div>
 
               {/* Métier */}

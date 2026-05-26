@@ -157,7 +157,7 @@ export const DocumentSlot: React.FC<DocumentSlotProps> = ({ document, status, on
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 z-50 backdrop-blur-md bg-white/40 flex flex-col items-center justify-center border-4 border-secondary border-dashed rounded-3xl"
+              className="absolute inset-0 z-50 backdrop-blur-xl bg-white/40 flex flex-col items-center justify-center border-4 border-secondary border-dashed rounded-3xl"
             >
               <UploadCloud className="w-12 h-12 text-secondary mb-2 animate-bounce" />
               <p className="font-bold text-primary">Déposer ici</p>

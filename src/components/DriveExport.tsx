@@ -164,10 +164,10 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
             </div>
             <div>
               <h3 className="text-white font-bold text-base">Export du dossier</h3>
-              <p className="text-slate-500 text-xs">{completedDocs.length} document(s) prêt(s)</p>
+              <p className="text-neutral-600 dark:text-neutral-300 text-xs">{completedDocs.length} document(s) prêt(s)</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={onClose} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/10 transition-colors">
             <X size={18} />
           </button>
         </div>
@@ -185,15 +185,15 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
               <div className="text-2xl font-black text-amber-400">{skippedDocs.length}</div>
               <div className="text-amber-600 text-xs font-medium mt-0.5">Passés</div>
             </div>
-            <div className="bg-slate-900/40 dark:bg-white/5 backdrop-blur-md border border-slate-700/50 dark:border-white/20 rounded-2xl p-3 text-center">
-              <div className="text-2xl font-black text-slate-400">{pendingDocs.length}</div>
+            <div className="bg-slate-900/40 dark:bg-white/10 backdrop-blur-xl border border-slate-700/50 dark:border-white/20 rounded-2xl p-3 text-center">
+              <div className="text-2xl font-black text-neutral-500 dark:text-neutral-400">{pendingDocs.length}</div>
               <div className="text-slate-600 text-xs font-medium mt-0.5">En attente</div>
             </div>
           </div>
 
           {/* Staple mode */}
           <div>
-            <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+            <h4 className="text-neutral-500 dark:text-neutral-400 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
               <Paperclip size={12} />
               Mode d'agrafage
             </h4>
@@ -224,7 +224,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
 
           {/* Drive folder structure preview */}
           <div>
-            <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+            <h4 className="text-neutral-500 dark:text-neutral-400 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
               <FolderOpen size={12} />
               Structure Drive
             </h4>
@@ -241,12 +241,12 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
               )}
               {[...new Set(completedDocs.map(d => d.category))].map(cat => (
                 <div key={cat}>
-                  <div className="ml-4 text-slate-400 flex items-center gap-1.5">
+                  <div className="ml-4 text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
                     <FolderOpen size={11} />
                     {cat}/
                   </div>
                   {completedDocs.filter(d => d.category === cat).map(doc => (
-                    <div key={doc.id} className="ml-8 text-slate-500 flex items-center gap-1.5">
+                    <div key={doc.id} className="ml-8 text-neutral-600 dark:text-neutral-300 flex items-center gap-1.5">
                       <FileText size={10} />
                       {doc.icon} {doc.name}.pdf
                       <span className="text-slate-700">({doc.pages.length}p)</span>
@@ -259,7 +259,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
 
           {/* Document list with expand */}
           <div>
-            <h4 className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">Documents inclus</h4>
+            <h4 className="text-neutral-500 dark:text-neutral-400 text-xs font-bold uppercase tracking-widest mb-3">Documents inclus</h4>
             <div className="space-y-2">
               {completedDocs.map(doc => (
                 <div key={doc.id} className="bg-green-900/10 border border-green-500/15 rounded-2xl overflow-hidden">
@@ -273,7 +273,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                       <p className="text-green-500 text-xs">{doc.pages.length} page(s)</p>
                     </div>
                     <Check size={14} className="text-green-400 shrink-0" />
-                    {expandedDocs.has(doc.id) ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
+                    {expandedDocs.has(doc.id) ? <ChevronUp size={14} className="text-neutral-600 dark:text-neutral-300" /> : <ChevronDown size={14} className="text-neutral-600 dark:text-neutral-300" />}
                   </button>
                   <AnimatePresence>
                     {expandedDocs.has(doc.id) && (
@@ -285,7 +285,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                       >
                         <div className="flex gap-2 p-3 overflow-x-auto">
                           {doc.pages.map((page, i) => (
-                            <div key={page.id} className="relative w-14 h-20 rounded-xl overflow-hidden bg-slate-900/40 dark:bg-white/5 backdrop-blur-md border border-slate-700/50 dark:border-white/20 shrink-0">
+                            <div key={page.id} className="relative w-14 h-20 rounded-xl overflow-hidden bg-slate-900/40 dark:bg-white/10 backdrop-blur-xl border border-slate-700/50 dark:border-white/20 shrink-0">
                               <div className="absolute inset-0 flex items-center justify-center text-2xl">{doc.icon}</div>
                               <div className="absolute bottom-0.5 left-0 right-0 text-center text-[9px] text-white/50">{i + 1}</div>
                             </div>
@@ -305,7 +305,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {pendingDocs.map(doc => (
-                      <span key={doc.id} className="text-xs bg-slate-800 text-slate-500 px-2 py-0.5 rounded-full">
+                      <span key={doc.id} className="text-xs bg-slate-800 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-full">
                         {doc.icon} {doc.name}
                       </span>
                     ))}
@@ -326,7 +326,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-                <p className="text-slate-500 text-xs text-center">{progressLabel}</p>
+                <p className="text-neutral-600 dark:text-neutral-300 text-xs text-center">{progressLabel}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -377,7 +377,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                 "w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all",
                 completedDocs.length > 0 && status === 'idle'
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02]"
-                  : "bg-white/5 text-white/20 cursor-not-allowed"
+                  : "bg-white/10 text-white/20 cursor-not-allowed"
               )}
             >
               {status === 'generating' ? (
@@ -398,7 +398,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
                 "w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all",
                 completedDocs.length > 0 && status === 'idle'
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02]"
-                  : "bg-white/5 text-white/20 cursor-not-allowed"
+                  : "bg-white/10 text-white/20 cursor-not-allowed"
               )}
             >
               {status === 'uploading' || status === 'generating' ? (
@@ -416,7 +416,7 @@ export function DriveExport({ documents, clientType, clientName, onClose }: Prop
             className={cn(
               "w-full py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all border",
               completedDocs.length > 0
-                ? "bg-white/5 hover:bg-white/10 text-white/70 border-white/10 hover:border-white/20"
+                ? "bg-white/10 hover:bg-white/10 text-white/70 border-white/10 hover:border-white/20"
                 : "bg-white/3 text-white/20 cursor-not-allowed border-white/5"
             )}
           >

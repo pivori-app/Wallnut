@@ -231,20 +231,20 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black md:bg-black/80 md:backdrop-blur-md p-0 md:p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black md:bg-black/80 md:backdrop-blur-xl p-0 md:p-4">
       <div className="relative w-full h-[100dvh] md:max-w-[450px] md:h-[85vh] bg-black md:bg-[#111] md:rounded-3xl overflow-hidden md:shadow-2xl flex flex-col md:border border-white/10">
         
         {/* Header */}
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent">
-          <button onClick={onCancel} className="p-2 text-white/70 hover:text-white rounded-full bg-black/40 backdrop-blur-md transition-colors">
+          <button onClick={onCancel} className="p-2 text-white/70 hover:text-white rounded-full bg-black/40 backdrop-blur-xl transition-colors">
             <X size={20} />
           </button>
-          <div className="px-4 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/90 text-app-sm font-medium flex items-center gap-2 shadow-lg shadow-black/20">
+          <div className="px-4 py-1.5 rounded-full bg-black/50 backdrop-blur-xl border border-white/10 text-white/90 text-app-sm font-medium flex items-center gap-2 shadow-lg shadow-black/20">
             <ScanAlertIcon /> {expectedDocType}
           </div>
           <div className="flex gap-2">
             {hasFlash && (
-               <button onClick={toggleFlash} className={cn("p-2 rounded-full backdrop-blur-md transition-colors", flashOn ? "bg-white text-black" : "bg-black/40 text-white/70 hover:text-white")}>
+               <button onClick={toggleFlash} className={cn("p-2 rounded-full backdrop-blur-xl transition-colors", flashOn ? "bg-white text-black" : "bg-black/40 text-white/70 hover:text-white")}>
                  {flashOn ? <Zap size={20} /> : <ZapOff size={20} />}
                </button>
             )}
@@ -319,7 +319,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                  <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center mb-3">
                     <div className="w-12 h-12 rounded-full border-2 border-white/50 border-t-blue-400 animate-spin" />
                  </div>
-                 <span className="text-white/90 text-sm font-bold tracking-wide bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg shadow-black/50 border border-white/10">{guidanceMsg}</span>
+                 <span className="text-white/90 text-sm font-bold tracking-wide bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg shadow-black/50 border border-white/10">{guidanceMsg}</span>
               </motion.div>
             )}
             {isStable && validationStatus === 'idle' && (
@@ -327,13 +327,13 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                  <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mb-3">
                     <Check className="text-green-500" size={32} />
                  </div>
-                 <span className="text-green-400 text-sm font-bold tracking-wide bg-green-950/80 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg border border-green-500/30">Capture automatique prête</span>
+                 <span className="text-green-400 text-sm font-bold tracking-wide bg-green-950/80 px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg border border-green-500/30">Capture automatique prête</span>
               </motion.div>
             )}
             {validationStatus === 'checking' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center">
                  <Loader2 className="animate-spin text-blue-400 mb-3" size={40} />
-                 <span className="text-blue-200 text-sm font-bold tracking-wide bg-blue-900/60 px-4 py-1.5 rounded-full backdrop-blur-md border border-blue-500/30">Analyse du document...</span>
+                 <span className="text-blue-200 text-sm font-bold tracking-wide bg-blue-900/60 px-4 py-1.5 rounded-full backdrop-blur-xl border border-blue-500/30">Analyse du document...</span>
               </motion.div>
             )}
           </div>
@@ -384,7 +384,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="absolute inset-0 z-40 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+              className="absolute inset-0 z-40 bg-black/60 backdrop-blur-xl flex items-center justify-center p-4"
             >
               <div className="w-full max-w-sm bg-[#0F172A] border border-blue-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
                 <div className="h-32 overflow-hidden relative border-b border-blue-500/20">
@@ -403,23 +403,23 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                 
                 <div className="p-5 flex flex-col gap-3 overflow-y-auto custom-scrollbar max-h-[60vh]">
                   <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
-                    <span className="text-slate-400">Nature Reconnue</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">Nature Reconnue</span>
                     <span className="text-white font-semibold text-right max-w-[60%] truncate">{scanReview.aiData.docType}</span>
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
-                    <span className="text-slate-400">Intégrité & Netteté</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">Intégrité & Netteté</span>
                     <span className="text-green-400 font-semibold">{scanReview.aiData.readability}</span>
                   </div>
                   {scanReview.aiData.amount && (
                     <div className="flex items-center justify-between pb-2 border-b border-white/5 text-sm">
-                      <span className="text-slate-400">Montant Certifié</span>
+                      <span className="text-neutral-500 dark:text-neutral-400">Montant Certifié</span>
                       <span className="text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20">{scanReview.aiData.amount}</span>
                     </div>
                   )}
                   <div className="flex flex-col gap-1.5 pb-3 border-b border-white/5 text-sm mt-1">
-                    <span className="text-slate-400 mb-1">Entité / Titulaires et Adresse Postale</span>
-                    <span className="text-white font-medium bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.names.join(' • ')}</span>
-                    <span className="text-white/60 text-xs bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.address}</span>
+                    <span className="text-neutral-500 dark:text-neutral-400 mb-1">Entité / Titulaires et Adresse Postale</span>
+                    <span className="text-white font-medium bg-white/10 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.names.join(' • ')}</span>
+                    <span className="text-white/60 text-xs bg-white/10 px-3 py-1.5 rounded-lg border border-white/5">{scanReview.aiData.address}</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs font-semibold text-green-400 bg-green-500/10 px-3 py-2.5 rounded-xl border border-green-500/20 shadow-inner mt-1">
                     <ShieldCheck size={16} className="shrink-0 mt-0.5" /> 
@@ -427,7 +427,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
                   </div>
 
                   <div className="flex gap-3 mt-4">
-                     <button onClick={cancelScanReview} className="flex-1 py-3 rounded-xl bg-white/5 text-white font-bold text-sm hover:bg-white/10 transition-colors border border-white/10">Rejeter</button>
+                     <button onClick={cancelScanReview} className="flex-1 py-3 rounded-xl bg-white/10 text-white font-bold text-sm hover:bg-white/10 transition-colors border border-white/10">Rejeter</button>
                      <button onClick={confirmScanReview} className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-500 transition-colors shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-500/50">Certifier & Joindre</button>
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export function SmartScannerPro({ expectedDocType, onComplete, onCancel }: Smart
 
             {/* Empty space for flex balance or extra tool */}
             <div className="w-32 flex justify-end">
-              <button disabled className="p-3 bg-white/5 text-white/30 rounded-full">
+              <button disabled className="p-3 bg-white/10 text-white/30 rounded-full">
                 <Layers size={20} />
               </button>
             </div>

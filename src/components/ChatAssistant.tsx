@@ -91,7 +91,7 @@ export function ChatAssistant() {
                     "max-w-[80%] p-3 rounded-2xl text-app-sm",
                     msg.role === 'user' 
                       ? "bg-primary text-white rounded-tr-none px-4" 
-                      : "bg-black/5 dark:bg-white/5 rounded-tl-none px-4 markdown-body-chat"
+                      : "bg-black/5 dark:bg-white/10 rounded-tl-none px-4 markdown-body-chat"
                   )}>
                     {msg.role === 'user' ? (
                       msg.content
@@ -121,7 +121,7 @@ export function ChatAssistant() {
                   <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
                     <Bot className="w-4 h-4" />
                   </div>
-                  <div className="bg-black/5 dark:bg-white/5 p-4 rounded-2xl rounded-tl-none">
+                  <div className="bg-black/5 dark:bg-white/10 p-4 rounded-2xl rounded-tl-none">
                     <Loader2 className="w-4 h-4 animate-spin opacity-40" />
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export function ChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Posez votre question..."
-                className="flex-1 bg-black/5 dark:bg-white/5 border-none rounded-xl px-4 py-3 text-app-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                className="flex-1 bg-black/5 dark:bg-white/10 border-none rounded-xl px-4 py-3 text-app-sm focus:ring-2 focus:ring-primary/20 outline-none"
               />
               <button 
                 type="submit"

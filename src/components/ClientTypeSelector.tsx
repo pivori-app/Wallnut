@@ -32,7 +32,7 @@ export function ClientTypeSelector({ onSelect }: Props) {
           </div>
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">DocScan Pro</h1>
           <p className="text-blue-300 text-lg font-medium">Scanner intelligent de documents</p>
-          <p className="text-slate-500 text-sm mt-2">Guidage IA • PDF • Google Drive</p>
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm mt-2">Guidage IA • PDF • Google Drive</p>
         </motion.div>
 
         {/* Type Selection */}
@@ -42,7 +42,7 @@ export function ClientTypeSelector({ onSelect }: Props) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="space-y-4"
         >
-          <p className="text-slate-400 text-center text-sm font-medium uppercase tracking-widest mb-6">
+          <p className="text-neutral-500 dark:text-neutral-400 text-center text-sm font-medium uppercase tracking-widest mb-6">
             Choisissez votre profil
           </p>
 
@@ -63,12 +63,12 @@ export function ClientTypeSelector({ onSelect }: Props) {
                   <h3 className="text-white font-bold text-xl">Particulier</h3>
                   <ChevronRight size={20} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
                 </div>
-                <p className="text-slate-400 text-sm mt-1">CNI, domicile, avis d'impôt, revenus…</p>
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">CNI, domicile, avis d'impôt, revenus…</p>
                 <div className="flex gap-2 mt-3">
                   {['🪪', '🏠', '📋', '🏦', '💰'].map((icon, i) => (
                     <span key={i} className="text-lg">{icon}</span>
                   ))}
-                  <span className="text-slate-500 text-sm self-center">+4</span>
+                  <span className="text-neutral-600 dark:text-neutral-300 text-sm self-center">+4</span>
                 </div>
               </div>
             </div>
@@ -91,12 +91,12 @@ export function ClientTypeSelector({ onSelect }: Props) {
                   <h3 className="text-white font-bold text-xl">Professionnel</h3>
                   <ChevronRight size={20} className="text-indigo-400 group-hover:translate-x-1 transition-transform" />
                 </div>
-                <p className="text-slate-400 text-sm mt-1">Kbis, statuts, bilans, liasse fiscale…</p>
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Kbis, statuts, bilans, liasse fiscale…</p>
                 <div className="flex gap-2 mt-3">
                   {['🏢', '📜', '🪪', '🏦', '📊'].map((icon, i) => (
                     <span key={i} className="text-lg">{icon}</span>
                   ))}
-                  <span className="text-slate-500 text-sm self-center">+6</span>
+                  <span className="text-neutral-600 dark:text-neutral-300 text-sm self-center">+6</span>
                 </div>
               </div>
             </div>

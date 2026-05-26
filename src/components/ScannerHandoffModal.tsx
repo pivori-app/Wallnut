@@ -67,7 +67,7 @@ export function ScannerHandoffModal({ onLocalScanner, onCancel, onSuccess }: Sca
           </div>
           <button 
             onClick={onCancel}
-            className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition-colors"
           >
             <X size={18} />
           </button>
@@ -90,7 +90,7 @@ export function ScannerHandoffModal({ onLocalScanner, onCancel, onSuccess }: Sca
                   <QRCodeSVG value={sessionUrl} size={180} level="H" includeMargin={true} fgColor="#0F172A" />
                 </div>
                 
-                <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400 uppercase tracking-widest bg-black/30 px-4 py-2 rounded-xl mb-4 border border-white/5">
+                <div className="flex items-center gap-3 text-[11px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest bg-black/30 px-4 py-2 rounded-xl mb-4 border border-white/5">
                   <ShieldCheck size={14} className="text-green-400" /> E2E Encrypted WebSockets
                 </div>
               </motion.div>
@@ -150,7 +150,7 @@ export function ScannerHandoffModal({ onLocalScanner, onCancel, onSuccess }: Sca
 
               <button 
                 onClick={onLocalScanner}
-                className="mt-6 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold transition-all w-full text-sm group"
+                className="mt-6 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/10 border border-white/10 hover:bg-white/10 text-white font-bold transition-all w-full text-sm group"
               >
                 <Camera size={18} className="text-white/50 group-hover:text-white transition-colors" />
                 Utiliser le flux matériel brut (Webcam PC)

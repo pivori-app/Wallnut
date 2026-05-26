@@ -158,7 +158,7 @@ export function SmartScanner({
           <div className="flex items-center justify-between w-full">
             <button
               onClick={onCancel}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-white/90 hover:text-white rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-colors text-xs font-bold border border-white/20 shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-white/90 hover:text-white rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-xl transition-colors text-xs font-bold border border-white/20 shadow-sm"
             >
               <ChevronLeft size={16} />
               <span>Retour à l'application</span>
@@ -168,7 +168,7 @@ export function SmartScanner({
               {!isMobileSession && (
                 <button
                   onClick={onSwitchToMobile}
-                  className="p-2 text-white/60 hover:text-white rounded-full bg-white/10 backdrop-blur-md transition-colors border border-white/10"
+                  className="p-2 text-white/60 hover:text-white rounded-full bg-white/10 backdrop-blur-xl transition-colors border border-white/10"
                   title="Continuer sur mobile"
                 >
                   <Smartphone size={16} />
@@ -177,7 +177,7 @@ export function SmartScanner({
               {hasFlash && (
                 <button
                   onClick={toggleFlash}
-                  className={cn("p-2 rounded-full backdrop-blur-md transition-colors border border-white/10", flashOn ? "bg-secondary text-white border-secondary" : "bg-white/10 text-white/60 hover:text-white")}
+                  className={cn("p-2 rounded-full backdrop-blur-xl transition-colors border border-white/10", flashOn ? "bg-secondary text-white border-secondary" : "bg-white/10 text-white/60 hover:text-white")}
                 >
                   {flashOn ? <Zap size={16} /> : <ZapOff size={16} />}
                 </button>
@@ -187,7 +187,7 @@ export function SmartScanner({
 
           <div className="flex items-center justify-between w-full mt-2">
             <div className="flex flex-col">
-              <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold flex items-center gap-2 max-w-[250px]">
+              <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white font-bold flex items-center gap-2 max-w-[250px]">
                 <span className="text-xl shrink-0">{document.icon}</span>
                 <span className="truncate">{document.name}</span>
               </div>
@@ -360,11 +360,11 @@ export function SmartScanner({
 
           {/* BRIGHTNESS & QUALITY INDICATORS */}
           <div className="absolute top-28 right-4 flex flex-col gap-2">
-            <div className="bg-primary-dark/80 backdrop-blur-md rounded-xl px-3 py-2 text-center border border-white/10 shadow-lg">
+            <div className="bg-primary-dark/80 backdrop-blur-xl rounded-xl px-3 py-2 text-center border border-white/10 shadow-lg">
               <Sun size={16} className={cn("mx-auto mb-1", brightnessColor)} />
               <span className={cn("text-[10px] font-bold uppercase tracking-widest", brightnessColor)}>{brightnessLabel}</span>
             </div>
-            <div className={cn("bg-primary-dark/80 backdrop-blur-md rounded-xl px-3 py-2 text-center border shadow-lg", isStable ? "border-green-500/50" : "border-white/10")}>
+            <div className={cn("bg-primary-dark/80 backdrop-blur-xl rounded-xl px-3 py-2 text-center border shadow-lg", isStable ? "border-green-500/50" : "border-white/10")}>
               <div className={cn("w-2 h-2 rounded-full mx-auto mb-1", isStable ? "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" : "bg-white/30 animate-pulse")} />
               <span className={cn("text-[10px] font-bold uppercase tracking-widest", isStable ? "text-green-400" : "text-white/50")}>
                 {isStable ? 'Stable' : 'Bouge'}
@@ -474,7 +474,7 @@ export function SmartScanner({
               ))}
 
               {/* Add page indicator */}
-              <div className="w-16 h-24 rounded-2xl border-2 border-dashed border-white/20 shrink-0 flex flex-col items-center justify-center gap-1.5 bg-white/5">
+              <div className="w-16 h-24 rounded-2xl border-2 border-dashed border-white/20 shrink-0 flex flex-col items-center justify-center gap-1.5 bg-white/10">
                 <Plus size={20} className="text-white/40" />
                 <span className="text-white/40 text-[10px] font-bold">Ajouter</span>
               </div>

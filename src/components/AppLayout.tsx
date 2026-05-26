@@ -51,10 +51,11 @@ const SupabaseConnectionBadge = () => {
       <button 
         onClick={testConnection}
         disabled={status === 'testing'}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold border transition-colors ${
-          status === 'success' ? 'bg-green-50 text-green-700 border-green-200' :
-          status === 'error' ? 'bg-red-50 text-red-700 border-red-200' :
-          'bg-slate-50 text-slate-600 dark:text-white/70 border-slate-200 hover:bg-slate-100'
+        aria-label="Vérifier la connexion à la base de données"
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold border transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+          status === 'success' ? 'bg-success-light text-success-dark border-success/30' :
+          status === 'error' ? 'bg-danger-light text-danger-dark border-danger/30' :
+          'bg-neutral-50 text-neutral-600 dark:bg-surface-dark dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800'
         }`}
       >
         {status === 'testing' ? <Loader2 size={12} className="animate-spin" /> : 
@@ -195,19 +196,23 @@ const NavItemLink = ({
 }) => (
   <Link
     to={targetPath}
+    aria-current={active ? 'page' : undefined}
     className={`
       flex items-center gap-3 px-3 py-2.5 mx-2 rounded-xl
-      text-[13.5px] font-medium transition-all duration-150
-      \${
+      text-[13.5px] font-medium transition-all duration-150 relative overflow-hidden group
+      ${
         active
-          ? 'bg-primary/8 text-primary font-semibold'
-          : 'text-slate-500 dark:text-white/60 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-800 dark:text-white/90'
+          ? 'bg-primary/10 text-primary font-bold shadow-sm'
+          : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/10 hover:text-neutral-900 dark:hover:text-white'
       }
     `}
   >
+    {active && (
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full shadow-[0_0_8px_rgba(10,43,78,0.6)]" />
+    )}
     <span
       className={`flex-shrink-0 transition-colors
-        \${active ? 'text-primary' : 'text-slate-400'}`}
+        ${active ? 'text-primary' : 'text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300'}`}
     >
       {item.icon}
     </span>
@@ -317,7 +322,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     ? { label: 'Pro', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
     : isAdmin
     ? { label: 'Institution', cls: 'bg-primary/8 text-primary border-primary/20' }
-    : { label: 'Particulier', cls: 'bg-slate-100 text-slate-500 dark:text-white/60 border-slate-200' };
+    : { label: 'Particulier', cls: 'bg-slate-100 text-neutral-600 dark:text-neutral-300 border-slate-200' };
 
   // ─────────────────────────────────────────────────────
   // SIDEBAR CONTENT
@@ -343,7 +348,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         <button
           onClick={() => setSidebarOpen(false)}
           className="w-8 h-8 flex items-center justify-center 
-                     rounded-lg text-slate-400 hover:text-slate-600 dark:text-white/70 
+                     rounded-lg text-neutral-500 dark:text-neutral-400 hover:text-slate-600 dark:text-white/70 
                      hover:bg-slate-100 transition-colors"
           aria-label="Fermer le menu"
         >
@@ -371,7 +376,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
           {/* Infos */}
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-semibold text-slate-800 dark:text-white/90 
+            <p className="text-[13px] font-semibold text-neutral-800 dark:text-white/90 
                           truncate leading-tight">
               {profile?.displayName || profile?.email || (isPro ? 'Mon compte Pro' : 'Mon compte Particulier')}
             </p>
@@ -388,7 +393,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
           <Link
             to="/settings"
             className="w-7 h-7 flex items-center justify-center 
-                       rounded-lg text-slate-400 hover:text-slate-600 dark:text-white/70 
+                       rounded-lg text-neutral-500 dark:text-neutral-400 hover:text-slate-600 dark:text-white/70 
                        hover:bg-white transition-colors flex-shrink-0"
             title="Paramètres"
           >
@@ -402,7 +407,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                       scrollbar-thin scrollbar-thumb-slate-200">
         {/* Label section */}
         <p className="px-5 mb-1.5 text-[10px] font-bold 
-                      uppercase tracking-[0.1em] text-slate-400">
+                      uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
           Navigation
         </p>
 
@@ -424,7 +429,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Label section compte */}
         <p className="px-5 mb-1.5 text-[10px] font-bold 
-                      uppercase tracking-[0.1em] text-slate-400">
+                      uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
           Compte
         </p>
 
@@ -460,7 +465,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   // RENDER
   // ─────────────────────────────────────────────────────
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-slate-50 dark:bg-[#0A0F1C] text-slate-900 dark:text-white">
+    <div className="flex h-[100dvh] overflow-hidden bg-slate-50 dark:bg-[#0A0F1C] text-neutral-900 dark:text-white">
 
       {/* ══════════════════════════════════════════════
           SIDEBAR MOBILE & DESKTOP (drawer)
@@ -514,7 +519,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
             <button
               onClick={() => setSidebarOpen(true)}
               className="w-9 h-9 flex items-center justify-center 
-                         rounded-xl text-slate-500 dark:text-white/60 hover:text-slate-800 dark:text-white/90
+                         rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:text-white/90
                          hover:bg-slate-100 transition-colors flex-shrink-0"
               aria-label="Ouvrir le menu"
             >
@@ -523,7 +528,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
             {/* Titre de page */}
             <div className="min-w-0">
-              <h1 className="text-[16px] font-bold text-slate-800 dark:text-white/90 
+              <h1 className="text-[16px] font-bold text-neutral-800 dark:text-white/90 
                              leading-tight truncate">
                 {pageTitle}
               </h1>
@@ -538,7 +543,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
             {/* Notifications */}
             <button
               className="relative w-9 h-9 flex items-center justify-center 
-                         rounded-xl text-slate-500 dark:text-white/60 hover:text-slate-800 dark:text-white/90
+                         rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:text-white/90
                          hover:bg-slate-100 transition-colors"
               aria-label="Notifications"
             >
@@ -578,11 +583,11 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
                 {/* Nom — tablette et + */}
                 <div className="hidden sm:block text-left min-w-0">
-                  <p className="text-[13px] font-semibold text-slate-800 dark:text-white/90 
+                  <p className="text-[13px] font-semibold text-neutral-800 dark:text-white/90 
                                 leading-tight truncate max-w-[130px]">
                     {profile?.displayName?.split(' ')[0] || (isPro ? 'Mon compte Pro' : 'Mon compte Particulier')}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-white/60 leading-none mt-1 font-medium">
+                  <p className="text-[11px] text-neutral-600 dark:text-neutral-300 leading-none mt-1 font-medium">
                     {roleBadge.label}
                   </p>
                 </div>
@@ -590,7 +595,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 <ChevronDown
                   size={15}
                   className={`
-                    text-slate-400 transition-transform duration-200
+                    text-neutral-500 dark:text-neutral-400 transition-transform duration-200
                     hidden sm:block flex-shrink-0
                     \${userMenuOpen ? 'rotate-180' : ''}
                   `}
@@ -609,10 +614,10 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 ">
                   {/* Entête dropdown */}
                   <div className="px-4 py-3 border-b border-slate-100 bg-slate-50">
-                    <p className="text-[13px] font-semibold text-slate-800 dark:text-white/90 truncate">
+                    <p className="text-[13px] font-semibold text-neutral-800 dark:text-white/90 truncate">
                       {profile?.displayName || (isPro ? 'Mon compte Pro' : 'Mon compte Particulier')}
                     </p>
-                    <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
                       {profile?.email || (isPro ? 'Espace Professionnel' : 'Espace Propriétaire')}
                     </p>
                   </div>
@@ -624,10 +629,10 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5
                                  text-[13px] text-slate-600 dark:text-white/70 font-medium
-                                 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white dark:text-white
+                                 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white dark:text-white
                                  transition-colors"
                     >
-                      <LayoutDashboard size={14} className="text-slate-400" />
+                      <LayoutDashboard size={14} className="text-neutral-500 dark:text-neutral-400" />
                       Mon tableau de bord
                     </Link>
 
@@ -636,10 +641,10 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5
                                  text-[13px] text-slate-600 dark:text-white/70 font-medium
-                                 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white dark:text-white
+                                 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white dark:text-white
                                  transition-colors"
                     >
-                      <Settings size={14} className="text-slate-400" />
+                      <Settings size={14} className="text-neutral-500 dark:text-neutral-400" />
                       Paramètres
                     </Link>
 
@@ -648,10 +653,10 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5
                                  text-[13px] text-slate-600 dark:text-white/70 font-medium
-                                 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white dark:text-white
+                                 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white dark:text-white
                                  transition-colors"
                     >
-                      <HelpCircle size={14} className="text-slate-400" />
+                      <HelpCircle size={14} className="text-neutral-500 dark:text-neutral-400" />
                       Centre d'aide
                     </Link>
                   </div>
@@ -691,13 +696,13 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                              border-t border-slate-100 bg-white
                              flex items-center justify-between gap-4
                              flex-shrink-0 relative z-10">
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
               © {new Date().getFullYear()} Wallnut — Tous droits réservés
             </p>
             <div className="flex items-center gap-3">
               <Link
                 to="/mentions-legales"
-                className="text-[11px] text-slate-400 hover:text-slate-600 dark:text-white/70 
+                className="text-[11px] text-neutral-500 dark:text-neutral-400 hover:text-slate-600 dark:text-white/70 
                            transition-colors"
               >
                 Mentions légales
@@ -705,7 +710,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
               <span className="text-slate-200">·</span>
               <Link
                 to="/rgpd"
-                className="text-[11px] text-slate-400 hover:text-slate-600 dark:text-white/70 
+                className="text-[11px] text-neutral-500 dark:text-neutral-400 hover:text-slate-600 dark:text-white/70 
                            transition-colors"
               >
                 RGPD
@@ -713,7 +718,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
               <span className="text-slate-200">·</span>
               <Link
                 to="/cgu"
-                className="text-[11px] text-slate-400 hover:text-slate-600 dark:text-white/70 
+                className="text-[11px] text-neutral-500 dark:text-neutral-400 hover:text-slate-600 dark:text-white/70 
                            transition-colors"
               >
                 CGU

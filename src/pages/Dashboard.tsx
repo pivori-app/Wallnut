@@ -71,7 +71,7 @@ export function Dashboard() {
             className="glass-card-3d p-6 rounded-3xl"
           >
             <div className="flex justify-between items-start mb-4">
-              <div className={cn("p-3 rounded-2xl bg-black/5 dark:bg-white/5", stat.color)}>
+              <div className={cn("p-3 rounded-2xl bg-black/5 dark:bg-white/10", stat.color)}>
                 <stat.icon className="w-6 h-6" />
               </div>
               <span className="text-app-xs font-bold text-success flex items-center gap-1">
@@ -125,7 +125,7 @@ export function Dashboard() {
           <h2 className="text-app-lg font-display font-bold">Actions Requises</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex gap-4 p-4 rounded-2xl bg-black/5 dark:bg-white/5 group hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+              <div key={i} className="flex gap-4 p-4 rounded-2xl bg-black/5 dark:bg-white/10 group hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 bg-white dark:bg-[#1a2234] rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110">
                   <AlertCircle className="w-6 h-6 text-warning" />
                 </div>
@@ -139,7 +139,7 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="touch-target min-h-[44px] w-full p-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-app-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <button className="touch-target min-h-[44px] w-full p-4 rounded-2xl border-2 border-black/5 dark:border-white/5 font-display font-bold text-app-sm hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             Voir tous les dossiers
           </button>
         </div>
@@ -151,7 +151,7 @@ export function Dashboard() {
            <h2 className="text-app-lg font-display font-bold">Pipeline Dossiers</h2>
            <div className="flex gap-2">
              {['Tous', 'En cours', 'Validés'].map(filter => (
-               <button key={filter} className={cn("px-4 py-1.5 rounded-full text-app-xs font-bold transition-all", filter === 'Tous' ? "bg-primary text-white" : "hover:bg-black/5 dark:hover:bg-white/5 opacity-60")}>
+               <button key={filter} className={cn("px-4 py-1.5 rounded-full text-app-xs font-bold transition-all", filter === 'Tous' ? "bg-primary text-white" : "hover:bg-black/5 dark:hover:bg-white/10 opacity-60")}>
                  {filter}
                </button>
              ))}
@@ -172,7 +172,7 @@ export function Dashboard() {
             </thead>
             <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {[1, 2, 3, 4].map((i) => (
-                <tr key={i} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors group cursor-pointer">
+                <tr key={i} className="hover:bg-black/5 dark:hover:bg-white/10 transition-colors group cursor-pointer">
                   <td className="py-4 pr-4 font-mono text-app-sm">#WN-00{i}</td>
                   <td className="py-4 px-4">
                     <p className="font-bold">Villa Mediterranean</p>

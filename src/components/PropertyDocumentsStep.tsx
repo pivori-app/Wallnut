@@ -62,7 +62,7 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
     <div className="glass p-6 md:p-10 rounded-[2.5rem] border border-gray-200 dark:border-white/10 space-y-8">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-app-2xl font-display font-bold text-slate-900 dark:!text-white">Checklist Documentaire</h2>
+          <h2 className="text-app-2xl font-display font-bold text-neutral-900 dark:text-white">Checklist Documentaire</h2>
           <p className="text-neutral-dark/60 mt-2">
             Complétez la conformité du bien avec une numérisation "Zéro Défaut". 
             Notre IA analyse automatiquement la qualité des pièces jointes.
@@ -76,24 +76,24 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
           return (
             <div key={doc.id} className={cn(
               "flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border transition-all",
-              isUploaded ? "bg-green-50/50 border-green-200" : "bg-gray-50/50 dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-primary/20"
+              isUploaded ? "bg-green-50/50 border-green-200" : "bg-gray-50/50 dark:bg-white/10 border-gray-200 dark:border-white/10 hover:border-primary/20"
             )}>
               <div className="flex items-center gap-4 mb-4 sm:mb-0">
                 <div className={cn(
                   "w-12 h-12 rounded-full flex items-center justify-center shrink-0",
-                  isUploaded ? "bg-green-100 text-green-600" : "bg-primary/5 text-slate-500 dark:!text-white"
+                  isUploaded ? "bg-green-100 text-green-600" : "bg-primary/5 text-neutral-600 dark:text-neutral-300 dark:text-white"
                 )}>
                   {isUploaded ? <CheckCircle2 size={24} /> : <FileText size={20} />}
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:!text-white">{doc.label}</h4>
+                  <h4 className="font-bold text-neutral-900 dark:text-white">{doc.label}</h4>
                   <p className="text-app-xs text-primary/50 mt-1">Requis pour l'audit de conformité</p>
                 </div>
               </div>
 
               <div className="flex gap-2 shrink-0">
                 {isUploaded ? (
-                  <div className="px-4 py-2 bg-white dark:bg-white/5 border border-green-200 rounded-xl text-green-700 text-app-sm font-bold flex items-center gap-2">
+                  <div className="px-4 py-2 bg-white dark:bg-white/10 border border-green-200 rounded-xl text-green-700 text-app-sm font-bold flex items-center gap-2">
                     <CheckCircle2 size={16} /> Validé 
                   </div>
                 ) : (
@@ -117,7 +117,7 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
                       />
                       <button 
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 dark:border-white/10 hover:bg-neutral-50 text-slate-900 dark:!text-white text-app-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all pointer-events-none"
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 dark:border-white/10 hover:bg-neutral-50 text-neutral-900 dark:text-white text-app-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all pointer-events-none"
                       >
                         <UploadCloud size={16} />
                         Importer
@@ -132,7 +132,7 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
 
         {/* Dynamic Checklist Addition */}
         {isAddingDoc ? (
-          <div className="flex items-center gap-3 p-5 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-primary/20">
+          <div className="flex items-center gap-3 p-5 rounded-2xl bg-gray-50/50 dark:bg-white/10 border border-primary/20">
             <input 
               type="text" 
               value={newDocLabel}
@@ -143,12 +143,12 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
               onKeyDown={(e) => e.key === 'Enter' && handleAddCustomDoc()}
             />
             <button onClick={handleAddCustomDoc} className="px-4 py-2 bg-primary text-white rounded-xl font-bold">Valider</button>
-            <button onClick={() => setIsAddingDoc(false)} className="px-4 py-2 bg-black/5 text-slate-900 dark:!text-white rounded-xl font-bold">Annuler</button>
+            <button onClick={() => setIsAddingDoc(false)} className="px-4 py-2 bg-black/5 text-neutral-900 dark:text-white rounded-xl font-bold">Annuler</button>
           </div>
         ) : (
           <button 
             onClick={() => setIsAddingDoc(true)}
-            className="flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-dashed border-primary/20 text-slate-900 dark:!text-white hover:bg-primary/5 transition-colors font-bold"
+            className="flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-dashed border-primary/20 text-neutral-900 dark:text-white hover:bg-primary/5 transition-colors font-bold"
           >
             <Plus size={20} /> Ajouter un document optionnel
           </button>
@@ -165,7 +165,7 @@ export function PropertyDocumentsStep({ propertyData, onBack, onComplete }: any)
       <div className="flex flex-col sm:flex-row justify-between gap-4 pt-8 mt-8 border-t border-gray-200 dark:border-white/10">
         <button 
           onClick={onBack}
-          className="px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all bg-white dark:bg-white/5 text-slate-900 dark:!text-white border border-gray-200 dark:border-white/10 hover:border-gray-200 dark:border-white/10"
+          className="px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all bg-white dark:bg-white/10 text-neutral-900 dark:text-white border border-gray-200 dark:border-white/10 hover:border-gray-200 dark:border-white/10"
         >
           <ChevronLeft size={20} /> Retour aux détails
         </button>

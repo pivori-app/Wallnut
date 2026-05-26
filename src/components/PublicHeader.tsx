@@ -97,7 +97,7 @@ export function PublicHeader() {
                   key={link.label}
                   to={link.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="block p-4 rounded-2xl bg-black/5 dark:bg-white/5 text-app-md font-bold hover:bg-primary hover:text-white transition-all"
+                  className="block p-4 rounded-2xl bg-black/5 dark:bg-white/10 text-app-md font-bold hover:bg-primary hover:text-white transition-all"
                 >
                   {link.label}
                 </Link>

@@ -11,7 +11,7 @@ function InputRow({ label, name, type = "text", options }: { label: string, name
   const error = errors[name]?.message as string;
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center px-6 py-4 hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors border-b border-slate-100 dark:border-white/5 last:border-0 relative group">
+    <div className="flex flex-col sm:flex-row sm:items-center px-6 py-4 hover:bg-slate-50/50 dark:hover:bg-white/10 transition-colors border-b border-slate-100 dark:border-white/5 last:border-0 relative group">
       <div className="sm:w-1/2 flex flex-col justify-center pr-4 mb-2 sm:mb-0">
         <span className="text-[13px] sm:text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{label}</span>
         {error && <span className="text-[11px] font-bold text-red-500 mt-0.5">{error}</span>}
@@ -21,20 +21,20 @@ function InputRow({ label, name, type = "text", options }: { label: string, name
           <div className="w-full relative">
             <select 
               {...register(name)}
-              className="w-full bg-white dark:bg-black/20 text-[14px] font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors appearance-none cursor-pointer"
+              className="w-full bg-white dark:bg-black/20 text-[14px] font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors appearance-none cursor-pointer"
             >
               {options.map((opt: string) => (
                 <option key={opt} value={opt} className="text-slate-900 dark:text-slate-900 font-medium">{opt}</option>
               ))}
             </select>
-            <ChevronRight className="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none rotate-90" />
+            <ChevronRight className="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 pointer-events-none rotate-90" />
           </div>
         ) : (
           <input 
             type={type} 
             step={type === 'number' ? 'any' : undefined}
             {...register(name)}
-            className="w-full bg-white dark:bg-black/20 text-[14px] font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors placeholder:text-slate-400 dark:placeholder:text-white/30" 
+            className="w-full bg-white dark:bg-black/20 text-[14px] font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors placeholder:text-neutral-500 dark:text-neutral-400 dark:placeholder:text-white/30" 
           />
         )}
       </div>
@@ -49,15 +49,15 @@ function ClientStep() {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 pb-8">
       <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-3xl border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-md border-b border-primary/10 dark:border-white/10 px-6 py-5">
+        <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-xl border-b border-primary/10 dark:border-white/10 px-6 py-5">
           <h3 className="text-primary dark:text-white font-display font-bold text-lg sm:text-xl">Informations Client</h3>
         </div>
         <div className="flex flex-col">
           <div className="flex items-center px-6 py-5 border-b border-slate-100 dark:border-white/5">
              <span className="w-1/2 text-sm font-semibold text-slate-700 dark:text-slate-300">Type de client</span>
              <div className="w-1/2 flex items-center gap-3">
-               <button type="button" onClick={() => setValue('clientType', 'particulier')} className={cn("px-4 py-2 rounded-xl text-sm font-bold transition-all flex-1", clientType === 'particulier' ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-slate-100 text-slate-500 dark:bg-white/5 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/10")}>Particulier</button>
-               <button type="button" onClick={() => setValue('clientType', 'pro')} className={cn("px-4 py-2 rounded-xl text-sm font-bold transition-all flex-1", clientType === 'pro' ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-slate-100 text-slate-500 dark:bg-white/5 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/10")}>Professionnel</button>
+               <button type="button" onClick={() => setValue('clientType', 'particulier')} className={cn("px-4 py-2 rounded-xl text-sm font-bold transition-all flex-1", clientType === 'particulier' ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-slate-100 text-neutral-600 dark:text-neutral-300 dark:bg-white/10 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/10")}>Particulier</button>
+               <button type="button" onClick={() => setValue('clientType', 'pro')} className={cn("px-4 py-2 rounded-xl text-sm font-bold transition-all flex-1", clientType === 'pro' ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-slate-100 text-neutral-600 dark:text-neutral-300 dark:bg-white/10 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/10")}>Professionnel</button>
              </div>
           </div>
           <InputRow label="Nom complet" name="clientName" />
@@ -81,7 +81,7 @@ function PropertyStep() {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 pb-8">
       <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-3xl border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-md border-b border-primary/10 dark:border-white/10 px-6 py-5">
+        <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-xl border-b border-primary/10 dark:border-white/10 px-6 py-5">
           <h3 className="text-primary dark:text-white font-display font-bold text-lg sm:text-xl">Caractéristiques du bien</h3>
         </div>
         <div className="flex flex-col">
@@ -108,7 +108,7 @@ function SimulationStep() {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 pb-8">
       <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-3xl border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col">
-          <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-md border-b border-primary/10 dark:border-white/10 px-6 py-5">
+          <div className="bg-primary/5 dark:bg-primary/20 backdrop-blur-xl border-b border-primary/10 dark:border-white/10 px-6 py-5">
             <h3 className="text-primary dark:text-white font-display font-bold text-lg sm:text-xl">Paramètres Financiers</h3>
           </div>
           <div className="flex flex-col">
@@ -172,8 +172,8 @@ function SynthesisStep() {
       <div className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl p-6 sm:p-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-white/10 gap-4">
            <div>
-             <h3 className="text-2xl font-display font-black text-slate-900 dark:text-white">Synthèse du Projet</h3>
-             <p className="text-slate-500 dark:text-white/60 font-medium">Bilan financier prévisionnel</p>
+             <h3 className="text-2xl font-display font-black text-neutral-900 dark:text-white">Synthèse du Projet</h3>
+             <p className="text-neutral-600 dark:text-neutral-300 font-medium">Bilan financier prévisionnel</p>
            </div>
            <div className={cn("px-4 py-2 rounded-xl border text-sm font-bold tracking-wide", validationBg, validationColor)}>
               {validation}
@@ -182,12 +182,12 @@ function SynthesisStep() {
 
         <div className="grid md:grid-cols-2 gap-8">
            <div className="space-y-6">
-              <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-6 border border-slate-100 dark:border-white/5">
-                 <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider opacity-80">Profil Acquéreur</h4>
+              <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-6 border border-slate-100 dark:border-white/5">
+                 <h4 className="text-sm font-bold text-neutral-900 dark:text-white mb-4 uppercase tracking-wider opacity-80">Profil Acquéreur</h4>
                  <div className="space-y-3 font-medium text-[15px]">
-                    <div className="flex justify-between"><span className="text-slate-500">Nom</span> <span className="font-bold text-slate-900 dark:text-white text-right">{data.clientName}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Type</span> <span className="font-bold text-slate-900 dark:text-white text-right capitalize">{data.clientType}</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500">Localisation</span> <span className="font-bold text-slate-900 dark:text-white text-right truncate pl-4">{data.propertyAddress}</span></div>
+                    <div className="flex justify-between"><span className="text-neutral-600 dark:text-neutral-300">Nom</span> <span className="font-bold text-neutral-900 dark:text-white text-right">{data.clientName}</span></div>
+                    <div className="flex justify-between"><span className="text-neutral-600 dark:text-neutral-300">Type</span> <span className="font-bold text-neutral-900 dark:text-white text-right capitalize">{data.clientType}</span></div>
+                    <div className="flex justify-between"><span className="text-neutral-600 dark:text-neutral-300">Localisation</span> <span className="font-bold text-neutral-900 dark:text-white text-right truncate pl-4">{data.propertyAddress}</span></div>
                  </div>
               </div>
            </div>
@@ -202,10 +202,10 @@ function SynthesisStep() {
                  </div>
               </div>
 
-              <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-6 border border-slate-100 dark:border-white/5 space-y-3">
-                    <div className="flex justify-between items-center"><span className="text-sm font-bold text-slate-500 dark:text-white/60">ROI Capital</span> <span className={cn("font-bold text-lg", validationColor)}>{formatPct(rentabiliteNetteInvestissement)}</span></div>
-                    <div className="flex justify-between items-center"><span className="text-sm font-bold text-slate-500 dark:text-white/60">Durée (mois)</span> <span className="font-bold text-slate-900 dark:text-white">{dureeMois}</span></div>
-                    <div className="flex justify-between items-center pt-3 border-t"><span className="text-sm font-bold text-slate-900 dark:text-white">Renta Annualisée</span> <span className={cn("font-black text-xl", validationColor)}>{formatPct(rentabiliteAnnualisee)}</span></div>
+              <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-6 border border-slate-100 dark:border-white/5 space-y-3">
+                    <div className="flex justify-between items-center"><span className="text-sm font-bold text-neutral-600 dark:text-neutral-300">ROI Capital</span> <span className={cn("font-bold text-lg", validationColor)}>{formatPct(rentabiliteNetteInvestissement)}</span></div>
+                    <div className="flex justify-between items-center"><span className="text-sm font-bold text-neutral-600 dark:text-neutral-300">Durée (mois)</span> <span className="font-bold text-neutral-900 dark:text-white">{dureeMois}</span></div>
+                    <div className="flex justify-between items-center pt-3 border-t"><span className="text-sm font-bold text-neutral-900 dark:text-white">Renta Annualisée</span> <span className={cn("font-black text-xl", validationColor)}>{formatPct(rentabiliteAnnualisee)}</span></div>
               </div>
            </div>
         </div>
@@ -259,8 +259,8 @@ export function B2BSimulator() {
         {/* En-tête Nouvelle Simulation */}
         <div className="flex items-center justify-between mb-8 px-2">
             <div>
-               <h2 className="text-2xl font-display font-black text-slate-900 dark:text-white tracking-tight">Simulateur Pro</h2>
-               <p className="text-slate-500 dark:text-white/60 text-sm font-medium">Bilan financier B2B & Souscription</p>
+               <h2 className="text-2xl font-display font-black text-neutral-900 dark:text-white tracking-tight">Simulateur Pro</h2>
+               <p className="text-neutral-600 dark:text-neutral-300 text-sm font-medium">Bilan financier B2B & Souscription</p>
             </div>
             <button 
               type="button"
@@ -291,7 +291,7 @@ export function B2BSimulator() {
                      "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-md",
                      isActive ? "bg-primary text-white scale-110 shadow-primary/30" : 
                      isCompleted ? "bg-emerald-500 text-white" : 
-                     "bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/40"
+                     "bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-neutral-500 dark:text-neutral-400"
                    )}>
                      {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                    </div>
@@ -299,7 +299,7 @@ export function B2BSimulator() {
                      "text-[10px] sm:text-[11px] font-bold absolute -bottom-6 whitespace-nowrap transition-colors uppercase tracking-widest",
                      isActive ? "text-primary dark:text-white" : 
                      isCompleted ? "text-slate-700 dark:text-white/80" : 
-                     "text-slate-400 dark:text-white/40"
+                     "text-neutral-500 dark:text-neutral-400"
                    )}>
                      {item.label}
                    </span>
@@ -328,7 +328,7 @@ export function B2BSimulator() {
               "flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm text-sm",
               currentStep === 1 
                 ? "opacity-0 pointer-events-none" 
-                : "bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10"
+                : "bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10"
             )}
           >
             <ChevronLeft className="w-4 h-4" /> Précédent

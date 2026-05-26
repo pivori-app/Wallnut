@@ -33,18 +33,18 @@ export function PropertyCreationWizard({ onComplete, onCancel }: PropertyCreatio
       {/* Stepper Header */}
       <div className="flex flex-col sm:flex-row items-center justify-center mb-8 gap-2 sm:gap-4">
         <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 1 ? 'bg-primary dark:bg-white text-white dark:!text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:!text-white'}`}>1</div>
-          <span className={`font-bold hidden sm:inline ${step >= 1 ? 'text-primary dark:!text-white' : 'text-primary/40 dark:!text-white'}`}>Informations Propriété</span>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 1 ? 'bg-primary dark:bg-white text-white dark:text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:text-white'}`}>1</div>
+          <span className={`font-bold hidden sm:inline ${step >= 1 ? 'text-primary dark:text-white' : 'text-primary/40 dark:text-white'}`}>Informations Propriété</span>
         </div>
         <div className={`h-px w-8 sm:w-16 ${step >= 2 ? 'bg-primary' : 'bg-gray-200 dark:bg-white/20'}`} />
         <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 2 ? 'bg-primary dark:bg-white text-white dark:!text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:!text-white'}`}>2</div>
-          <span className={`font-bold hidden sm:inline ${step >= 2 ? 'text-primary dark:!text-white' : 'text-primary/40 dark:!text-white'}`}>Documents & Validation</span>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 2 ? 'bg-primary dark:bg-white text-white dark:text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:text-white'}`}>2</div>
+          <span className={`font-bold hidden sm:inline ${step >= 2 ? 'text-primary dark:text-white' : 'text-primary/40 dark:text-white'}`}>Documents & Validation</span>
         </div>
         <div className={`h-px w-8 sm:w-16 ${step >= 3 ? 'bg-primary' : 'bg-gray-200 dark:bg-white/20'}`} />
         <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 3 ? 'bg-primary dark:bg-white text-white dark:!text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:!text-white'}`}>3</div>
-          <span className={`font-bold hidden sm:inline ${step >= 3 ? 'text-primary dark:!text-white' : 'text-primary/40 dark:!text-white'}`}>Synthèse & Déploiement</span>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-app-sm ${step >= 3 ? 'bg-primary dark:bg-white text-white dark:text-primary' : 'bg-gray-100 dark:bg-white/10 text-primary/40 dark:text-white'}`}>3</div>
+          <span className={`font-bold hidden sm:inline ${step >= 3 ? 'text-primary dark:text-white' : 'text-primary/40 dark:text-white'}`}>Synthèse & Déploiement</span>
         </div>
       </div>
 

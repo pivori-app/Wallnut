@@ -3,51 +3,50 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { Home } from './pages/Home';
-import { Dashboard } from './pages/Dashboard';
-import { Dossiers } from './pages/Dossiers';
-import { InstitutionalDashboard } from './pages/InstitutionalDashboard';
-import { NewDossier } from './pages/NewDossier';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AppLayout } from './components/AppLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { RegisterSelection } from './pages/RegisterSelection';
-import { RegisterForm } from './pages/RegisterForm';
-import { AuthCallback } from './pages/AuthCallback';
-import { CompleteProfile } from './pages/CompleteProfile';
-import { Solution } from './pages/Solution';
-import { Offres } from './pages/Offres';
-import { Blog } from './pages/Blog';
-import { BlogPost } from './pages/BlogPost';
-import { FAQ } from './pages/FAQ';
-import { Contact } from './pages/Contact';
-import { HelpCenter } from './pages/HelpCenter';
-import { MobileScannerPage } from './pages/MobileScannerPage';
-
-import { MentionsLegales, RGPD, CGU, Cookies } from './pages/Legal';
-import { MentionsImportantes } from './pages/MentionsImportantes';
 import { ScrollToTop } from './components/ScrollToTop';
-import { DocScanPage } from './pages/DocScanPage';
+import { Building2, Settings as SettingsIcon } from 'lucide-react';
+import { ErrorBoundary } from './ErrorBoundary';
 
-import { HowItWorks } from './pages/HowItWorks';
-import { Situations } from './pages/Situations';
-import { Partenaires } from './pages/Partenaires';
-import { Investisseurs } from './pages/Investisseurs';
-import { About } from './pages/About';
-
-import { ParticulierDashboard } from './pages/dashboard/ParticulierDashboard';
-import { ProDashboard } from './pages/dashboard/ProDashboard';
-import { SecureAccess } from './pages/SecureAccess';
-
-import { Settings } from './pages/dashboard/Settings';
-import { Calendar } from './pages/dashboard/Calendar';
-import { Messages } from './pages/dashboard/Messages';
-
-import { Building2 } from 'lucide-react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
+// Lazy loaded pages for Performance Optimization (Code Splitting)
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const Dossiers = lazy(() => import('./pages/Dossiers').then(m => ({ default: m.Dossiers })));
+const InstitutionalDashboard = lazy(() => import('./pages/InstitutionalDashboard').then(m => ({ default: m.InstitutionalDashboard })));
+const NewDossier = lazy(() => import('./pages/NewDossier').then(m => ({ default: m.NewDossier })));
+const RegisterSelection = lazy(() => import('./pages/RegisterSelection').then(m => ({ default: m.RegisterSelection })));
+const RegisterForm = lazy(() => import('./pages/RegisterForm').then(m => ({ default: m.RegisterForm })));
+const AuthCallback = lazy(() => import('./pages/AuthCallback').then(m => ({ default: m.AuthCallback })));
+const CompleteProfile = lazy(() => import('./pages/CompleteProfile').then(m => ({ default: m.CompleteProfile })));
+const Solution = lazy(() => import('./pages/Solution').then(m => ({ default: m.Solution })));
+const Offres = lazy(() => import('./pages/Offres').then(m => ({ default: m.Offres })));
+const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
+const BlogPost = lazy(() => import('./pages/BlogPost').then(m => ({ default: m.BlogPost })));
+const FAQ = lazy(() => import('./pages/FAQ').then(m => ({ default: m.FAQ })));
+const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
+const HelpCenter = lazy(() => import('./pages/HelpCenter').then(m => ({ default: m.HelpCenter })));
+const MobileScannerPage = lazy(() => import('./pages/MobileScannerPage').then(m => ({ default: m.MobileScannerPage })));
+const MentionsLegales = lazy(() => import('./pages/Legal').then(m => ({ default: m.MentionsLegales })));
+const RGPD = lazy(() => import('./pages/Legal').then(m => ({ default: m.RGPD })));
+const CGU = lazy(() => import('./pages/Legal').then(m => ({ default: m.CGU })));
+const Cookies = lazy(() => import('./pages/Legal').then(m => ({ default: m.Cookies })));
+const MentionsImportantes = lazy(() => import('./pages/MentionsImportantes').then(m => ({ default: m.MentionsImportantes })));
+const DocScanPage = lazy(() => import('./pages/DocScanPage').then(m => ({ default: m.DocScanPage })));
+const HowItWorks = lazy(() => import('./pages/HowItWorks').then(m => ({ default: m.HowItWorks })));
+const Situations = lazy(() => import('./pages/Situations').then(m => ({ default: m.Situations })));
+const Partenaires = lazy(() => import('./pages/Partenaires').then(m => ({ default: m.Partenaires })));
+const Investisseurs = lazy(() => import('./pages/Investisseurs').then(m => ({ default: m.Investisseurs })));
+const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
+const ParticulierDashboard = lazy(() => import('./pages/dashboard/ParticulierDashboard').then(m => ({ default: m.ParticulierDashboard })));
+const ProDashboard = lazy(() => import('./pages/dashboard/ProDashboard').then(m => ({ default: m.ProDashboard })));
+const SecureAccess = lazy(() => import('./pages/SecureAccess').then(m => ({ default: m.SecureAccess })));
+const Settings = lazy(() => import('./pages/dashboard/Settings').then(m => ({ default: m.Settings })));
+const Calendar = lazy(() => import('./pages/dashboard/Calendar').then(m => ({ default: m.Calendar })));
+const Messages = lazy(() => import('./pages/dashboard/Messages').then(m => ({ default: m.Messages })));
 
 // Placeholder Pages
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -78,8 +77,7 @@ const DashboardRedirect = () => {
   return <Navigate to="/dashboard/particulier" replace />;
 };
 
-import { ErrorBoundary } from './ErrorBoundary';
-import { Settings as SettingsIcon } from 'lucide-react';
+// import removed
 
 const DevNav = () => (
   <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2">
@@ -94,12 +92,29 @@ const DevNav = () => (
 );
 
 export default function App() {
+  // Fallback Loading Display for Suspense (Enterprise Grade)
+  const LoadingFallback = () => (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6">
+      <div className="relative flex items-center justify-center">
+        {/* Glowing ring */}
+        <div className="absolute inset-0 rounded-full border-2 border-primary/20 blur-sm animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+        {/* Premium Spinner */}
+        <div className="w-16 h-16 border-4 border-slate-200 dark:border-white/10 border-t-primary dark:border-t-primary rounded-full animate-spin relative z-10 shadow-lg"></div>
+        {/* Core Dot */}
+        <div className="absolute w-4 h-4 bg-primary rounded-full z-20 shadow-[0_0_15px_rgba(8,112,184,0.8)]"></div>
+      </div>
+      <p className="mt-8 text-neutral-800 dark:text-white font-display font-bold tracking-tight text-lg">Initialisation de votre environnement</p>
+      <p className="mt-2 text-neutral-600 dark:text-neutral-300 dark:text-neutral-500 dark:text-neutral-400 font-medium text-sm">Chiffrement AES-256 actif • Protection Wallnut</p>
+    </div>
+  );
+
   return (
     <ErrorBoundary>
       <Router>
         <ScrollToTop />
         <AuthProvider>
         <DevNav />
+        <Suspense fallback={<LoadingFallback />}>
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<Home />} />
@@ -241,6 +256,7 @@ export default function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </AuthProvider>
     </Router>
     </ErrorBoundary>

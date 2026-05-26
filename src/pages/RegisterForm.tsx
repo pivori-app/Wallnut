@@ -81,7 +81,7 @@ const FieldError = ({ message }: { message?: string }) =>
 const inputClass = (hasError?: boolean) =>
   `w-full px-4 py-3 rounded-2xl text-[14px] leading-snug
    bg-white/60 border transition-all outline-none
-   placeholder:text-slate-400 placeholder:text-[13px]
+   placeholder:text-neutral-500 dark:text-neutral-400 placeholder:text-[13px]
    ${
      hasError
        ? 'border-red-300 focus:border-red-400 focus:ring-4 focus:ring-red-100'
@@ -149,13 +149,12 @@ export function RegisterForm() {
   const handleGoogleSignIn = async () => {
     if (window.top !== window.self) {
       setError(
-        "L'Aperçu (iFrame) peut bloquer Google Auth. Veuillez ouvrir l'application dans un nouvel onglet, et surtout, assurez-vous d'avoir configuré le provider Google dans Supabase."
+        "La connexion avec Google est désactivée dans l'aperçu. Veuillez utiliser l'inscription par email ou ouvrir l'application dans un nouvel onglet."
       );
       return;
     }
     
-    // Check if the user really wants to proceed since Google Auth requires a configured client_id
-    const confirmGoogle = window.confirm("ATTENTION: Pour que la connexion Google fonctionne, vous DEVEZ d'abord obtenir un 'Client ID' depuis Google Cloud Console et le configurer dans 'Supabase > Authentication > Providers > Google'.\\n\\nSi c'est fait (ou pour vérifier), cliquez sur OK. Sinon, cliquez sur Annuler et utilisez l'inscription par Email en dessous.");
+    const confirmGoogle = window.confirm("Souhaitez-vous continuer avec Google ? Assurez-vous d'avoir autorisé l'application.");
     
     if (!confirmGoogle) return;
 
@@ -431,14 +430,14 @@ export function RegisterForm() {
                                 ${
                                   step >= s
                                     ? 'bg-secondary text-white shadow-md shadow-secondary/30'
-                                    : 'bg-slate-200 text-slate-400'
+                                    : 'bg-slate-200 text-neutral-500 dark:text-neutral-400'
                                 }`}
                   >
                     {s}
                   </div>
                   <span
                     className={`text-[12px] font-medium transition-colors
-                                ${step >= s ? 'text-secondary' : 'text-slate-400'}`}
+                                ${step >= s ? 'text-secondary' : 'text-neutral-500 dark:text-neutral-400'}`}
                   >
                     {s === 1 ? 'Informations' : 'Société'}
                   </span>
@@ -519,7 +518,7 @@ export function RegisterForm() {
             </div>
             <div className="relative flex justify-center">
               <span className="px-3 bg-white/80 text-[12px] 
-                               text-slate-400 font-medium">
+                               text-neutral-500 dark:text-neutral-400 font-medium">
                 ou créez un compte
               </span>
             </div>
@@ -550,7 +549,7 @@ export function RegisterForm() {
                       <User
                         size={16}
                         className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                   text-slate-400 pointer-events-none"
+                                   text-neutral-500 dark:text-neutral-400 pointer-events-none"
                       />
                       <input
                         {...register('firstName', {
@@ -595,7 +594,7 @@ export function RegisterForm() {
                     <Mail
                       size={16}
                       className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                 text-slate-400 pointer-events-none"
+                                 text-neutral-500 dark:text-neutral-400 pointer-events-none"
                     />
                     <input
                       {...register('email', {
@@ -622,7 +621,7 @@ export function RegisterForm() {
                     <Phone
                       size={16}
                       className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                 text-slate-400 pointer-events-none"
+                                 text-neutral-500 dark:text-neutral-400 pointer-events-none"
                     />
                     <input
                       {...register('phone', {
@@ -659,7 +658,7 @@ export function RegisterForm() {
                     <Lock
                       size={16}
                       className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                 text-slate-400 pointer-events-none"
+                                 text-neutral-500 dark:text-neutral-400 pointer-events-none"
                     />
                     <input
                       {...register('password', {
@@ -679,7 +678,7 @@ export function RegisterForm() {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 
-                                 text-slate-400 hover:text-primary 
+                                 text-neutral-500 dark:text-neutral-400 hover:text-primary 
                                  transition-colors p-1"
                       aria-label={
                         showPassword
@@ -708,7 +707,7 @@ export function RegisterForm() {
                           />
                         ))}
                       </div>
-                      <p className="text-[12px] text-slate-500 text-right">
+                      <p className="text-[12px] text-neutral-600 dark:text-neutral-300 text-right">
                         {strengthLabel()}
                       </p>
                     </div>
@@ -735,7 +734,7 @@ export function RegisterForm() {
                       <Briefcase
                         size={16}
                         className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                   text-slate-400 pointer-events-none z-10"
+                                   text-neutral-500 dark:text-neutral-400 pointer-events-none z-10"
                       />
                       <select
                         {...register('subRole', {
@@ -794,7 +793,7 @@ export function RegisterForm() {
                       <Building2
                         size={16}
                         className="absolute left-3.5 top-1/2 -translate-y-1/2 
-                                   text-slate-400 pointer-events-none"
+                                   text-neutral-500 dark:text-neutral-400 pointer-events-none"
                       />
                       <input
                         {...register('companyName', {
@@ -837,7 +836,7 @@ export function RegisterForm() {
                       className={`${inputClass(!!errors.siret)} font-mono tracking-wider`}
                     />
                     <FieldError message={errors.siret?.message as string} />
-                    <p className="text-[11px] text-slate-400 mt-1 ml-1">
+                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1 ml-1">
                       14 chiffres — Validé par l'algorithme 
                     </p>
                   </div>
@@ -847,7 +846,7 @@ export function RegisterForm() {
                   <div>
                     <FieldLabel>N° Carte Pro / ORIAS (Optionnel)</FieldLabel>
                     <div className="relative">
-                      <CreditCard size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                      <CreditCard size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 pointer-events-none" />
                       <input
                         {...register('professionalCard')}
                         placeholder="CPI 7501 2024..."
@@ -923,7 +922,7 @@ export function RegisterForm() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 text-[12px] text-center text-slate-500 flex items-center justify-center gap-2"
+                  className="mt-4 text-[12px] text-center text-neutral-600 dark:text-neutral-300 flex items-center justify-center gap-2"
                 >
                   <div className="w-3 h-3 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                   {attestationStatus}
@@ -934,13 +933,13 @@ export function RegisterForm() {
 
           {/* Footer form */}
           <div className="mt-8 text-center border-t border-slate-100 pt-6">
-            <p className="text-[13px] text-slate-500">
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300">
               Déjà un compte ?{' '}
               <Link to="/" onClick={signIn} className="text-primary font-bold hover:underline">
                 Se connecter
               </Link>
             </p>
-            <div className="mt-4 text-[11px] text-slate-400 flex flex-col items-center gap-1">
+            <div className="mt-4 text-[11px] text-neutral-500 dark:text-neutral-400 flex flex-col items-center gap-1">
               <p>Protégé par reCAPTCHA — Wallnut Technologies SAS</p>
               <div className="flex gap-2">
                 <Link to="/legal" className="hover:text-slate-600 transition-colors">Confidentialité</Link>

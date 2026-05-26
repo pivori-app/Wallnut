@@ -3,6 +3,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import cors from "cors";
+import compression from "compression";
 
 import { GoogleGenAI } from "@google/genai";
 
@@ -59,13 +63,35 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Global Security Headers (Basic)
-  app.use((req, res, next) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    next();
+  // ═══════════════════════════════════════════════════════
+  // OWASP ENTERPRISE SECURITY MIDDLEWARES
+  // ═══════════════════════════════════════════════════════
+  
+  // Rate Limiting (Protection DDOS / Brute Force)
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window`
+    standardHeaders: true, 
+    legacyHeaders: false,
+    message: { error: "Trop de requêtes, veuillez réessayer plus tard." }
   });
+  
+  // Appliquer le Rate Limit sur toutes les routes API
+  app.use("/api/", apiLimiter);
+
+  // Helmet (Headers de sécurité strictes)
+  app.use(helmet({
+    contentSecurityPolicy: false, // Désactivé pour l'iframe AI Studio et Vite HMR
+    frameguard: false, // Indispensable pour l'aperçu iFrame AI Studio
+    crossOriginEmbedderPolicy: false, // Vite dev server compatibility
+  }));
+
+  // CORS restriction & Compression (Performance & Sec)
+  app.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL || '*' : '*',
+    credentials: true
+  }));
+  app.use(compression());
 
   app.use(express.json({ limit: '10mb' }));
 

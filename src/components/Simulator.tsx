@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, ShieldCheck, Zap, Info } from 'lucide-react';
 import { formatCurrency, cn } from '../lib/utils';
+import { PORTAGE_CONSTANTS } from '../lib/underwritingEngine';
 
 interface SimulatorProps {
   onInitialize?: (data: { propertyValue: number; fundingNeed: number; offerId: string }) => void;
@@ -16,8 +17,8 @@ export function Simulator({ onInitialize }: SimulatorProps) {
     { 
       id: 'premium', 
       name: 'Premium', 
-      ratio: 0.8, 
-      feeYearly: 0.13,
+      ratio: PORTAGE_CONSTANTS.PREMIUM.ratio, 
+      feeYearly: PORTAGE_CONSTANTS.PREMIUM.feeYearly,
       color: 'bg-primary', 
       textColor: 'text-secondary',
       description: 'Liquidité maximale pour projets ambitieux.'
@@ -25,8 +26,8 @@ export function Simulator({ onInitialize }: SimulatorProps) {
     { 
       id: 'equilibre', 
       name: 'Équilibre', 
-      ratio: 0.7, 
-      feeYearly: 0.13,
+      ratio: PORTAGE_CONSTANTS.EQUILIBRE.ratio, 
+      feeYearly: PORTAGE_CONSTANTS.EQUILIBRE.feeYearly,
       color: 'bg-secondary', 
       textColor: 'text-primary',
       description: 'L’accord parfait entre liquidité et sécurité.'
@@ -34,16 +35,16 @@ export function Simulator({ onInitialize }: SimulatorProps) {
     { 
       id: 'prudente', 
       name: 'Prudente', 
-      ratio: 0.6, 
-      feeYearly: 0.13,
+      ratio: PORTAGE_CONSTANTS.PRUDENTE.ratio, 
+      feeYearly: PORTAGE_CONSTANTS.PRUDENTE.feeYearly,
       color: 'bg-success', 
       textColor: 'text-white',
       description: 'Protection maximale de votre patrimoine.'
     }
   ];
 
-  const maxBaseIntervention = propertyValue * 0.8;
-  const maxPrepayeAppx = maxBaseIntervention * 0.13 * 2;
+  const maxBaseIntervention = propertyValue * PORTAGE_CONSTANTS.PREMIUM.ratio;
+  const maxPrepayeAppx = maxBaseIntervention * PORTAGE_CONSTANTS.PREMIUM.feeYearly * PORTAGE_CONSTANTS.DEFAULT_DURATION_YEARS;
   const maxEstimatedNet = maxBaseIntervention - maxPrepayeAppx;
   const isTooHigh = fundingNeed > maxEstimatedNet;
 
@@ -106,7 +107,7 @@ export function Simulator({ onInitialize }: SimulatorProps) {
           <h3 className="text-app-lg font-display font-bold mb-6">Montant d'intervention possible</h3>
           {offers.map((offer) => {
             const baseIntervention = propertyValue * offer.ratio;
-            const netVendeur = baseIntervention * (1 - (offer.feeYearly * 2));
+            const netVendeur = baseIntervention * (1 - (offer.feeYearly * PORTAGE_CONSTANTS.DEFAULT_DURATION_YEARS));
             const isFeasible = netVendeur >= fundingNeed;
             const ltvPercent = offer.ratio * 100;
 
@@ -145,7 +146,7 @@ export function Simulator({ onInitialize }: SimulatorProps) {
                     <span className={isFeasible ? "opacity-70" : "text-red-500 opacity-100"}>Net vendeur disponible: {formatCurrency(netVendeur)}</span>
                     <span className="opacity-40 text-right">Frais: {offer.feeYearly * 100}%/an</span>
                   </div>
-                  <div className="h-2 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
                     <motion.div 
                       key={`${offer.id}-${ltvPercent}`}
                       initial={{ width: 0 }}

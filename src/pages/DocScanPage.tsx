@@ -121,7 +121,7 @@ export function DocScanPage() {
               {/* Floating mobile handoff button */}
               <button
                 onClick={() => setShowQRHandoff(true)}
-                className="absolute top-6 right-6 z-20 flex items-center gap-2 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-xl text-white font-medium hover:bg-slate-800 transition-colors shadow-lg"
+                className="absolute top-6 right-6 z-20 flex items-center gap-2 px-4 py-2 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-xl text-white font-medium hover:bg-slate-800 transition-colors shadow-lg"
               >
                 <Bot size={18} className="text-blue-400" />
                 Scanner avec le téléphone

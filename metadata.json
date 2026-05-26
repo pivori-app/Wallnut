@@ -1,9 +1,9 @@
 {
-  "name": "Wallnut ",
+  "name": "Wallnut",
   "description": "Plateforme structurée de portage immobilier et solution de liquidité avec analyse IA et pilotage financier institutionnel.",
   "requestFramePermissions": [
     "camera",
     "geolocation"
   ],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

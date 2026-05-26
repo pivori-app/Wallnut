@@ -183,22 +183,22 @@ export function InstitutionalDashboard() {
           </div>
         </div>
 
-        <div className="flex gap-2 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl w-fit overflow-x-auto no-scrollbar">
+        <div className="flex gap-2 p-1.5 bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl w-fit overflow-x-auto no-scrollbar">
           <button 
             onClick={() => setActiveTab('comite')} 
-            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'comite' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'comite' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/10")}
           >
             Page Comité
           </button>
           <button 
             onClick={() => setActiveTab('fonds')} 
-            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'fonds' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'fonds' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/10")}
           >
             Synthèse Fonds (Biens)
           </button>
           <button 
             onClick={() => setActiveTab('clients')} 
-            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'clients' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/5")}
+            className={cn("px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap", activeTab === 'clients' ? "bg-white text-black shadow-lg" : "text-white/60 hover:text-white hover:bg-white/10")}
           >
             Dossiers Clients Consol.
           </button>
@@ -339,7 +339,7 @@ export function InstitutionalDashboard() {
 
       {activeTab === 'fonds' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card-3d rounded-3xl overflow-hidden">
-           <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
+           <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/10">
              <h2 className="text-app-lg font-display font-bold">Consolidation des biens D01 à D10</h2>
            </div>
            <div className="overflow-x-auto w-full">
@@ -396,7 +396,7 @@ export function InstitutionalDashboard() {
 
       {activeTab === 'clients' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card-3d rounded-3xl overflow-hidden">
-           <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
+           <div className="p-8 border-b border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/10">
              <h2 className="text-app-lg font-display font-bold">Consolidation Multi-Biens (Dossiers Clients)</h2>
            </div>
            <div className="overflow-x-auto w-full">

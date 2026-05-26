@@ -57,7 +57,7 @@ const FlipCard = ({ item }: { item: any, key?: React.Key }) => {
               href={item.link} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="mt-auto px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-[10px] font-medium transition-all flex items-center gap-1.5 border border-white/10 hover:border-white/20"
+              className="mt-auto px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/10 text-white text-[10px] font-medium transition-all flex items-center gap-1.5 border border-white/10 hover:border-white/20"
               onClick={(e) => e.stopPropagation()}
             >
               Découvrir notre solution <ChevronRight size={12} />
@@ -176,14 +176,19 @@ export function Home() {
         >
           <div className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(8,_112,_184,_0.2)] group aspect-video">
             <div className="absolute inset-0 bg-slate-900">
-              {/* Professional real estate background video */}
+              {/* Professional real estate background video - 2026 Standards */}
               <video
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
+                preload="metadata"
+                disablePictureInPicture
+                disableRemotePlayback
+                poster="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
+                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-1000 transform-gpu"
                 src="https://cdn.pixabay.com/video/2020/04/17/36384-411478546_large.mp4"
+                aria-hidden="true"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent" />
             </div>
@@ -198,9 +203,11 @@ export function Home() {
 
             {/* Clean Title Overlay */}
             <div className="absolute bottom-6 left-6 right-6 sm:bottom-12 sm:left-12 sm:right-12 flex justify-center text-center">
-              <h3 className="text-white font-display font-black text-3xl sm:text-5xl drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] max-w-3xl leading-tight">
-                L'intelligence artificielle au service de votre patrimoine.
-              </h3>
+              <div className="bg-slate-900/50 backdrop-blur-xl px-6 py-4 sm:px-10 sm:py-6 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                <h3 className="text-white font-display font-black text-2xl sm:text-4xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-2xl leading-tight">
+                  L'intelligence artificielle au service de votre patrimoine.
+                </h3>
+              </div>
             </div>
           </div>
         </motion.div>

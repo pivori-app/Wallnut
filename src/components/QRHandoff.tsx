@@ -92,10 +92,10 @@ export function QRHandoff({ sessionId, documentName, documentIcon, onClose, onDo
             </div>
             <div>
               <h3 className="text-white font-bold text-base">Continuer sur mobile</h3>
-              <p className="text-slate-500 text-xs">Transférez vers votre smartphone</p>
+              <p className="text-neutral-600 dark:text-neutral-300 text-xs">Transférez vers votre smartphone</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={onClose} className="p-2 text-white/40 hover:text-white rounded-full hover:bg-white/10 transition-colors">
             <X size={18} />
           </button>
         </div>
@@ -103,20 +103,20 @@ export function QRHandoff({ sessionId, documentName, documentIcon, onClose, onDo
         {/* Content */}
         <div className="p-5">
           {/* Document being scanned */}
-          <div className="flex items-center gap-3 bg-white/5 rounded-2xl p-3 mb-5 border border-white/5">
+          <div className="flex items-center gap-3 bg-white/10 rounded-2xl p-3 mb-5 border border-white/5">
             <span className="text-2xl">{documentIcon}</span>
             <div>
               <p className="text-white/90 text-sm font-semibold">{documentName}</p>
-              <p className="text-slate-500 text-xs">Document à scanner sur mobile</p>
+              <p className="text-neutral-600 dark:text-neutral-300 text-xs">Document à scanner sur mobile</p>
             </div>
           </div>
 
           {/* QR Code */}
           <div className="flex flex-col items-center">
             {status === 'expired' ? (
-              <div className="w-64 h-64 bg-slate-900/40 dark:bg-white/5 backdrop-blur-xl rounded-2xl flex shadow-lg border border-white/20 flex-col items-center justify-center gap-3 border border-white/5">
+              <div className="w-64 h-64 bg-slate-900/40 dark:bg-white/10 backdrop-blur-xl rounded-2xl flex shadow-lg border border-white/20 flex-col items-center justify-center gap-3 border border-white/5">
                 <Clock size={32} className="text-slate-600" />
-                <p className="text-slate-500 text-sm font-medium">QR expiré</p>
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm font-medium">QR expiré</p>
                 <button
                   onClick={handleRefresh}
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-xl text-white text-sm font-medium hover:bg-blue-500 transition-colors"
@@ -150,15 +150,15 @@ export function QRHandoff({ sessionId, documentName, documentIcon, onClose, onDo
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="w-52 h-52 bg-slate-900/40 dark:bg-white/5 backdrop-blur-xl rounded-2xl flex shadow-lg border border-white/20 items-center justify-center border border-white/5">
+              <div className="w-52 h-52 bg-slate-900/40 dark:bg-white/10 backdrop-blur-xl rounded-2xl flex shadow-lg border border-white/20 items-center justify-center border border-white/5">
                 <div className="w-8 h-8 border-2 border-blue-500/50 border-t-blue-500 rounded-full animate-spin" />
               </div>
             )}
 
             {/* Timer */}
-            <div className={`flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full ${status === 'expired' ? 'bg-red-500/10 border border-red-500/20' : 'bg-white/5 border border-white/10'}`}>
-              <Clock size={12} className={status === 'expired' ? 'text-red-400' : 'text-slate-400'} />
-              <span className={`text-xs font-mono font-bold ${status === 'expired' ? 'text-red-400' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full ${status === 'expired' ? 'bg-red-500/10 border border-red-500/20' : 'bg-white/10 border border-white/10'}`}>
+              <Clock size={12} className={status === 'expired' ? 'text-red-400' : 'text-neutral-500 dark:text-neutral-400'} />
+              <span className={`text-xs font-mono font-bold ${status === 'expired' ? 'text-red-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
                 {status === 'expired' ? 'Expiré' : formatTime(timeLeft)}
               </span>
             </div>
@@ -174,7 +174,7 @@ export function QRHandoff({ sessionId, documentName, documentIcon, onClose, onDo
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-2.5">
                 <span className="text-base shrink-0">{step.icon}</span>
-                <p className="text-slate-400 text-xs leading-relaxed">{step.text}</p>
+                <p className="text-neutral-500 dark:text-neutral-400 text-xs leading-relaxed">{step.text}</p>
               </div>
             ))}
           </div>
@@ -209,7 +209,7 @@ export function QRHandoff({ sessionId, documentName, documentIcon, onClose, onDo
           {/* Back to desktop */}
           <button
             onClick={onClose}
-            className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl transition-colors text-sm border border-white/10"
+            className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-white/10 hover:bg-white/10 text-white/70 rounded-xl transition-colors text-sm border border-white/10"
           >
             <Monitor size={15} />
             Continuer sur ordinateur

@@ -15,7 +15,7 @@ interface Props {
 }
 
 const statusConfig = {
-  pending: { bg: 'bg-white/5', border: 'border-white/10', label: 'En attente', icon: Clock, color: 'text-white/40' },
+  pending: { bg: 'bg-white/10', border: 'border-white/10', label: 'En attente', icon: Clock, color: 'text-white/40' },
   scanning: { bg: 'bg-secondary/10', border: 'border-secondary/30', label: 'En cours', icon: Camera, color: 'text-secondary' },
   completed: { bg: 'bg-green-500/10', border: 'border-green-500/30', label: 'Complété', icon: Check, color: 'text-green-400' },
   skipped: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', label: 'Ignoré', icon: SkipForward, color: 'text-amber-400' },
@@ -43,7 +43,7 @@ export function DocumentList({ documents, clientType, currentIndex, onSelectDocu
             <div>
               <button 
                 onClick={() => navigate(profile?.isPro ? '/dashboard/pro' : '/dashboard/particulier')}
-                className="mb-3 flex items-center gap-1.5 px-3 py-1.5 text-white/50 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-colors text-xs font-bold border border-white/10"
+                className="mb-3 flex items-center gap-1.5 px-3 py-1.5 text-white/50 hover:text-white rounded-full bg-white/10 hover:bg-white/10 transition-colors text-xs font-bold border border-white/10"
               >
                 <ChevronLeft size={16} /> Retour à l'application
               </button>
@@ -96,7 +96,7 @@ export function DocumentList({ documents, clientType, currentIndex, onSelectDocu
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       className={cn(
-                        "relative rounded-2xl border p-4 transition-all cursor-pointer backdrop-blur-md",
+                        "relative rounded-2xl border p-4 transition-all cursor-pointer backdrop-blur-xl",
                         config.bg, config.border,
                         isCurrent && "ring-2 ring-secondary/50 shadow-[0_0_30px_rgba(199,154,46,0.15)] bg-secondary/5 border-secondary/30"
                       )}
@@ -108,7 +108,7 @@ export function DocumentList({ documents, clientType, currentIndex, onSelectDocu
                           "w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0 relative",
                           doc.status === 'completed' ? 'bg-green-500/20 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.2)]' :
                           isCurrent ? 'bg-secondary/20 border border-secondary/40 shadow-[0_0_15px_rgba(199,154,46,0.2)]' :
-                          'bg-white/5 border border-white/10 opacity-70'
+                          'bg-white/10 border border-white/10 opacity-70'
                         )}>
                           {doc.icon}
                           {doc.status === 'completed' && (
@@ -135,7 +135,7 @@ export function DocumentList({ documents, clientType, currentIndex, onSelectDocu
                               </span>
                             )}
                           </div>
-                          <p className="text-slate-500 text-xs truncate">{doc.description}</p>
+                          <p className="text-neutral-600 dark:text-neutral-300 text-xs truncate">{doc.description}</p>
 
                           {/* Status bar */}
                           <div className="flex items-center gap-2 mt-2">

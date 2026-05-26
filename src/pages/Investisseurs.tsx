@@ -81,19 +81,19 @@ export function Investisseurs() {
                 </Link>
               </div>
               <div className="grid grid-cols-2 gap-6">
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
+                <div className="bg-white/10 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-bold text-secondary mb-2">-25%</div>
                   <div className="text-white/60 text-sm">Décote moyenne à l'acquisition LTV</div>
                 </div>
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
+                <div className="bg-white/10 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-bold text-secondary mb-2">~10%</div>
                   <div className="text-white/60 text-sm">TRI cible annualisé modélisé</div>
                 </div>
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
+                <div className="bg-white/10 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-bold text-secondary mb-2">12-24m</div>
                   <div className="text-white/60 text-sm">Horizon typique de liquidité de sortie</div>
                 </div>
-                <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
+                <div className="bg-white/10 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
                   <div className="text-3xl font-bold text-secondary mb-2">100%</div>
                   <div className="text-white/60 text-sm">Cadrage notarial sous-jacent certifié</div>
                 </div>

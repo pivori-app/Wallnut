@@ -38,15 +38,15 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
     <div className="text-left animate-in fade-in zoom-in duration-300 w-full min-w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Data Room Notaire</h2>
-          <p className="text-sm font-medium text-slate-500 dark:text-white/60">Checklist documentaire sécurisée et structurée</p>
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Data Room Notaire</h2>
+          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Checklist documentaire sécurisée et structurée</p>
         </div>
-        <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-xl shrink-0">
+        <div className="flex bg-gray-100 dark:bg-white/10 p-1 rounded-xl shrink-0">
           <button 
             onClick={() => setActiveTab('pro')} 
             className={cn(
               "px-4 py-2 font-bold text-sm rounded-lg transition-all", 
-              activeTab === 'pro' ? "bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white"
+              activeTab === 'pro' ? "bg-white dark:bg-white/10 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-600 dark:text-neutral-300 dark:text-white/50 hover:text-slate-900 dark:hover:text-white"
             )}
           >
             Documents Pro
@@ -55,7 +55,7 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
             onClick={() => setActiveTab('particulier')} 
             className={cn(
               "px-4 py-2 font-bold text-sm rounded-lg transition-all", 
-              activeTab === 'particulier' ? "bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white"
+              activeTab === 'particulier' ? "bg-white dark:bg-white/10 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-600 dark:text-neutral-300 dark:text-white/50 hover:text-slate-900 dark:hover:text-white"
             )}
           >
             Documents Client
@@ -66,7 +66,7 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
       <div className="mb-6">
         <label className="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2">Dossier sélectionné</label>
         <select 
-          className="w-full bg-white dark:bg-black/20 text-sm font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors appearance-none cursor-pointer"
+          className="w-full bg-white dark:bg-black/20 text-sm font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 transition-colors appearance-none cursor-pointer"
           value={selectedPropId}
           onChange={(e) => setSelectedPropId(e.target.value)}
         >
@@ -78,13 +78,13 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
       </div>
 
       {!property ? (
-        <div className="py-10 text-center text-slate-500 dark:text-white/50 border border-dashed border-gray-300 dark:border-white/20 rounded-2xl">
+        <div className="py-10 text-center text-neutral-600 dark:text-neutral-300 dark:text-white/50 border border-dashed border-gray-300 dark:border-white/20 rounded-2xl">
           Sélectionnez un dossier pour consulter sa checklist.
         </div>
       ) : (
         <div className="space-y-4">
           {currentDocs.map((doc, idx) => (
-            <div key={idx} className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-purple-300 dark:hover:border-purple-500/30 transition-all shadow-sm">
+            <div key={idx} className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white dark:bg-white/10 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-purple-300 dark:hover:border-purple-500/30 transition-all shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="shrink-0 mt-1">
                   {doc.status === 'uploaded' ? (
@@ -96,15 +96,15 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
                   )}
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                  <h4 className="font-bold text-neutral-900 dark:text-white text-sm flex items-center gap-2">
                     {doc.title}
                     {doc.required && <span className="text-[10px] bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400 px-2 py-0.5 rounded-full uppercase tracking-widest">Requis</span>}
                   </h4>
-                  <div className="text-xs font-medium text-slate-500 dark:text-white/50 flex items-center gap-2 mt-1">
+                  <div className="text-xs font-medium text-neutral-600 dark:text-neutral-300 dark:text-white/50 flex items-center gap-2 mt-1">
                     <span className="px-2 py-0.5 bg-gray-100 dark:bg-white/10 rounded-md text-gray-600 dark:text-gray-300">{doc.category}</span>
                     {doc.status === 'missing' && <span className="text-amber-500">Document manquant</span>}
                     {doc.status === 'uploaded' && <span className="text-emerald-500">Intégré</span>}
-                    {doc.status === 'na' && <span className="text-gray-400">Non applicable</span>}
+                    {doc.status === 'na' && <span className="text-neutral-500 dark:text-neutral-400">Non applicable</span>}
                   </div>
                 </div>
               </div>
@@ -125,8 +125,8 @@ export function DataRoom({ properties, onClose }: DataRoomProps) {
           ))}
 
           <div className="pt-6 mt-6 border-t border-gray-200 dark:border-white/10 flex justify-between items-center">
-            <div className="text-sm font-medium text-slate-500 dark:text-white/50">
-              Progression: <span className="font-bold text-slate-900 dark:text-white">
+            <div className="text-sm font-medium text-neutral-600 dark:text-neutral-300 dark:text-white/50">
+              Progression: <span className="font-bold text-neutral-900 dark:text-white">
                 {currentDocs.filter(d => d.status === 'uploaded').length} / {currentDocs.filter(d => d.required).length} requis
               </span>
             </div>

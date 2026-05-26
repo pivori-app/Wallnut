@@ -80,7 +80,7 @@ export function SecuritySettings({ user }: { user: any }) {
               <button 
                 onClick={() => setActiveModal('passkey')}
                 disabled={passkeyAdded}
-                className="px-4 py-2 bg-slate-900/90 dark:bg-white/90 backdrop-blur-md text-white dark:text-slate-900 border border-transparent dark:border-white/20 text-app-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors shrink-0 disabled:opacity-50"
+                className="px-4 py-2 bg-slate-900/90 dark:bg-white/90 backdrop-blur-xl text-white dark:text-slate-900 border border-transparent dark:border-white/20 text-app-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors shrink-0 disabled:opacity-50"
               >
                 {passkeyAdded ? 'Passkey configuré' : 'Ajouter un Passkey'}
               </button>
@@ -163,7 +163,7 @@ export function SecuritySettings({ user }: { user: any }) {
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
                   Navigateur Chrome - Paris, France (Session courante)
                 </div>
-                <span className="text-slate-400">Actif maintenant</span>
+                <span className="text-neutral-500 dark:text-neutral-400">Actif maintenant</span>
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ export function SecuritySettings({ user }: { user: any }) {
       {activeModal && (
         <div className="fixed inset-0 bg-primary/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white rounded-3xl w-full max-w-md p-6 relative shadow-2xl">
-            <button onClick={closeModal} className="absolute top-4 right-4 text-slate-400 hover:text-primary transition-colors">
+            <button onClick={closeModal} className="absolute top-4 right-4 text-neutral-500 dark:text-neutral-400 hover:text-primary transition-colors">
               <X size={24} />
             </button>
 
@@ -238,7 +238,7 @@ export function SecuritySettings({ user }: { user: any }) {
                 </div>
                 <div>
                   <h3 className="text-app-xl font-bold text-primary">Créer un Passkey</h3>
-                  <p className="text-app-sm text-slate-500 mt-2">Votre appareil va vous demander de vous authentifier (empreinte, Face ID ou PIN) pour créer une clé cryptographique.</p>
+                  <p className="text-app-sm text-neutral-600 dark:text-neutral-300 mt-2">Votre appareil va vous demander de vous authentifier (empreinte, Face ID ou PIN) pour créer une clé cryptographique.</p>
                 </div>
                 <button onClick={handlePasskeyCreate} className="w-full py-3 bg-secondary text-white font-bold rounded-xl hover:bg-secondary/90 transition-colors shadow-lg shadow-secondary/20">
                   Continuer
@@ -253,10 +253,10 @@ export function SecuritySettings({ user }: { user: any }) {
                 </div>
                 <div>
                   <h3 className="text-app-xl font-bold text-primary">Configuration 2FA</h3>
-                  <p className="text-app-sm text-slate-500 mt-2">Scannez ce QR Code avec votre application d'authentification (Google Authenticator, Authy, etc.)</p>
+                  <p className="text-app-sm text-neutral-600 dark:text-neutral-300 mt-2">Scannez ce QR Code avec votre application d'authentification (Google Authenticator, Authy, etc.)</p>
                 </div>
                 <div className="w-48 h-48 bg-slate-100 rounded-xl mx-auto flex items-center justify-center border-2 border-dashed border-slate-300">
-                  <span className="text-slate-400 font-mono text-app-sm">[Simulation QR Mock]</span>
+                  <span className="text-neutral-500 dark:text-neutral-400 font-mono text-app-sm">[Simulation QR Mock]</span>
                 </div>
                 <div className="space-y-4">
                   <input type="text" placeholder="Code à 6 chiffres" className="w-full text-center tracking-widest font-mono text-app-md py-3 rounded-xl border border-slate-200 outline-none focus:border-secondary" />
@@ -274,7 +274,7 @@ export function SecuritySettings({ user }: { user: any }) {
                 </div>
                 <div>
                   <h3 className="text-app-xl font-bold text-blue-900">European Identity Wallet</h3>
-                  <p className="text-app-sm text-slate-500 mt-2">Présentez votre QR Code fourni par votre application France Identité ou équivalent européen (eIDAS v2).</p>
+                  <p className="text-app-sm text-neutral-600 dark:text-neutral-300 mt-2">Présentez votre QR Code fourni par votre application France Identité ou équivalent européen (eIDAS v2).</p>
                 </div>
                 <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 mb-6">
                    <p className="text-app-xs text-blue-800 text-left">Les attributs suivants seront demandés : <br/>- Vérification de l'identité (+18 ans)<br/>- Numéro de SIRET professionnel<br/>- Agrément ORIAS ou Carte Pro.</p>

@@ -42,7 +42,7 @@ export function Blog() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute top-4 left-4 z-20">
-                    <span className="px-3 py-1 bg-white/80 backdrop-blur-md shadow-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-primary border border-white/50">
+                    <span className="px-3 py-1 bg-white/80 backdrop-blur-xl shadow-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-primary border border-white/50">
                       {post.category}
                     </span>
                   </div>

@@ -21,7 +21,7 @@ export function Offres() {
       color: "bg-slate-50",
       titleColor: "text-primary",
       descColor: "opacity-70",
-      accent: "text-slate-500",
+      accent: "text-neutral-600 dark:text-neutral-300",
       btn: "border-primary text-primary"
     },
     {

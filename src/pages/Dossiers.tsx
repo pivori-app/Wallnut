@@ -57,8 +57,8 @@ export function Dossiers() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-app-2xl font-display font-bold text-slate-900 dark:text-white">Mes Dossiers</h1>
-          <p className="text-slate-500 dark:text-slate-400">Gérez et suivez l'avancement de vos demandes de portage.</p>
+          <h1 className="text-app-2xl font-display font-bold text-neutral-900 dark:text-white">Mes Dossiers</h1>
+          <p className="text-neutral-600 dark:text-neutral-300 dark:text-neutral-500 dark:text-neutral-400">Gérez et suivez l'avancement de vos demandes de portage.</p>
         </div>
         <button 
           onClick={() => navigate(profile?.role === 'professionnel' ? '/dashboard/pro' : '/dashboard/particulier')}
@@ -71,13 +71,13 @@ export function Dossiers() {
       {/* Filters & Search */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex-1 min-w-[280px] relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-40 text-slate-800 dark:text-white" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-40 text-neutral-800 dark:text-white" />
           <input 
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher une adresse, un client, une référence..."
-            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/30 font-medium"
+            className="w-full pl-12 pr-4 py-3 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm text-neutral-800 dark:text-white placeholder:text-neutral-500 dark:text-neutral-400 dark:placeholder:text-white/30 font-medium"
           />
         </div>
         <div className="flex bg-white dark:bg-black/20 p-1 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
@@ -97,7 +97,7 @@ export function Dossiers() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center py-20 text-slate-500 dark:text-white/50">
+        <div className="flex justify-center items-center py-20 text-neutral-600 dark:text-neutral-300 dark:text-white/50">
           <Clock className="w-6 h-6 animate-spin mr-2" /> Chargement de vos dossiers...
         </div>
       ) : filteredProperties.length === 0 ? (
@@ -116,22 +116,22 @@ export function Dossiers() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="bg-white dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 p-6 rounded-3xl hover:shadow-xl transition-all group flex flex-col"
+                  className="bg-white dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/10 p-6 rounded-3xl hover:shadow-xl transition-all group flex flex-col"
                 >
                   <div className="flex justify-between items-start mb-6">
-                    <span className="font-mono text-xs text-slate-400 dark:text-white/40 font-bold bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md">ID: {dossier.referenceNumber || dossier.id.substring(0, 8)}</span>
-                    <button className="p-2 -mr-2 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400 font-bold bg-slate-100 dark:bg-white/10 px-2 py-1 rounded-md">ID: {dossier.referenceNumber || dossier.id.substring(0, 8)}</span>
+                    <button className="p-2 -mr-2 text-neutral-500 dark:text-neutral-400 opacity-0 group-hover:opacity-100 transition-opacity">
                       <MoreVertical className="w-5 h-5" />
                     </button>
                   </div>
 
                   <div className="flex-1 space-y-4">
                     <div>
-                      <h3 className="text-lg font-display font-bold leading-tight line-clamp-2 text-slate-800 dark:text-white flex items-center gap-2">
+                      <h3 className="text-lg font-display font-bold leading-tight line-clamp-2 text-neutral-800 dark:text-white flex items-center gap-2">
                         <MapPin size={16} className="text-primary hidden sm:inline shrink-0" />
                         {typeof dossier.address === 'string' ? dossier.address : (dossier.address?.fullAddress || (typeof dossier.city === 'string' ? dossier.city : 'Adresse non renseignée') || 'Adresse non renseignée')}
                       </h3>
-                      <p className="text-sm text-slate-500 dark:text-white/60 mt-1">{typeof dossier.city === 'string' ? dossier.city : 'Ville non renseignée'} • {dossier.type}</p>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-1">{typeof dossier.city === 'string' ? dossier.city : 'Ville non renseignée'} • {dossier.type}</p>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -145,11 +145,11 @@ export function Dossiers() {
 
                     <div className="pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
                       <div>
-                        <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-white/40">Valeur estimée</p>
-                        <p className="font-display font-bold text-slate-800 dark:text-white">{formatCurrency(dossier.estimatedValue)}</p>
+                        <p className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400">Valeur estimée</p>
+                        <p className="font-display font-bold text-neutral-800 dark:text-white">{formatCurrency(dossier.estimatedValue)}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-white/40">Créé le</p>
+                        <p className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400">Créé le</p>
                         <p className="text-xs font-medium text-slate-600 dark:text-white/60">{new Date(dossier.createdAt).toLocaleDateString('fr-FR')}</p>
                       </div>
                     </div>
@@ -157,7 +157,7 @@ export function Dossiers() {
 
                   <button 
                     onClick={() => setSelectedProperty(dossier)}
-                    className="w-full mt-6 py-3 rounded-xl bg-slate-50 dark:bg-white/5 font-bold text-sm text-slate-700 dark:text-white/80 hover:bg-primary hover:text-white transition-all shadow-sm"
+                    className="w-full mt-6 py-3 rounded-xl bg-slate-50 dark:bg-white/10 font-bold text-sm text-slate-700 dark:text-white/80 hover:bg-primary hover:text-white transition-all shadow-sm"
                   >
                     Voir les détails
                   </button>

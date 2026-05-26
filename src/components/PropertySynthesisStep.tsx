@@ -100,7 +100,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
 
         <div className="flex flex-col md:flex-row justify-between items-start gap-6">
           <div>
-            <h2 className="text-app-2xl font-display font-bold text-slate-900 dark:!text-white mb-2">Synthèse du Dossier</h2>
+            <h2 className="text-app-2xl font-display font-bold text-neutral-900 dark:text-white mb-2">Synthèse du Dossier</h2>
             <div className="flex items-center gap-2 text-neutral-dark/60">
               <MapPin size={16} />
               <span>{propertyData?.address?.fullAddress || (typeof propertyData?.address === 'string' ? propertyData.address : "Adresse non spécifiée")}</span>
@@ -111,16 +111,16 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
           </div>
 
           <div className="flex items-center gap-4 text-center">
-             <div className="p-4 bg-white dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm">
+             <div className="p-4 bg-white dark:bg-white/10 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm">
                 <div className="text-app-sm font-bold opacity-60 mb-1">Documents</div>
-                <div className="text-app-xl font-bold text-slate-900 dark:!text-white">{uploadedDocsCount}/{totalDocsCount}</div>
+                <div className="text-app-xl font-bold text-neutral-900 dark:text-white">{uploadedDocsCount}/{totalDocsCount}</div>
              </div>
-             <div className="p-4 bg-white dark:bg-white/5 rounded-2xl border border-primary/20 shadow-sm relative overflow-hidden">
+             <div className="p-4 bg-white dark:bg-white/10 rounded-2xl border border-primary/20 shadow-sm relative overflow-hidden">
                 <div className="absolute inset-x-0 bottom-0 h-1 bg-primary/10">
                   <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${completenessScore}%` }} />
                 </div>
                 <div className="text-app-sm font-bold opacity-60 mb-1">Complétude</div>
-                <div className="text-app-xl font-bold text-slate-900 dark:!text-white">{completenessScore}%</div>
+                <div className="text-app-xl font-bold text-neutral-900 dark:text-white">{completenessScore}%</div>
              </div>
           </div>
         </div>
@@ -128,42 +128,42 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
         {/* Estimation Section */}
         <div className="mt-10 pt-10 border-t border-gray-200 dark:border-white/10">
           <div className="flex items-center gap-2 mb-6">
-            <Calculator className="text-slate-900 dark:!text-white" />
-            <h3 className="font-bold text-app-lg text-slate-900 dark:!text-white">Estimation Pondérée (Data Science)</h3>
+            <Calculator className="text-neutral-900 dark:text-white" />
+            <h3 className="font-bold text-app-lg text-neutral-900 dark:text-white">Estimation Pondérée (Data Science)</h3>
           </div>
 
           {isEstimating ? (
-            <div className="p-10 flex flex-col items-center justify-center text-slate-500 dark:!text-white">
+            <div className="p-10 flex flex-col items-center justify-center text-neutral-600 dark:text-neutral-300 dark:text-white">
               <Loader2 className="w-8 h-8 animate-spin mb-4" />
               <p className="font-medium animate-pulse">Analyse DVF & Yanport en cours...</p>
             </div>
           ) : estimation ? (
             <>
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="p-6 bg-gray-50/50 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center text-center">
+                <div className="p-6 bg-gray-50/50 dark:bg-white/10 rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center text-center">
                   <div className="text-app-sm font-bold opacity-60 mb-2">Fourchette Basse</div>
                   <div className="text-app-xl font-bold text-primary/80">{formatEuro(estimation.lowBound)}</div>
                 </div>
                 <div className="p-6 bg-primary/5 rounded-2xl border border-primary/20 flex flex-col items-center justify-center text-center relative shadow-lg transform md:-translate-y-4">
                   <div className="absolute -top-3 px-3 py-1 bg-primary text-white text-app-xs font-bold rounded-full">VALEUR AFFINÉE</div>
-                  <div className="text-app-sm font-bold text-slate-500 dark:!text-white mb-2 mt-2">Prix Estimé</div>
-                  <div className="text-app-3xl font-display font-bold text-slate-900 dark:!text-white">{formatEuro(estimation.finalPrice)}</div>
+                  <div className="text-app-sm font-bold text-neutral-600 dark:text-neutral-300 dark:text-white mb-2 mt-2">Prix Estimé</div>
+                  <div className="text-app-3xl font-display font-bold text-neutral-900 dark:text-white">{formatEuro(estimation.finalPrice)}</div>
                   <div className="text-app-sm font-medium mt-2 opacity-70">~{formatEuro(estimation.pricePerSqm)}/m²</div>
                 </div>
-                <div className="p-6 bg-gray-50/50 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center text-center">
+                <div className="p-6 bg-gray-50/50 dark:bg-white/10 rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center text-center">
                   <div className="text-app-sm font-bold opacity-60 mb-2">Fourchette Haute</div>
                   <div className="text-app-xl font-bold text-primary/80">{formatEuro(estimation.highBound)}</div>
                 </div>
               </div>
               
               <div className="mt-8 flex flex-col items-center gap-4">
-                <div className="flex items-center gap-2 p-3 bg-white dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 w-fit">
-                   <Activity className="text-slate-900 dark:!text-white" size={16} />
+                <div className="flex items-center gap-2 p-3 bg-white dark:bg-white/10 rounded-xl border border-gray-200 dark:border-white/10 w-fit">
+                   <Activity className="text-neutral-900 dark:text-white" size={16} />
                    <span className="text-app-xs font-bold opacity-60 uppercase tracking-wider">Fiabilité de l'estimation</span>
                    <div className="w-32 h-2 bg-black/10 rounded-full overflow-hidden ml-2">
                       <div className={cn("h-full", estimation.confidenceIndex > 80 ? "bg-green-500" : "bg-orange-500")} style={{ width: `${estimation.confidenceIndex}%` }} />
                    </div>
-                   <span className="text-app-sm font-bold text-slate-900 dark:!text-white ml-1">{estimation.confidenceIndex}%</span>
+                   <span className="text-app-sm font-bold text-neutral-900 dark:text-white ml-1">{estimation.confidenceIndex}%</span>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 text-app-sm mt-2">
@@ -231,7 +231,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
       <div className="flex flex-col sm:flex-row justify-between gap-4 pt-4 border-t border-gray-200 dark:border-white/10">
         <button 
           onClick={onBack}
-          className="px-4 py-2 text-sm rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-white dark:bg-white/5 text-slate-900 dark:!text-white border border-gray-200 dark:border-white/10 hover:border-gray-200 dark:border-white/10"
+          className="px-4 py-2 text-sm rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-white dark:bg-white/10 text-neutral-900 dark:text-white border border-gray-200 dark:border-white/10 hover:border-gray-200 dark:border-white/10"
         >
           <ChevronLeft size={16} /> Retour aux documents
         </button>
@@ -263,7 +263,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
                 )}
               >
                 <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0 mt-1">
-                  <FileCheck className="text-slate-900 dark:!text-white" size={20} />
+                  <FileCheck className="text-neutral-900 dark:text-white" size={20} />
                 </div>
                 <div>
                   <div className="font-bold">Notaire (Bundle Légal complet)</div>
@@ -279,7 +279,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
                 )}
               >
                 <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0 mt-1">
-                  <Share2 className="text-slate-900 dark:!text-white" size={20} />
+                  <Share2 className="text-neutral-900 dark:text-white" size={20} />
                 </div>
                 <div>
                   <div className="font-bold">Agent Immobilier (Bundle Commercial)</div>
@@ -307,7 +307,7 @@ export function PropertySynthesisStep({ propertyData, documents, onComplete, onB
                <button 
                  onClick={handleExportPDF}
                  disabled={isGeneratingPDF}
-                 className="text-app-sm font-bold text-slate-900 dark:!text-white/40 flex items-center justify-center gap-2 mx-auto hover:underline opacity-80"
+                 className="text-app-sm font-bold text-neutral-900 dark:text-white/40 flex items-center justify-center gap-2 mx-auto hover:underline opacity-80"
                >
                   {isGeneratingPDF ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
                   Exporter PDF Institutionnel (Synthèse)

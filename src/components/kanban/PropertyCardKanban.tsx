@@ -17,7 +17,7 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
   const completeness = property.completeness || 0;
 
   return (
-    <div className="bg-white dark:bg-white/5 backdrop-blur-2xl border border-gray-200 dark:border-white/10 p-5 rounded-3xl shadow-xl relative group overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity">
+    <div className="bg-white dark:bg-white/10 backdrop-blur-2xl border border-gray-200 dark:border-white/10 p-5 rounded-3xl shadow-xl relative group overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity">
       {/* Header */}
       <div className="relative z-10 flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
@@ -26,9 +26,9 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium text-sm text-slate-900 dark:!text-white/90 leading-tight truncate">{property.type}</h4>
+              <h4 className="font-medium text-sm text-neutral-900 dark:text-white/90 leading-tight truncate">{property.type}</h4>
             </div>
-            <p className="text-[10px] text-slate-500 dark:!text-white/50 font-medium truncate mt-0.5">Réf: {property.referenceNumber || property.id.slice(0,8)}</p>
+            <p className="text-[10px] text-neutral-600 dark:text-neutral-300 dark:text-white/50 font-medium truncate mt-0.5">Réf: {property.referenceNumber || property.id.slice(0,8)}</p>
           </div>
         </div>
         
@@ -38,7 +38,7 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
               e.stopPropagation();
               setShowMenu(!showMenu);
             }}
-            className="p-1.5 text-slate-400 dark:!text-white/40 hover:text-slate-900 dark:!text-white rounded-full transition-colors"
+            className="p-1.5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:text-white rounded-full transition-colors"
           >
             <MoreHorizontal size={18} />
           </button>
@@ -68,7 +68,7 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
                       setShowMenu(false);
                       onOpenAgrafe();
                     }}
-                    className="w-full text-left px-4 py-3 text-sm font-bold text-slate-900 dark:!text-white hover:bg-gray-100 dark:bg-white/10 flex items-center gap-3 transition-colors"
+                    className="w-full text-left px-4 py-3 text-sm font-bold text-neutral-900 dark:text-white hover:bg-gray-100 dark:bg-white/10 flex items-center gap-3 transition-colors"
                   >
                     <FileText size={16} className="text-blue-400" /> Voir le dossier
                   </button>
@@ -77,9 +77,9 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
                       e.stopPropagation();
                       setShowMenu(false);
                     }}
-                    className="w-full text-left px-4 py-3 text-sm font-bold text-slate-900 dark:!text-white hover:bg-gray-100 dark:bg-white/10 flex items-center gap-3 border-t border-white/5 transition-colors"
+                    className="w-full text-left px-4 py-3 text-sm font-bold text-neutral-900 dark:text-white hover:bg-gray-100 dark:bg-white/10 flex items-center gap-3 border-t border-white/5 transition-colors"
                   >
-                    <Phone size={16} className="text-slate-400 dark:!text-white/40" /> Contacter
+                    <Phone size={16} className="text-neutral-500 dark:text-neutral-400" /> Contacter
                   </button>
                 </motion.div>
               </>
@@ -90,11 +90,11 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
 
       {/* Body: Location & Financials */}
       <div className="relative z-10 mb-5 pl-1">
-        <p className="text-xs text-slate-900 dark:!text-white/70 flex items-center gap-1.5 mb-3">
-          <MapPin size={12} className="text-slate-400 dark:!text-white/40" /> {typeof property.city === 'string' ? property.city : 'Ville inconnue'}
+        <p className="text-xs text-neutral-900 dark:text-white/70 flex items-center gap-1.5 mb-3">
+          <MapPin size={12} className="text-neutral-500 dark:text-neutral-400" /> {typeof property.city === 'string' ? property.city : 'Ville inconnue'}
         </p>
         <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-400 dark:!text-white/40 font-bold uppercase tracking-widest">Valeur</span>
+            <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-bold uppercase tracking-widest">Valeur</span>
             <div className="flex-1 border-b border-gray-200 dark:border-white/10 border-dashed mx-2"></div>
             <p className="font-mono font-bold text-blue-400">
                 {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(property.estimatedValue)}
@@ -105,12 +105,12 @@ export const PropertyCardKanban: React.FC<PropertyCardKanbanProps> = ({ property
       {/* Footer: Completeness Progress */}
       <div className="relative z-10 space-y-2 pt-4 border-t border-gray-200 dark:border-white/10">
         <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider">
-          <span className="text-slate-400 dark:!text-white/40">Status Dossier</span>
+          <span className="text-neutral-500 dark:text-neutral-400">Status Dossier</span>
           <span className={cn(
             completeness === 100 ? "text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.5)]" : "text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]"
           )}>{completeness === 100 ? 'COMPLET' : `${completeness}%`}</span>
         </div>
-        <div className="h-1.5 w-full bg-gray-50 dark:bg-white/5 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-gray-50 dark:bg-white/10 rounded-full overflow-hidden">
           <div 
             className={cn(
               "h-full rounded-full transition-all duration-500",

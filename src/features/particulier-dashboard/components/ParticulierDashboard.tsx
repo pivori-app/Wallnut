@@ -47,7 +47,7 @@ export function ParticulierDashboard() {
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Espace Particulier</h1>
-          <p className="text-sm text-gray-500 mt-1">Tableau de bord institutionnel - Indicateurs de décision</p>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-1">Tableau de bord institutionnel - Indicateurs de décision</p>
         </div>
         {!modals.wizard && (
           <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ export function ParticulierDashboard() {
               <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-12 text-center">
                 <Building2 className="h-12 w-12 text-gray-300 mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900">Aucun bien enregistré</h3>
-                <p className="text-sm text-gray-500 mt-1 mb-4">Commencez par ajouter votre premier bien immobilier.</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-1 mb-4">Commencez par ajouter votre premier bien immobilier.</p>
                 <button
                   onClick={() => openModal('wizard')}
                   className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"

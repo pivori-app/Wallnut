@@ -21,7 +21,7 @@ export function MobileScannerPage() {
       <div className="min-h-[100dvh] bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
         <ShieldCheck size={48} className="text-red-500 mb-4" />
         <h1 className="text-xl font-bold text-white mb-2">Lien invalide ou expiré</h1>
-        <p className="text-slate-400 text-sm">Veuillez générer un nouveau QR Code depuis votre ordinateur.</p>
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm">Veuillez générer un nouveau QR Code depuis votre ordinateur.</p>
       </div>
     );
   }
@@ -91,7 +91,7 @@ export function MobileScannerPage() {
           </motion.div>
 
           <h2 className="text-2xl font-black text-white mb-2 tracking-tight">Scan transféré !</h2>
-          <p className="text-slate-400 text-sm mb-8 max-w-[280px]">
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-8 max-w-[280px]">
             Le document a été envoyé avec succès à votre ordinateur.
           </p>
 

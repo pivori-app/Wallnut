@@ -32,17 +32,31 @@ export interface AssetData {
   population: number; // B51
 }
 
+export const PORTAGE_CONSTANTS = {
+  PREMIUM: { ratio: 0.8, feeYearly: 0.13 },
+  EQUILIBRE: { ratio: 0.7, feeYearly: 0.13 },
+  PRUDENTE: { ratio: 0.6, feeYearly: 0.13 },
+  DEFAULT_DURATION_YEARS: 2
+};
+
 export function calculateAssetUnderwriting(asset: AssetData) {
   // LTV cible
-  let ltvTarget = 0.6;
-  if (asset.offerTarget === 'Premium') ltvTarget = 0.8;
-  else if (asset.offerTarget === 'Équilibre') ltvTarget = 0.7;
+  let ltvTarget = PORTAGE_CONSTANTS.PRUDENTE.ratio;
+  let feeYearly = PORTAGE_CONSTANTS.PRUDENTE.feeYearly;
+
+  if (asset.offerTarget === 'Premium') {
+    ltvTarget = PORTAGE_CONSTANTS.PREMIUM.ratio;
+    feeYearly = PORTAGE_CONSTANTS.PREMIUM.feeYearly;
+  } else if (asset.offerTarget === 'Équilibre') {
+    ltvTarget = PORTAGE_CONSTANTS.EQUILIBRE.ratio;
+    feeYearly = PORTAGE_CONSTANTS.EQUILIBRE.feeYearly;
+  }
 
   // Montages
   const baseIntervention = asset.referenceValue * ltvTarget; // F71
-  const prepayeTotal = baseIntervention * 0.13 * 2; // F72
-  let prepayeAcquis = baseIntervention * 0.13; // F73
-  if (asset.offerTarget === 'Premium') prepayeAcquis = baseIntervention * 0.195;
+  const prepayeTotal = baseIntervention * feeYearly * PORTAGE_CONSTANTS.DEFAULT_DURATION_YEARS; // F72
+  const prepayeAcquis = baseIntervention * feeYearly; // Acquis au moment initial
+
 
   const fraisActeFinal = asset.offerTarget === 'Premium' ? 0 : asset.actFees;
   const netClientAvantPrepaye = baseIntervention - asset.existingDebt - asset.agencyFees - fraisActeFinal; // F74

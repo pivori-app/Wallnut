@@ -40,13 +40,13 @@ export const BoardKanban: React.FC<BoardKanbanProps> = ({ properties, onDragEnd,
                   className={cn(
                     "flex-shrink-0 w-[85vw] sm:w-80 flex flex-col gap-4 rounded-[2rem] p-4 transition-all duration-300 border snap-center",
                     snapshot.isDraggingOver 
-                      ? "bg-gray-50 dark:bg-white/5 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]" 
-                      : "bg-white dark:bg-white/5 backdrop-blur-xl border-gray-200 dark:border-white/10 shadow-xl dark:shadow-2xl"
+                      ? "bg-gray-50 dark:bg-white/10 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.15)]" 
+                      : "bg-white dark:bg-white/10 backdrop-blur-xl border-gray-200 dark:border-white/10 shadow-xl dark:shadow-2xl"
                   )}
                 >
                   <div className="flex items-center justify-between px-2 mb-2">
-                    <h3 className="font-medium text-slate-900 dark:!text-white/90 text-sm tracking-wide">{column.title}</h3>
-                    <span className="bg-gray-200 dark:bg-white/10 text-slate-900 dark:!text-white text-xs font-bold px-2.5 py-1 rounded-full border border-gray-300 dark:border-white/10 shadow-sm">
+                    <h3 className="font-medium text-neutral-900 dark:text-white/90 text-sm tracking-wide">{column.title}</h3>
+                    <span className="bg-gray-200 dark:bg-white/10 text-neutral-900 dark:text-white text-xs font-bold px-2.5 py-1 rounded-full border border-gray-300 dark:border-white/10 shadow-sm">
                       {columnProps.length}
                     </span>
                   </div>

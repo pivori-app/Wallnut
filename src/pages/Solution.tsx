@@ -29,7 +29,7 @@ export function Solution() {
 
         {/* Concept Section */}
         <section className="bg-slate-50 py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-primary/5 dark:bg-white/5 pointer-events-none backdrop-blur-3xl"></div>
+          <div className="absolute inset-0 bg-primary/5 dark:bg-white/10 pointer-events-none backdrop-blur-3xl"></div>
           <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">

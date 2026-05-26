@@ -129,11 +129,11 @@ export function NewDossier() {
             <React.Fragment key={i}>
               <div className={cn(
                 "w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all",
-                step >= i ? "bg-primary text-white" : "bg-black/5 dark:bg-white/5 opacity-40"
+                step >= i ? "bg-primary text-white" : "bg-black/5 dark:bg-white/10 opacity-40"
               )}>
                 {step > i ? <CheckCircle2 className="w-6 h-6" /> : i}
               </div>
-              {i < 3 && <div className={cn("w-12 h-1 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden")}>
+              {i < 3 && <div className={cn("w-12 h-1 bg-black/5 dark:bg-white/10 rounded-full overflow-hidden")}>
                 <div className={cn("h-full bg-primary transition-all duration-500", step > i ? "w-full" : "w-0")}></div>
               </div>}
             </React.Fragment>
@@ -154,7 +154,7 @@ export function NewDossier() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <label className="text-app-sm font-bold opacity-60 uppercase tracking-wider">Valeur & Besoin</label>
-                  <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/5 space-y-4">
+                  <div className="p-4 rounded-2xl bg-black/5 dark:bg-white/10 space-y-4">
                     <div className="flex justify-between">
                       <span className="text-app-sm">Valeur du bien</span>
                       <span className="font-bold">{formatCurrency(form.propertyValue)}</span>
@@ -186,7 +186,7 @@ export function NewDossier() {
                         value={form.address}
                         onChange={e => setForm({...form, address: e.target.value})}
                         placeholder="Ex: 24 Rue de Rivoli, Paris"
-                        className="w-full pl-12 pr-4 py-4 bg-black/5 dark:bg-white/5 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full pl-12 pr-4 py-4 bg-black/5 dark:bg-white/10 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 outline-none"
                       />
                     </div>
                   </div>
@@ -199,7 +199,7 @@ export function NewDossier() {
                         value={form.surface}
                         onChange={e => setForm({...form, surface: e.target.value})}
                         placeholder="Ex: 85"
-                        className="w-full pl-12 pr-4 py-4 bg-black/5 dark:bg-white/5 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full pl-12 pr-4 py-4 bg-black/5 dark:bg-white/10 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 outline-none"
                       />
                     </div>
                   </div>
@@ -247,12 +247,12 @@ export function NewDossier() {
                    <h4 className="text-app-sm font-bold opacity-60 uppercase">Documents détectés</h4>
                    <div className="space-y-3">
                      {form.documents.length === 0 && (
-                       <div className="p-10 rounded-2xl bg-black/5 dark:bg-white/5 text-center italic text-app-sm opacity-40">
+                       <div className="p-10 rounded-2xl bg-black/5 dark:bg-white/10 text-center italic text-app-sm opacity-40">
                          Aucun document pour le moment.
                        </div>
                      )}
                      {form.documents.map((doc, idx) => (
-                       <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 shadow-sm">
+                       <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/10 border border-black/5 shadow-sm">
                          <div className="p-2 bg-primary/10 rounded-lg">
                            <FileUp className="w-5 h-5 text-primary" />
                          </div>
@@ -276,7 +276,7 @@ export function NewDossier() {
               <div className="flex gap-4 pt-10">
                 <button 
                   onClick={() => setStep(1)}
-                  className="flex-1 py-4 rounded-2xl bg-black/5 dark:bg-white/5 font-display font-bold hover:bg-black/10 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-4 rounded-2xl bg-black/5 dark:bg-white/10 font-display font-bold hover:bg-black/10 transition-all flex items-center justify-center gap-2"
                 >
                   <ArrowLeft className="w-5 h-5" /> Précédent
                 </button>
@@ -336,7 +336,7 @@ export function NewDossier() {
               <div className="flex gap-4 pt-4">
                 <button 
                   onClick={() => setStep(2)}
-                  className="flex-1 py-4 rounded-2xl bg-black/5 dark:bg-white/5 font-display font-bold hover:bg-black/10 transition-all"
+                  className="flex-1 py-4 rounded-2xl bg-black/5 dark:bg-white/10 font-display font-bold hover:bg-black/10 transition-all"
                 >
                   Modifier
                 </button>
